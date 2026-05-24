@@ -1,0 +1,26 @@
+.home-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Content wrapper */
+.home-page__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Section spacing */
+.home-page__section {
+  margin-top: 40px;
+}
+
+/* Section headings */
+.home-page__section h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #333;
+  border-left: 4px solid #055c8d;
+  padding-left: 10px;
+}

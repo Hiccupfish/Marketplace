@@ -1,0 +1,42 @@
+<div class="seller-card">
+
+  <!-- Avatar -->
+  <div class="seller-card__avatar">
+    <img [src]="seller.profileImage" alt="Seller image" />
+  </div>
+
+  <!-- Info -->
+  <div class="seller-card__info">
+
+    <h3 class="seller-card__name">
+      {{ seller.name }}
+    </h3>
+
+    <p class="seller-card__location">
+      {{ seller.location }}
+    </p>
+
+    <!-- Verification -->
+    <div class="seller-card__badge" *ngIf="seller.isVerified">
+      Verified Seller
+    </div>
+
+    <!-- Rating -->
+    <div class="seller-card__rating">
+      ⭐ {{ seller.rating }} / 5
+    </div>
+
+  </div>
+
+  <!-- Action -->
+  <div class="seller-card__actions">
+    <button (click)="viewProfile()">
+      View Profile
+    </button>
+
+    <button (click)="contactSeller()">
+      Contact
+    </button>
+  </div>
+
+</div>

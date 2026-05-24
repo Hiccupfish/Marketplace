@@ -1,0 +1,74 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  gap: 20px;
+}
+
+/* Brand */
+.navbar__brand {
+  font-size: 20px;
+  font-weight: 700;
+  color: #055c8d;
+  cursor: pointer;
+}
+
+/* Search */
+.navbar__search {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar__search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+}
+
+/* Links */
+.navbar__links {
+  display: flex;
+  gap: 15px;
+}
+
+.navbar__links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+.navbar__links a:hover {
+  color: #055c8d;
+}
+
+/* Auth */
+.navbar__auth {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.navbar__auth button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.navbar__auth button:first-child {
+  background: transparent;
+  border: 1px solid #055c8d;
+  color: #055c8d;
+}
+
+.navbar__auth button:last-child {
+  background: #055c8d;
+  color: white;
+}

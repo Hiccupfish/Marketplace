@@ -1,0 +1,34 @@
+<section class="hero">
+  <div class="hero__content">
+
+    <h1 class="hero__title">
+      Find trusted local sellers & artisans near you
+    </h1>
+
+    <p class="hero__subtitle">
+      From mechanics to painters, electronics to furniture — connect safely with verified people in your community.
+    </p>
+
+    <!-- Search Box -->
+    <div class="hero__search">
+      <input
+        type="text"
+        placeholder="Search services or products..."
+        [(ngModel)]="searchQuery"
+      />
+
+      <button (click)="onSearch()">
+        Search
+      </button>
+    </div>
+
+    <!-- Quick Categories -->
+    <div class="hero__categories">
+      <span (click)="filter('mechanics')">Mechanics</span>
+      <span (click)="filter('painters')">Painters</span>
+      <span (click)="filter('electronics')">Electronics</span>
+      <span (click)="filter('plumbing')">Plumbing</span>
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,17 @@
+<section class="featured-listings">
+
+  <div class="featured-listings__header">
+    <h2>Featured Listings</h2>
+    <p>Trusted sellers and services in your area</p>
+  </div>
+
+  <div class="featured-listings__grid">
+
+    <app-listing-card
+      *ngFor="let listing of featuredListings"
+      [listing]="listing">
+    </app-listing-card>
+
+  </div>
+
+</section>

@@ -1,0 +1,10 @@
+<div class="search-bar">
+  <input
+    class="search-bar__input"
+    type="search"
+    [value]="value"
+    (input)="onInput(($event.target as HTMLInputElement).value)"
+    placeholder="Search"
+  />
+  <button class="search-bar__button" type="button" (click)="onSearch()">Search</button>
+</div>

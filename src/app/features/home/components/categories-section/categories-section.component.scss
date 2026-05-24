@@ -1,0 +1,54 @@
+.categories-section {
+  padding: 20px 0;
+}
+
+.categories-section__header {
+  margin-bottom: 15px;
+}
+
+.categories-section__header h2 {
+  font-size: 22px;
+  margin: 0;
+  color: #333;
+}
+
+.categories-section__header p {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Grid */
+.categories-section__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+/* Category Card */
+.category-card {
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  border-color: #055c8d;
+}
+
+/* Icon */
+.category-card__icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+/* Name */
+.category-card__name {
+  font-size: 13px;
+  font-weight: 500;
+}

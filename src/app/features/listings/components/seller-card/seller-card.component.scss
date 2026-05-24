@@ -1,0 +1,76 @@
+.seller-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  background: #fff;
+  gap: 15px;
+}
+
+/* Avatar */
+.seller-card__avatar img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Info */
+.seller-card__info {
+  flex: 1;
+}
+
+.seller-card__name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.seller-card__location {
+  margin: 4px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Verified badge */
+.seller-card__badge {
+  display: inline-block;
+  background: #e6f7ee;
+  color: #1a7f37;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Rating */
+.seller-card__rating {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Actions */
+.seller-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.seller-card__actions button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.seller-card__actions button:first-child {
+  background: #055c8d;
+  color: white;
+}
+
+.seller-card__actions button:last-child {
+  background: #ffcc00;
+  color: black;
+}
