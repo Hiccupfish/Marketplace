@@ -1,9 +1,35 @@
-:host {
-  display: block;
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 14px;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  background: #fff;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
 }
 
-.category-card {
-  background: #f7f7f7;
-  border-radius: 0.5rem;
-  padding: 1rem;
+.category-card:hover {
+  transform: translateY(-3px);
+  border-color: #055c8d;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Icon */
+.category-card__icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* Title */
+.category-card__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
 }

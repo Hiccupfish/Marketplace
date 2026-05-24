@@ -1,4 +1,41 @@
 <article class="listing-card">
-  <h3 class="listing-card__title">{{ listing?.title || 'Listing title' }}</h3>
-  <p class="listing-card__price">{{ listing?.price || 0 }}</p>
+
+  <!-- Image -->
+  <div class="listing-card__image">
+    <img [src]="listing?.image" alt="Listing image" />
+  </div>
+
+  <!-- Content -->
+  <div class="listing-card__content">
+
+    <h3 class="listing-card__title">
+      {{ listing?.title || 'Listing title' }}
+    </h3>
+
+    <p class="listing-card__location">
+      📍 {{ listing?.location || 'Location' }}
+    </p>
+
+    <p class="listing-card__price">
+      {{ listing?.price ? 'R ' + listing.price : 'Price on request' }}
+    </p>
+
+    <!-- Trust indicators -->
+    <div class="listing-card__meta">
+
+      <span class="listing-card__rating">
+        ⭐ {{ listing?.rating || 0 }}
+      </span>
+
+      <span
+        class="listing-card__verified"
+        *ngIf="listing?.isVerified"
+      >
+        Verified
+      </span>
+
+    </div>
+
+  </div>
+
 </article>
