@@ -2,11 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px;
+
   padding: 12px;
   border: 1px solid #eaeaea;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fff;
-  gap: 15px;
 }
 
 /* Avatar */
@@ -20,17 +21,20 @@
 /* Info */
 .seller-card__info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .seller-card__name {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .seller-card__location {
-  margin: 4px 0;
-  font-size: 13px;
+  margin: 0;
+  font-size: 12px;
   color: #666;
 }
 
@@ -41,14 +45,8 @@
   color: #1a7f37;
   padding: 2px 8px;
   border-radius: 12px;
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* Rating */
-.seller-card__rating {
-  font-size: 13px;
-  margin-top: 4px;
+  font-size: 11px;
+  width: fit-content;
 }
 
 /* Actions */
@@ -58,19 +56,21 @@
   gap: 8px;
 }
 
-.seller-card__actions button {
+.btn-primary {
   padding: 6px 10px;
+  background: #055c8d;
+  color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 12px;
 }
 
-.seller-card__actions button:first-child {
-  background: #055c8d;
-  color: white;
-}
-
-.seller-card__actions button:last-child {
-  background: #ffcc00;
-  color: black;
+.btn-secondary {
+  padding: 6px 10px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
 }

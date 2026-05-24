@@ -1,1 +1,24 @@
-<div>Listing gallery placeholder.</div>
+<div class="listing-gallery">
+
+  <!-- Main Image -->
+  <div class="listing-gallery__main">
+    <img
+      [src]="selectedImage || images[0]"
+      alt="Listing image"
+    />
+  </div>
+
+  <!-- Thumbnails -->
+  <div class="listing-gallery__thumbnails">
+
+    <img
+      *ngFor="let img of images"
+      [src]="img"
+      (click)="selectImage(img)"
+      [class.active]="img === selectedImage"
+      alt="Thumbnail"
+    />
+
+  </div>
+
+</div>

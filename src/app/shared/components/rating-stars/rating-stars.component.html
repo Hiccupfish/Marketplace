@@ -1,9 +1,12 @@
 <span class="rating-stars" aria-label="Rating">
+
   <span
     *ngFor="let star of stars"
     class="rating-stars__star"
-    [class.rating-stars__star--filled]="star"
+    [class.rating-stars__star--filled]="star.filled"
+    [class.rating-stars__star--half]="star.half"
   >
     ★
   </span>
+
 </span>

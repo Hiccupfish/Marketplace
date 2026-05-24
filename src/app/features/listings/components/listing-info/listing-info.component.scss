@@ -1,3 +1,68 @@
-:host {
-  display: block;
+.listing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Title */
+.listing-info__title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Meta */
+.listing-info__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Verified badge */
+.listing-info__verified {
+  background: #e6f7ee;
+  color: #1a7f37;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Price */
+.listing-info__price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #055c8d;
+}
+
+/* Description */
+.listing-info__description p {
+  margin: 0;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Actions */
+.listing-info__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-primary {
+  padding: 10px 14px;
+  background: #055c8d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  padding: 10px 14px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }

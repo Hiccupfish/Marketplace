@@ -2,41 +2,46 @@
 
   <!-- Avatar -->
   <div class="seller-card__avatar">
-    <img [src]="seller.profileImage" alt="Seller image" />
+    <img
+      [src]="seller?.profileImage || 'assets/images/default-user.png'"
+      alt="Seller image"
+    />
   </div>
 
   <!-- Info -->
   <div class="seller-card__info">
 
     <h3 class="seller-card__name">
-      {{ seller.name }}
+      {{ seller?.name || 'Seller name' }}
     </h3>
 
     <p class="seller-card__location">
-      {{ seller.location }}
+      📍 {{ seller?.location || 'Location not provided' }}
     </p>
 
     <!-- Verification -->
-    <div class="seller-card__badge" *ngIf="seller.isVerified">
+    <div class="seller-card__badge" *ngIf="seller?.isVerified">
       Verified Seller
     </div>
 
     <!-- Rating -->
     <div class="seller-card__rating">
-      ⭐ {{ seller.rating }} / 5
+      <app-rating-stars [rating]="seller?.rating || 0"></app-rating-stars>
     </div>
 
   </div>
 
   <!-- Action -->
   <div class="seller-card__actions">
-    <button (click)="viewProfile()">
+
+    <button class="btn-secondary" (click)="viewProfile()">
       View Profile
     </button>
 
-    <button (click)="contactSeller()">
+    <button class="btn-primary" (click)="contactSeller()">
       Contact
     </button>
+
   </div>
 
 </div>

@@ -1,1 +1,53 @@
-<div>Listing info placeholder.</div>
+<div class="listing-info">
+
+  <!-- Title -->
+  <h1 class="listing-info__title">
+    {{ listing?.title || 'Listing title' }}
+  </h1>
+
+  <!-- Meta -->
+  <div class="listing-info__meta">
+
+    <span class="listing-info__location">
+      📍 {{ listing?.location || 'Location not provided' }}
+    </span>
+
+    <span class="listing-info__rating">
+      <app-rating-stars [rating]="listing?.rating || 0"></app-rating-stars>
+    </span>
+
+    <span
+      class="listing-info__verified"
+      *ngIf="listing?.isVerified"
+    >
+      Verified Seller
+    </span>
+
+  </div>
+
+  <!-- Price -->
+  <div class="listing-info__price">
+    {{ listing?.price ? 'R ' + listing.price : 'Price on request' }}
+  </div>
+
+  <!-- Description -->
+  <div class="listing-info__description">
+    <p>
+      {{ listing?.description || 'No description provided.' }}
+    </p>
+  </div>
+
+  <!-- Actions -->
+  <div class="listing-info__actions">
+
+    <button class="btn-primary" (click)="contactSeller()">
+      Contact Seller
+    </button>
+
+    <button class="btn-secondary" (click)="saveListing()">
+      Save
+    </button>
+
+  </div>
+
+</div>

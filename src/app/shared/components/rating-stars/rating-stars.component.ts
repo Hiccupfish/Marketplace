@@ -1,14 +1,29 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-rating-stars',
   templateUrl: './rating-stars.component.html',
   styleUrls: ['./rating-stars.component.scss']
 })
-export class RatingStarsComponent {
-  @Input() value = 0;
+export class RatingStarsComponent implements OnChanges {
 
-  get stars(): boolean[] {
-    return Array.from({ length: 5 }, (_, index) => index < Math.round(this.value));
+  @Input() rating: number = 0;
+
+  stars: { filled: boolean; half: boolean }[] = [];
+
+  ngOnChanges() {
+    this.generateStars();
+  }
+
+  private generateStars() {
+    const fullStars = Math.floor(this.rating);
+    const hasHalfStar = this.rating % 1 >= 0.5;
+
+    this.stars = Array.from({ length: 5 }, (_, i) => {
+      return {
+        filled: i < fullStars,
+        half: i === fullStars && hasHalfStar
+      };
+    });
   }
 }

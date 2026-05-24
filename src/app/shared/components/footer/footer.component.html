@@ -1,3 +1,31 @@
 <footer class="footer">
-  <small>&copy; {{ year }} Marketplace</small>
+
+  <div class="footer__content">
+
+    <!-- Brand -->
+    <div class="footer__brand">
+      <h3>Township Market</h3>
+      <p>Safe, verified local buying and selling</p>
+    </div>
+
+    <!-- Links -->
+    <div class="footer__links">
+      <a routerLink="/">Home</a>
+      <a routerLink="/listings">Browse</a>
+      <a routerLink="/dashboard/create-listing">Sell</a>
+      <a routerLink="/auth/login">Login</a>
+    </div>
+
+    <!-- Safety -->
+    <div class="footer__safety">
+      <h4>Safety</h4>
+      <p>Only meet verified sellers and use trusted locations.</p>
+    </div>
+
+  </div>
+
+  <div class="footer__bottom">
+    <small>&copy; {{ year }} Township Market. All rights reserved.</small>
+  </div>
+
 </footer>

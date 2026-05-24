@@ -1,6 +1,4 @@
-import { Component, Input } from '@angular/core';
-
-import { Category } from '../../models/category.model';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-category-card',
@@ -8,5 +6,12 @@ import { Category } from '../../models/category.model';
   styleUrls: ['./category-card.component.scss']
 })
 export class CategoryCardComponent {
-  @Input() category: Category | null = null;
+
+  @Input() category: any;
+
+  @Output() select = new EventEmitter<any>();
+
+  onSelectCategory() {
+    this.select.emit(this.category);
+  }
 }

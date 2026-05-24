@@ -1,7 +1,21 @@
-:host {
-  display: inline-block;
+.rating-stars {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 14px;
 }
 
+.rating-stars__star {
+  color: #ddd;
+}
+
+/* full star */
 .rating-stars__star--filled {
-  color: gold;
+  color: #f5a623;
+}
+
+/* half star (optional visual tweak) */
+.rating-stars__star--half {
+  background: linear-gradient(90deg, #f5a623 50%, #ddd 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
