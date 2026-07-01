@@ -1,3 +1,32 @@
 <section class="user-verifications">
-  <app-verification-table></app-verification-table>
+  <h2 class="section-title">User Verifications</h2>
+  <div class="table-wrapper">
+    <table class="verifications-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Reason</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of verifications" [class.verified]="v.status === 'Verified'" (click)="select(v)">
+          <td>{{ v.id }}</td>
+          <td>{{ v.username }}</td>
+          <td>{{ v.reason }}</td>
+          <td>{{ v.date | date:'short' }}</td>
+          <td>{{ v.status }}</td>
+          <td>
+            <button *ngIf="v.status !== 'Verified'" class="verify-btn" (click)="verify(v.id); $event.stopPropagation()">
+              Verify
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="verifications.length === 0" class="empty-state">No user verifications pending.</p>
+  </div>
 </section>

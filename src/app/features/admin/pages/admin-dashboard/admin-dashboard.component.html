@@ -1,6 +1,17 @@
 <section class="admin-dashboard">
-  <h1>Admin Dashboard</h1>
-  <app-user-verifications></app-user-verifications>
-  <app-reported-listings></app-reported-listings>
-  <app-users-management></app-users-management>
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+  <div class="grid">
+    <section class="card">
+      <h2 class="card-title">User Verifications</h2>
+      <app-user-verifications></app-user-verifications>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Reported Listings</h2>
+      <app-reported-listings></app-reported-listings>
+    </section>
+    <section class="card">
+      <h2 class="card-title">Users Management</h2>
+      <app-users-management></app-users-management>
+    </section>
+  </div>
 </section>
