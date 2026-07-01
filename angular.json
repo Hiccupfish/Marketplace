@@ -58,5 +58,8 @@
       }
     }
   },
-  "defaultProject": "marketplace"
+  "defaultProject": "marketplace",
+  "cli": {
+    "analytics": "a9944e8f-1ee2-4336-ae81-eda494718af1"
+  }
 }
