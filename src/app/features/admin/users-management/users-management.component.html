@@ -1,3 +1,34 @@
 <section class="users-management">
-  <p>Users management placeholder.</p>
+  <h2 class="section-title">Users Management</h2>
+  <div class="table-wrapper">
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of users" [class.inactive]="u.status === 'Inactive'" (click)="select(u)">
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.role }}</td>
+          <td>{{ u.dateCreated | date:'short' }}</td>
+          <td>{{ u.status }}</td>
+          <td>
+            <button class="status-btn" (click)="toggle(u.id); $event.stopPropagation()">
+              {{ u.status === 'Active' ? 'Deactivate' : 'Activate' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="users.length === 0" class="empty-state">No users found.</p>
+  </div>
 </section>
