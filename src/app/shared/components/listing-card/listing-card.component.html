@@ -2,7 +2,7 @@
 
   <!-- Image -->
   <div class="listing-card__image">
-    <img [src]="listing?.image" alt="Listing image" />
+    <img [src]="listing?.imageUrl || 'assets/placeholder-listing.svg'" alt="Listing image" />
   </div>
 
   <!-- Content -->
@@ -13,23 +13,23 @@
     </h3>
 
     <p class="listing-card__location">
-      📍 {{ listing?.location || 'Location' }}
+      {{ listing?.location?.city || 'Location' }}{{ listing?.location?.country ? ', ' + listing?.location?.country : '' }}
     </p>
 
     <p class="listing-card__price">
-      {{ listing?.price ? 'R ' + listing.price : 'Price on request' }}
+      {{ listing?.price ? (listing.currency || 'R') + ' ' + listing.price : 'Price on request' }}
     </p>
 
     <!-- Trust indicators -->
     <div class="listing-card__meta">
 
       <span class="listing-card__rating">
-        ⭐ {{ listing?.rating || 0 }}
+        {{ listing?.rating || 0 }} stars
       </span>
 
       <span
         class="listing-card__verified"
-        *ngIf="listing?.isVerified"
+        *ngIf="listing?.verified"
       >
         Verified
       </span>

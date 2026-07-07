@@ -46,8 +46,15 @@
 
     tr {
       cursor: pointer;
-      &:hover td { background: rgba(255, 255, 255, 0.12); }
-      &.verified td { opacity: 0.6; text-decoration: line-through; }
+
+      &:hover td {
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      &.verified td {
+        opacity: 0.6;
+        text-decoration: line-through;
+      }
     }
   }
 
@@ -60,8 +67,14 @@
     font-size: 0.9rem;
     cursor: pointer;
     transition: transform 0.1s ease, background 0.2s ease;
-    &:hover { background: hsl(210, 80%, 45%); }
-    &:active { transform: scale(0.97); }
+
+    &:hover {
+      background: hsl(210, 80%, 45%);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
   }
 
   .empty-state {
@@ -70,7 +83,4 @@
     font-size: 1.1rem;
     color: hsl(0, 0%, 70%);
   }
-}
-
-  display: block;
 }

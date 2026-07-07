@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { CategoryCardComponent } from './components/category-card/category-card.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -31,7 +33,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     TruncatePipe,
     PhoneFormatDirective
   ],
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   exports: [
     NavbarComponent,
     FooterComponent,

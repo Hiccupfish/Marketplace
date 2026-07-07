@@ -12,12 +12,13 @@ export class SearchBarComponent {
   @Output() valueChange = new EventEmitter<string>();
   @Output() search = new EventEmitter<string>();
 
-  onInput(value: string) {
-    this.value = value;
-    this.valueChange.emit(value);
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.value = input.value;
+    this.valueChange.emit(this.value);
   }
 
-  onSearch() {
+  onSearch(): void {
     this.search.emit(this.value);
   }
 }

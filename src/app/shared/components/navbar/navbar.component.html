@@ -1,6 +1,6 @@
 <nav class="navbar">
   <!-- Brand -->
-  <div class="navbar__brand">
+  <div class="navbar__brand" routerLink="/">
     {{ brand }}
   </div>
 
@@ -10,6 +10,7 @@
       type="text"
       placeholder="Search services, products..."
       [(ngModel)]="searchQuery"
+      (keyup.enter)="onSearch()"
     />
   </div>
 
@@ -17,7 +18,7 @@
   <div class="navbar__links">
     <a routerLink="/">Home</a>
     <a routerLink="/listings">Browse</a>
-    <a routerLink="/dashboard/create-listing">Sell</a>
+    <a routerLink="/listings/create">Sell</a>
   </div>
 
   <!-- Auth -->
@@ -32,44 +33,7 @@
 
     <div *ngIf="isLoggedIn" class="navbar__profile">
       <span>{{ userName }}</span>
-      <button (click)="logout()">Logout</button>
-    </div>
-  </div>
-</nav><nav class="navbar">
-  <!-- Brand -->
-  <div class="navbar__brand">
-    {{ brand }}
-  </div>
-
-  <!-- Search -->
-  <div class="navbar__search">
-    <input
-      type="text"
-      placeholder="Search services, products..."
-      [(ngModel)]="searchQuery"
-    />
-  </div>
-
-  <!-- Links -->
-  <div class="navbar__links">
-    <a routerLink="/">Home</a>
-    <a routerLink="/listings">Browse</a>
-    <a routerLink="/dashboard/create-listing">Sell</a>
-  </div>
-
-  <!-- Auth -->
-  <div class="navbar__auth">
-    <button *ngIf="!isLoggedIn" routerLink="/auth/login">
-      Login
-    </button>
-
-    <button *ngIf="!isLoggedIn" routerLink="/auth/register">
-      Register
-    </button>
-
-    <div *ngIf="isLoggedIn" class="navbar__profile">
-      <span>{{ userName }}</span>
-      <button (click)="logout()">Logout</button>
+      <button type="button" (click)="logout()">Logout</button>
     </div>
   </div>
 </nav>

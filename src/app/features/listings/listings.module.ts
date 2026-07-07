@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '../../shared/shared.module';
 import { ListingsRoutingModule } from './listings-routing.module';
 import { CreateListingComponent } from './pages/create-listing/create-listing.component';
 import { EditListingComponent } from './pages/edit-listing/edit-listing.component';
@@ -23,7 +24,7 @@ import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-b
     SellerCardComponent,
     WhatsappButtonComponent,
   ],
-  imports: [CommonModule, ListingsRoutingModule],
+  imports: [CommonModule, SharedModule, ListingsRoutingModule],
   exports: [
     ListingsComponent,
     ListingDetailsComponent,
