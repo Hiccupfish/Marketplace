@@ -1,4 +1,13 @@
 <section class="register-page">
-  <app-auth-form></app-auth-form>
+  <h2>Create a seller account</h2>
+  <form class="auth-form" (ngSubmit)="submit()">
+    <label>Name <input name="name" [(ngModel)]="name" required /></label>
+    <label>Email <input name="email" type="email" [(ngModel)]="email" required /></label>
+    <label>Password <input name="password" type="password" minlength="8" [(ngModel)]="password" required /></label>
+    <label>Phone <input name="phone" [(ngModel)]="phone" /></label>
+    <label>City <input name="city" [(ngModel)]="city" /></label>
+    <p *ngIf="error" role="alert">{{ error }}</p>
+    <button type="submit" [disabled]="loading">{{ loading ? 'Creating account…' : 'Register' }}</button>
+  </form>
   <a routerLink="/auth/login">Login</a>
 </section>

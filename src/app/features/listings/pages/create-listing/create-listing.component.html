@@ -1,1 +1,67 @@
-<p>Create listing works.</p>
+<section class="create-listing-page">
+  <div class="create-listing-page__intro">
+    <p class="eyebrow">SELL ON MARKETPLACE</p>
+    <h1>Create a listing</h1>
+    <p>Tell local buyers what you offer. You can edit your listing later from your dashboard.</p>
+  </div>
+
+  <div class="create-listing-layout">
+    <form (ngSubmit)="submit()" #listingForm="ngForm" class="listing-form" novalidate>
+      <div class="form-section">
+        <div class="form-section__heading">
+          <span class="form-step">1</span>
+          <div><h2>What are you selling?</h2><p>Use a clear title and helpful description.</p></div>
+        </div>
+
+        <div class="form-group form-group--full">
+          <label for="title">Listing title <span>*</span></label>
+          <input id="title" name="title" [(ngModel)]="listing.title" required class="input" placeholder="e.g. Mobile car repair and diagnostics" />
+        </div>
+
+        <div class="form-group form-group--full">
+          <label for="description">Description <span>*</span></label>
+          <textarea id="description" name="description" [(ngModel)]="listing.description" required rows="6" class="textarea" placeholder="Describe what you offer, what is included, and why buyers can trust you."></textarea>
+          <small>Include key details such as condition, availability, or service area.</small>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section__heading">
+          <span class="form-step">2</span>
+          <div><h2>Price and location</h2><p>Help buyers find your listing and understand the cost.</p></div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="priceZar">Price (ZAR) <span>*</span></label>
+            <div class="price-input"><span>R</span><input id="priceZar" name="priceZar" type="number" min="0" [(ngModel)]="listing.priceZar" required class="input" placeholder="0.00" /></div>
+          </div>
+          <div class="form-group">
+            <label for="category">Category <span>*</span></label>
+            <select id="category" name="category" [(ngModel)]="listing.category" required class="input">
+              <option value="" disabled>Select a category</option>
+              <option>Mechanics</option><option>Painters</option><option>Electronics</option><option>Plumbing</option><option>Furniture</option><option>Repairs</option><option>Beauty</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group form-group--full">
+            <label for="city">City <span>*</span></label>
+            <input id="city" name="city" [(ngModel)]="listing.city" required class="input" placeholder="e.g. Johannesburg" />
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="error" class="form-error" role="alert">{{ error }}</p>
+      <div class="form-actions">
+        <a routerLink="/listings" class="cancel-link">Cancel</a>
+        <button type="submit" [disabled]="listingForm.invalid || loading" class="btn-primary">{{ loading ? 'Publishing…' : 'Publish listing' }}</button>
+      </div>
+    </form>
+
+    <aside class="listing-tips">
+      <div class="listing-tips__icon">?</div>
+      <h2>Tips for a great listing</h2>
+      <ul><li>Write a specific, descriptive title.</li><li>Add the price buyers should expect.</li><li>Choose the closest matching category.</li><li>Reply quickly when buyers contact you.</li></ul>
+      <div class="listing-tips__note"><strong>Your listing is yours.</strong><br />You can update or remove it at any time.</div>
+    </aside>
+  </div>
+</section>

@@ -30,7 +30,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -63,3 +62,4 @@
     "analytics": "a9944e8f-1ee2-4336-ae81-eda494718af1"
   }
 }
+

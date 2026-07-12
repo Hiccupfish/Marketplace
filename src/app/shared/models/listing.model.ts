@@ -7,7 +7,9 @@ export interface Listing {
   priceZar: number;
   category: string;
   city: string;
-  sellerId: number;
+  imageUrl?: string;
+  rating?: number;
+  isVerified?: boolean;
   createdAt: string;
   updatedAt: string;
 }

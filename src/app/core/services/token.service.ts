@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 
+@Injectable({ providedIn: 'root' })
 export class TokenService {
-  constructor(private readonly storage: StorageService = new StorageService()) {}
+  constructor(private readonly storage: StorageService) {}
 
   getToken(): string | null {
     return this.storage.getItem('token');

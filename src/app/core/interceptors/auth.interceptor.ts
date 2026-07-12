@@ -1,13 +1,13 @@
-export interface HttpRequestLike {
-  headers?: Record<string, string>;
-}
+import { Injectable } from '@angular/core';
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { TokenService } from '../services/token.service';
 
-export interface HttpHandlerLike {
-  handle(request: HttpRequestLike): unknown;
-}
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private readonly tokenService: TokenService) {}
 
-export class AuthInterceptor {
-  intercept(request: HttpRequestLike, next: HttpHandlerLike): unknown {
-    return next.handle(request);
+  intercept(request: HttpRequest<unknown>, next: HttpHandler) {
+    const token = this.tokenService.getToken();
+    return next.handle(token ? request.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : request);
   }
 }

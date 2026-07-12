@@ -1,3 +1,8 @@
-<div class="listings-grid">
-  <app-listing-card *ngFor="let listing of listings" [listing]="listing"></app-listing-card>
-</div>
+<section>
+  <p *ngIf="loading">Loading listings…</p>
+  <p *ngIf="error" role="alert">{{ error }}</p>
+  <p *ngIf="!loading && !error && listings.length === 0">No listings found.</p>
+  <div class="listings-grid" *ngIf="!loading && !error">
+    <app-listing-card *ngFor="let listing of listings" [listing]="listing"></app-listing-card>
+  </div>
+</section>

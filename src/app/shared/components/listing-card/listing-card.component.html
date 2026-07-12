@@ -13,11 +13,11 @@
     </h3>
 
     <p class="listing-card__location">
-      {{ listing?.location?.city || 'Location' }}{{ listing?.location?.country ? ', ' + listing?.location?.country : '' }}
+      {{ listing?.city || 'Location' }}
     </p>
 
     <p class="listing-card__price">
-      {{ listing?.price ? (listing.currency || 'R') + ' ' + listing.price : 'Price on request' }}
+      {{ listing?.priceZar ? 'R ' + listing.priceZar : 'Price on request' }}
     </p>
 
     <!-- Trust indicators -->
@@ -29,7 +29,7 @@
 
       <span
         class="listing-card__verified"
-        *ngIf="listing?.verified"
+        *ngIf="listing?.isVerified"
       >
         Verified
       </span>
