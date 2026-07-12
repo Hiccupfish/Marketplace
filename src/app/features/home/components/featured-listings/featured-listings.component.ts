@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Listing } from '../../../../shared/models/listing.model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-featured-listings',
@@ -10,40 +11,37 @@ import { Listing } from '../../../../shared/models/listing.model';
 export class FeaturedListingsComponent {
   featuredListings: Listing[] = [
     {
-      id: '1',
+      id: 1,
       title: 'Mobile mechanic',
       description: 'Reliable car diagnostics, minor repairs, and maintenance.',
-      price: 450,
-      currency: 'ZAR',
-      categoryId: 'mechanics',
-      location: { city: 'Johannesburg', country: 'South Africa' },
-      imageUrl: 'assets/placeholder-listing.svg',
-      verified: true,
-      rating: 4.8
+      priceZar: 450,
+      category: 'mechanics',
+      city: 'Johannesburg',
+      sellerId: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     {
-      id: '2',
+      id: 2,
       title: 'Interior painting service',
       description: 'Clean residential painting for rooms and feature walls.',
-      price: 1200,
-      currency: 'ZAR',
-      categoryId: 'painters',
-      location: { city: 'Pretoria', country: 'South Africa' },
-      imageUrl: 'assets/placeholder-listing.svg',
-      verified: true,
-      rating: 4.6
+      priceZar: 1200,
+      category: 'painters',
+      city: 'Pretoria',
+      sellerId: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     },
     {
-      id: '3',
+      id: 3,
       title: 'Laptop and phone repairs',
       description: 'Screen replacements, software setup, and device checks.',
-      price: 350,
-      currency: 'ZAR',
-      categoryId: 'electronics',
-      location: { city: 'Soweto', country: 'South Africa' },
-      imageUrl: 'assets/placeholder-listing.svg',
-      verified: false,
-      rating: 4.4
-    }
+      priceZar: 350,
+      category: 'electronics',
+      city: 'Soweto',
+      sellerId: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
   ];
 }

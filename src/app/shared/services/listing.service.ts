@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { Listing } from '../models/listing.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ListingService {
+  private apiUrl = `${environment.apiUrl}/listings`;
+
+  constructor(private http: HttpClient) {}
+
   getListings(): Observable<Listing[]> {
-    return of([]);
+    return this.http.get<Listing[]>(this.apiUrl);
   }
 }

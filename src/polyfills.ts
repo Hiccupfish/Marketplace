@@ -1,4 +1,2 @@
-/**
- * This file is intentionally left blank.
- * It exists so the Angular CLI build configuration can reference a polyfills entry point.
- */
+/** Angular's change-detection runtime dependency. */
+import 'zone.js';

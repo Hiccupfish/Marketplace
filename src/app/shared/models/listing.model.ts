@@ -1,14 +1,13 @@
 import { Location } from './location.model';
 
 export interface Listing {
-  id: string;
+  id: number;
   title: string;
   description: string;
-  price: number;
-  currency: string;
-  categoryId: string;
-  location: Location;
-  imageUrl?: string;
-  verified?: boolean;
-  rating?: number;
+  priceZar: number;
+  category: string;
+  city: string;
+  sellerId: number;
+  createdAt: string;
+  updatedAt: string;
 }
