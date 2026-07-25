@@ -1,41 +1,65 @@
-<article class="listing-card">
+<article class="listing-card" [ngClass]="viewMode" [routerLink]="['/listings', listing?.id]">
+  <!-- Image Container -->
+  <div class="card-image-wrapper">
+    <img
+      [src]="listing?.imageUrl || fallbackImage"
+      [alt]="listing?.title || 'Listing item image'"
+      loading="lazy"
+    />
+    <div class="card-overlay"></div>
 
-  <!-- Image -->
-  <div class="listing-card__image">
-    <img [src]="listing?.imageUrl || 'assets/placeholder-listing.svg'" alt="Listing image" />
+    <!-- Category Pill -->
+    <span *ngIf="listing?.category" class="category-pill" [style.backgroundColor]="categoryColor">
+      {{ listing?.category }}
+    </span>
+
+    <!-- Verified Badge -->
+    <div *ngIf="listing?.isVerified" class="verified-badge" title="Verified Seller">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </svg>
+      <span>Verified</span>
+    </div>
   </div>
 
-  <!-- Content -->
-  <div class="listing-card__content">
-
-    <h3 class="listing-card__title">
-      {{ listing?.title || 'Listing title' }}
-    </h3>
-
-    <p class="listing-card__location">
-      {{ listing?.city || 'Location' }}
-    </p>
-
-    <p class="listing-card__price">
-      {{ listing?.priceZar ? 'R ' + listing.priceZar : 'Price on request' }}
-    </p>
-
-    <!-- Trust indicators -->
-    <div class="listing-card__meta">
-
-      <span class="listing-card__rating">
-        {{ listing?.rating || 0 }} stars
-      </span>
-
-      <span
-        class="listing-card__verified"
-        *ngIf="listing?.isVerified"
-      >
-        Verified
-      </span>
-
+  <!-- Content Body -->
+  <div class="card-content">
+    <div class="card-header">
+      <h3 class="card-title">{{ listing?.title || 'Untitled Listing' }}</h3>
+      <div class="card-price">{{ formattedPrice }}</div>
     </div>
 
-  </div>
+    <p *ngIf="listing?.description" class="card-description">
+      {{ listing?.description }}
+    </p>
 
+    <!-- Meta Details Row -->
+    <div class="card-meta">
+      <div class="meta-location">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span>{{ listing?.city || 'Location not specified' }}</span>
+      </div>
+
+      <div class="meta-rating" *ngIf="listing?.rating">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span>{{ listing?.rating | number:'1.1-1' }}</span>
+      </div>
+    </div>
+
+    <div class="card-action-bar">
+      <span class="view-link">
+        <span>View Item</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </span>
+    </div>
+  </div>
 </article>

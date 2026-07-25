@@ -1,8 +1,174 @@
-<section>
-  <p *ngIf="loading">Loading listings…</p>
-  <p *ngIf="error" role="alert">{{ error }}</p>
-  <p *ngIf="!loading && !error && listings.length === 0">No listings found.</p>
-  <div class="listings-grid" *ngIf="!loading && !error">
-    <app-listing-card *ngFor="let listing of listings" [listing]="listing"></app-listing-card>
+<div class="listings-page-wrapper">
+  <!-- Glow Orbs for ambient background animation -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="listings-container">
+    <!-- Hero Header -->
+    <header class="listings-hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Explore Marketplace</h1>
+        <p class="hero-subtitle">
+          Find top-rated electronics, vehicles, property, and local services in your area.
+        </p>
+
+        <!-- Search Input Bar -->
+        <div class="search-bar-wrapper">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Search by title, description, category, or city..."
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange()"
+          />
+          <button *ngIf="searchQuery" class="clear-search-btn" (click)="clearSearch()" title="Clear search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Category Pills Bar -->
+        <div class="categories-bar">
+          <button
+            *ngFor="let cat of categories"
+            class="category-chip"
+            [class.active]="selectedCategory === cat"
+            (click)="selectCategory(cat)"
+          >
+            <span>{{ cat }}</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toolbar Controls -->
+    <div class="listings-toolbar">
+      <div class="toolbar-left">
+        <span class="results-count" *ngIf="!loading">
+          Showing <strong>{{ displayListings.length }}</strong> {{ displayListings.length === 1 ? 'item' : 'items' }}
+          <span *ngIf="selectedCategory !== 'All'"> in <em>{{ selectedCategory }}</em></span>
+        </span>
+      </div>
+
+      <div class="toolbar-right">
+        <!-- Sort Control -->
+        <div class="sort-select-wrapper">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" [(ngModel)]="selectedSort">
+            <option value="newest">Newest First</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+          </select>
+        </div>
+
+        <!-- View Mode Toggle -->
+        <div class="view-mode-toggle">
+          <button
+            class="toggle-btn"
+            [class.active]="viewMode === 'grid'"
+            (click)="viewMode = 'grid'"
+            title="Grid View"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </button>
+          <button
+            class="toggle-btn"
+            [class.active]="viewMode === 'list'"
+            (click)="viewMode = 'list'"
+            title="List View"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"/>
+              <line x1="8" y1="12" x2="21" y2="12"/>
+              <line x1="8" y1="18" x2="21" y2="18"/>
+              <line x1="3" y1="6" x2="3.01" y2="6"/>
+              <line x1="3" y1="12" x2="3.01" y2="12"/>
+              <line x1="3" y1="18" x2="3.01" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sell CTA -->
+        <a routerLink="/listings/create" class="sell-cta-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Sell Something</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-banner">
+      <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <div class="error-text">
+        <h3>Could not load listings</h3>
+        <p>{{ error }}</p>
+      </div>
+      <button class="retry-btn" (click)="loadListings()">Retry</button>
+    </div>
+
+    <!-- Skeleton Loading Grid -->
+    <div class="listings-grid skeleton-grid" *ngIf="loading">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton-line title"></div>
+          <div class="skeleton-line price"></div>
+          <div class="skeleton-line text"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && !error && displayListings.length === 0">
+      <div class="empty-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="8" y1="11" x2="14" y2="11"/>
+        </svg>
+      </div>
+      <h2>No listings found</h2>
+      <p>
+        We couldn't find any items matching your search
+        <span *ngIf="searchQuery">"<strong>{{ searchQuery }}</strong>"</span>
+        <span *ngIf="selectedCategory !== 'All'"> in category <strong>{{ selectedCategory }}</strong></span>.
+      </p>
+      <div class="empty-actions">
+        <button class="clear-filters-btn" (click)="clearFilters()">Clear All Filters</button>
+        <a routerLink="/listings/create" class="create-listing-btn">Post a New Listing</a>
+      </div>
+    </div>
+
+    <!-- Listings Grid / List -->
+    <div
+      class="listings-grid"
+      [class.list-view]="viewMode === 'list'"
+      *ngIf="!loading && !error && displayListings.length > 0"
+    >
+      <app-listing-card
+        *ngFor="let item of displayListings"
+        [listing]="item"
+        [viewMode]="viewMode"
+      ></app-listing-card>
+    </div>
   </div>
-</section>
+</div>

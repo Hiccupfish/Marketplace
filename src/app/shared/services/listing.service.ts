@@ -17,7 +17,16 @@ export class ListingService {
     return this.http.get<Listing[]>(this.apiUrl, { params });
   }
 
+  getListing(id: number | string): Observable<Listing> {
+    return this.http.get<Listing>(`${this.apiUrl}/${id}`);
+  }
+
   createListing(listing: Pick<Listing, 'title' | 'description' | 'priceZar' | 'category' | 'city'>): Observable<Listing> {
     return this.http.post<Listing>(this.apiUrl, listing);
   }
+
+  deleteListing(id: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
+

@@ -1,0 +1,195 @@
+<div class="offers-page-wrapper">
+  <!-- Glow Orbs for ambient background animation -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="offers-container">
+    <!-- Header & Navigation -->
+    <nav class="offers-nav">
+      <button class="back-btn" (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        <span>Back to Item Details</span>
+      </button>
+
+      <div class="breadcrumbs" *ngIf="listing">
+        <a routerLink="/listings">Listings</a>
+        <span class="sep">/</span>
+        <a [routerLink]="['/listings', listing.id]">{{ listing.title }}</a>
+        <span class="sep">/</span>
+        <span class="current">Manage Offers</span>
+      </div>
+    </nav>
+
+    <!-- Header Banner -->
+    <header class="offers-header" *ngIf="listing">
+      <div class="header-main">
+        <div class="header-badge">
+          <span class="badge-dot"></span>
+          <span>Seller Portal</span>
+        </div>
+        <h1>Offers for "{{ listing.title }}"</h1>
+        <p class="header-sub">
+          Review, accept, or decline price offers submitted by interested buyers.
+        </p>
+      </div>
+
+      <div class="listing-summary-card">
+        <div class="summary-label">Asking Price</div>
+        <div class="summary-price">R {{ listing.priceZar | number:'1.0-0' }}</div>
+        <div class="summary-meta">{{ offers.length }} {{ offers.length === 1 ? 'offer' : 'offers' }} received</div>
+      </div>
+    </header>
+
+    <!-- Notification Log Info Banner -->
+    <div class="notification-log-card" *ngIf="listing">
+      <div class="log-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <div class="log-content">
+        <h3>Automated Seller Alerts Active</h3>
+        <p>
+          Whenever a buyer places an offer, an instant <strong>Email Alert</strong> is sent to <code>{{ listing.seller?.email || 'seller@marketplace.co.za' }}</code> and a <strong>WhatsApp Alert</strong> is dispatched to <code>{{ listing.seller?.phone || '+27 82 000 0000' }}</code>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Status Toast -->
+    <div *ngIf="statusMessage" class="alert-toast">
+      {{ statusMessage }}
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-banner">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div *ngIf="loading" class="skeleton-list">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3]"></div>
+    </div>
+
+    <!-- Empty Offers State -->
+    <div *ngIf="!loading && !error && offers.length === 0" class="empty-offers">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <h2>No offers submitted yet</h2>
+      <p>When buyers submit price offers on this listing, they will appear here along with Email and WhatsApp notifications.</p>
+    </div>
+
+    <!-- Offers List -->
+    <div *ngIf="!loading && !error && offers.length > 0" class="offers-list">
+      <div
+        *ngFor="let offer of offers"
+        class="offer-card"
+        [class.accepted]="offer.status === 'ACCEPTED'"
+        [class.rejected]="offer.status === 'REJECTED'"
+      >
+        <div class="offer-card-header">
+          <div class="buyer-profile">
+            <div class="buyer-avatar">
+              {{ offer.buyerName.charAt(0).toUpperCase() }}
+            </div>
+            <div class="buyer-info">
+              <h3>{{ offer.buyerName }}</h3>
+              <div class="buyer-contacts">
+                <span class="contact-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  {{ offer.buyerEmail }}
+                </span>
+
+                <a
+                  *ngIf="offer.buyerPhone"
+                  [href]="getWhatsAppLink(offer.buyerPhone, offer)"
+                  target="_blank"
+                  rel="noopener"
+                  class="contact-item whatsapp-link"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  {{ offer.buyerPhone }} (WhatsApp)
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Badge -->
+          <div class="status-badge" [ngClass]="offer.status?.toLowerCase()">
+            <span class="status-dot"></span>
+            <span>{{ offer.status }}</span>
+          </div>
+        </div>
+
+        <div class="offer-card-body">
+          <div class="price-row">
+            <div class="offered-amount">R {{ offer.amountZar | number:'1.0-0' }}</div>
+            <div
+              class="diff-badge"
+              [class.above]="getPriceDiff(offer.amountZar).isAbove"
+            >
+              {{ getPriceDiff(offer.amountZar).text }}
+            </div>
+          </div>
+
+          <p *ngIf="offer.message" class="offer-message">
+            "{{ offer.message }}"
+          </p>
+          <p *ngIf="!offer.message" class="offer-message empty">
+            No note attached with this offer.
+          </p>
+
+          <div class="offer-footer">
+            <span class="offer-date">
+              Submitted {{ offer.createdAt | date:'medium' }}
+            </span>
+
+            <!-- Action Buttons -->
+            <div class="offer-actions" *ngIf="offer.status === 'PENDING'">
+              <button
+                class="btn-reject"
+                [disabled]="updatingOfferId === offer.id"
+                (click)="updateStatus(offer, 'REJECTED')"
+              >
+                Reject Offer
+              </button>
+
+              <button
+                class="btn-accept"
+                [disabled]="updatingOfferId === offer.id"
+                (click)="updateStatus(offer, 'ACCEPTED')"
+              >
+                Accept Offer
+              </button>
+            </div>
+
+            <div class="accepted-note" *ngIf="offer.status === 'ACCEPTED'">
+              ✓ Offer accepted! You can now contact {{ offer.buyerName }} to finalize payment.
+            </div>
+
+            <div class="rejected-note" *ngIf="offer.status === 'REJECTED'">
+              Offer rejected.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

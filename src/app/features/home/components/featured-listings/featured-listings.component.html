@@ -1,16 +1,27 @@
 <section class="featured-listings">
 
-  <div class="featured-listings__header">
-    <h2>Featured Listings</h2>
-    <p>Trusted sellers and services in your area</p>
-  </div>
+  <div class="featured-listings__container">
 
-  <div class="featured-listings__grid">
+    <div class="featured-listings__header">
 
-    <app-listing-card
-      *ngFor="let listing of featuredListings"
-      [listing]="listing">
-    </app-listing-card>
+      <p class="eyebrow">FEATURED MARKETPLACE</p>
+
+      <h2>Featured Listings</h2>
+
+      <p class="featured-listings__description">
+        Discover trusted local businesses, skilled artisans and verified sellers recommended in your community.
+      </p>
+
+    </div>
+
+    <div class="featured-listings__grid">
+
+      <app-listing-card
+        *ngFor="let listing of featuredListings"
+        [listing]="listing">
+      </app-listing-card>
+
+    </div>
 
   </div>
 

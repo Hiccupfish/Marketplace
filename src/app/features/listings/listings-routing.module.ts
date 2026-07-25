@@ -4,13 +4,17 @@ import { CreateListingComponent } from './pages/create-listing/create-listing.co
 import { EditListingComponent } from './pages/edit-listing/edit-listing.component';
 import { ListingDetailsComponent } from './pages/listing-details/listing-details.component';
 import { ListingsComponent } from './pages/listings/listings.component';
+import { ListingOffersComponent } from './pages/listing-offers/listing-offers.component';
+
 
 const routes: Routes = [
   { path: '', component: ListingsComponent },
   { path: 'create', component: CreateListingComponent },
+  { path: ':id/offers', component: ListingOffersComponent },
   { path: ':id/edit', component: EditListingComponent },
   { path: ':id', component: ListingDetailsComponent },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

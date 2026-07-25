@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRouter from './routes/auth';
 import listingsRouter from './routes/listings';
 import sellersRouter from './routes/sellers';
+import offersRouter from './routes/offers';
 
 dotenv.config();
 
@@ -15,5 +16,7 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/sellers', sellersRouter);
+app.use('/api/offers', offersRouter);
 
 export default app;
+

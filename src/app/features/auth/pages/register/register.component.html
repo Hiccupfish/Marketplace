@@ -1,13 +1,284 @@
-<section class="register-page">
-  <h2>Create a seller account</h2>
-  <form class="auth-form" (ngSubmit)="submit()">
-    <label>Name <input name="name" [(ngModel)]="name" required /></label>
-    <label>Email <input name="email" type="email" [(ngModel)]="email" required /></label>
-    <label>Password <input name="password" type="password" minlength="8" [(ngModel)]="password" required /></label>
-    <label>Phone <input name="phone" [(ngModel)]="phone" /></label>
-    <label>City <input name="city" [(ngModel)]="city" /></label>
-    <p *ngIf="error" role="alert">{{ error }}</p>
-    <button type="submit" [disabled]="loading">{{ loading ? 'Creating account…' : 'Register' }}</button>
-  </form>
-  <a routerLink="/auth/login">Login</a>
-</section>
+<div class="register-wrapper">
+  <!-- Glow Orbs for ambient background animation -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="register-container">
+    <!-- Left Hero/Banner Panel -->
+    <div class="hero-panel">
+      <div class="brand-badge">
+        <span class="brand-dot"></span>
+        <span>Marketplace Seller Portal</span>
+      </div>
+      <h1 class="hero-title">Start Selling &amp; Growing Your Business</h1>
+      <p class="hero-subtitle">
+        Join thousands of verified sellers reaching eager buyers every day. Quick setup, zero hidden fees.
+      </p>
+
+      <div class="features-list">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>Instant Product Listing</h3>
+            <p>Publish items with photos and specs in under 60 seconds.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>Verified Seller Status</h3>
+            <p>Build buyer trust with identity verification &amp; ratings.</p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h3>Direct Buyer Chat</h3>
+            <p>In-app messaging lets you close deals and answer questions fast.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Form Card -->
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Create an Account</h2>
+        <p>Enter your details below to get started</p>
+      </div>
+
+      <!-- Error Alert -->
+      <div *ngIf="error" class="alert-error" role="alert">
+        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ error }}</span>
+        <button class="alert-dismiss" (click)="error = ''" type="button" aria-label="Dismiss error">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <form class="auth-form" (ngSubmit)="submit()" #regForm="ngForm">
+        <!-- Full Name -->
+        <div class="input-group">
+          <label for="reg-name">Full Name <span class="required-star">*</span></label>
+          <div class="input-field-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input
+              id="reg-name"
+              name="name"
+              type="text"
+              placeholder="e.g. Sarah Jenkins"
+              [(ngModel)]="name"
+              required
+              #nameInput="ngModel"
+              [class.invalid]="nameInput.touched && nameInput.invalid"
+            />
+          </div>
+        </div>
+
+        <!-- Email Address -->
+        <div class="input-group">
+          <label for="reg-email">Email Address <span class="required-star">*</span></label>
+          <div class="input-field-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input
+              id="reg-email"
+              name="email"
+              type="email"
+              placeholder="name@example.com"
+              [(ngModel)]="email"
+              required
+              email
+              #emailInput="ngModel"
+              [class.invalid]="emailInput.touched && emailInput.invalid"
+            />
+          </div>
+        </div>
+
+        <!-- Grid Row: Phone & City -->
+        <div class="input-row">
+          <div class="input-group">
+            <label for="reg-phone">Phone Number</label>
+            <div class="input-field-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <input
+                id="reg-phone"
+                name="phone"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                [(ngModel)]="phone"
+              />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="reg-city">City / Region</label>
+            <div class="input-field-wrapper">
+              <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <input
+                id="reg-city"
+                name="city"
+                type="text"
+                placeholder="New York, NY"
+                [(ngModel)]="city"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="input-group">
+          <label for="reg-password">Password <span class="required-star">*</span></label>
+          <div class="input-field-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="reg-password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Minimum 8 characters"
+              minlength="8"
+              [(ngModel)]="password"
+              required
+              #passInput="ngModel"
+              [class.invalid]="passInput.touched && passInput.invalid"
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              (click)="toggleShowPassword()"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            >
+              <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Password Strength Indicator -->
+          <div *ngIf="password" class="password-strength-container">
+            <div class="strength-bar-track">
+              <div
+                class="strength-bar-fill"
+                [style.width.%]="passwordStrengthScore"
+                [ngClass]="passwordStrengthClass"
+              ></div>
+            </div>
+            <div class="strength-label-row">
+              <span>Password strength:</span>
+              <span class="strength-value" [ngClass]="passwordStrengthClass">{{ passwordStrengthLabel }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="input-group">
+          <label for="reg-confirm-password">Confirm Password <span class="required-star">*</span></label>
+          <div class="input-field-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <input
+              id="reg-confirm-password"
+              name="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Re-enter your password"
+              [(ngModel)]="confirmPassword"
+              [class.invalid]="passwordsMismatch"
+            />
+            <button
+              type="button"
+              class="password-toggle-btn"
+              (click)="toggleShowConfirmPassword()"
+              [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+            >
+              <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg *ngIf="showConfirmPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+          <span *ngIf="passwordsMismatch" class="error-hint">Passwords do not match</span>
+        </div>
+
+        <!-- Terms Agreement Checkbox -->
+        <div class="terms-group">
+          <label class="custom-checkbox">
+            <input
+              type="checkbox"
+              name="agreeToTerms"
+              [(ngModel)]="agreeToTerms"
+              required
+            />
+            <span class="checkmark"></span>
+            <span class="terms-text">
+              I agree to the <a href="#" (click)="$event.preventDefault()">Terms of Service</a> and <a href="#" (click)="$event.preventDefault()">Privacy Policy</a>
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loading || regForm.invalid || passwordsMismatch || !agreeToTerms"
+        >
+          <span *ngIf="loading" class="spinner"></span>
+          <span>{{ loading ? 'Creating account...' : 'Create Account' }}</span>
+          <svg *ngIf="!loading" class="btn-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Footer Link -->
+      <div class="form-footer">
+        <span>Already have an account?</span>
+        <a routerLink="/auth/login" class="login-link">Log In</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,7 @@ import { VerifiedBadgeComponent } from './components/verified-badge/verified-bad
 import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { PricePipe } from './pipes/price.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { PageLayoutComponent } from './components/page-layout/page-layout.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     ConfirmDialogComponent,
     PricePipe,
     TruncatePipe,
-    PhoneFormatDirective
+    PhoneFormatDirective,
+    PageLayoutComponent
   ],
   imports: [CommonModule, FormsModule, RouterModule],
   exports: [

@@ -11,7 +11,9 @@ import { ListingFiltersComponent } from './components/listing-filters/listing-fi
 import { ListingGalleryComponent } from './components/listing-gallery/listing-gallery.component';
 import { ListingInfoComponent } from './components/listing-info/listing-info.component';
 import { SellerCardComponent } from './components/seller-card/seller-card.component';
+import { ListingOffersComponent } from './pages/listing-offers/listing-offers.component';
 import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-button.component';
+
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-b
     ListingDetailsComponent,
     CreateListingComponent,
     EditListingComponent,
+    ListingOffersComponent,
     ListingGalleryComponent,
     ListingInfoComponent,
     ListingFiltersComponent,
@@ -31,6 +34,7 @@ import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-b
     ListingDetailsComponent,
     CreateListingComponent,
     EditListingComponent,
+    ListingOffersComponent,
     ListingGalleryComponent,
     ListingInfoComponent,
     ListingFiltersComponent,
@@ -39,3 +43,4 @@ import { WhatsappButtonComponent } from './components/whatsapp-button/whatsapp-b
   ],
 })
 export class ListingsModule {}
+

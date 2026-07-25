@@ -1,33 +1,39 @@
 <section class="hero">
-  <div class="hero__content">
+  <div class="hero__container">
 
-    <h1 class="hero__title">
-      Find trusted local sellers & artisans near you
-    </h1>
+    <div class="hero__content">
 
-    <p class="hero__subtitle">
-      From mechanics to painters, electronics to furniture — connect safely with verified people in your community.
-    </p>
+      <p class="eyebrow">LOCAL MARKETPLACE</p>
 
-    <!-- Search Box -->
-    <div class="hero__search">
-      <input
-        type="text"
-        placeholder="Search services or products..."
-        [(ngModel)]="searchQuery"
-      />
+      <h1 class="hero__title">
+        Find trusted local sellers & artisans near you
+      </h1>
 
-      <button (click)="onSearch()">
-        Search
-      </button>
-    </div>
+      <p class="hero__subtitle">
+        From mechanics to painters, electronics to furniture—discover verified businesses and skilled people in your community.
+      </p>
 
-    <!-- Quick Categories -->
-    <div class="hero__categories">
-      <span (click)="filter('mechanics')">Mechanics</span>
-      <span (click)="filter('painters')">Painters</span>
-      <span (click)="filter('electronics')">Electronics</span>
-      <span (click)="filter('plumbing')">Plumbing</span>
+      <div class="hero__search">
+
+        <input
+          type="text"
+          placeholder="Search services or products..."
+          [(ngModel)]="searchQuery"
+        />
+
+        <button (click)="onSearch()">
+          Search
+        </button>
+
+      </div>
+
+      <div class="hero__categories">
+        <span (click)="filter('mechanics')">Mechanics</span>
+        <span (click)="filter('painters')">Painters</span>
+        <span (click)="filter('electronics')">Electronics</span>
+        <span (click)="filter('plumbing')">Plumbing</span>
+      </div>
+
     </div>
 
   </div>

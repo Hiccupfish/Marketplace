@@ -1,1 +1,319 @@
-<p>Listing details works.</p>
+<div class="details-page-wrapper">
+  <!-- Glow Orbs for ambient background animation -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="details-container">
+    <!-- Navigation & Breadcrumbs -->
+    <nav class="details-nav">
+      <button class="back-btn" (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        <span>Back to Listings</span>
+      </button>
+
+      <div class="breadcrumbs" *ngIf="listing">
+        <a routerLink="/listings">Listings</a>
+        <span class="sep">/</span>
+        <span>{{ listing.category }}</span>
+        <span class="sep">/</span>
+        <span class="current">{{ listing.title }}</span>
+      </div>
+    </nav>
+
+    <!-- Loading Skeleton State -->
+    <div *ngIf="loading" class="skeleton-wrapper">
+      <div class="skeleton-media"></div>
+      <div class="skeleton-info">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line price"></div>
+        <div class="skeleton-line text"></div>
+        <div class="skeleton-line text short"></div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-card">
+      <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <h2>Unable to Load Listing</h2>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="goBack()">Return to All Listings</button>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div *ngIf="!loading && !error && listing" class="details-grid">
+      <!-- Left Column: Visual Showcase -->
+      <div class="showcase-column">
+        <div class="image-card">
+          <img [src]="listing.imageUrl || fallbackImage" [alt]="listing.title" />
+          <div class="image-overlay"></div>
+
+          <!-- Category Badge Overlay -->
+          <span class="category-badge" [style.backgroundColor]="categoryColor">
+            {{ listing.category }}
+          </span>
+
+          <!-- Verified Badge -->
+          <div *ngIf="listing.isVerified" class="verified-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <span>Verified Seller Listing</span>
+          </div>
+        </div>
+
+        <!-- Safety Advice Banner -->
+        <div class="safety-card">
+          <div class="safety-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <h3>Buyer Safety Tips</h3>
+          </div>
+          <ul>
+            <li>Inspect the item in person before making final payment.</li>
+            <li>Meet in public, well-lit locations.</li>
+            <li>Never wire money or send advance deposits to strangers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: Details & Actions -->
+      <div class="info-column">
+        <div class="main-info-card">
+          <!-- Rating & Location Row -->
+          <div class="meta-row">
+            <div class="location-tag">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>{{ listing.city }}</span>
+            </div>
+
+            <div class="rating-tag" *ngIf="listing.rating">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              <span>{{ listing.rating | number:'1.1-1' }} / 5.0</span>
+            </div>
+          </div>
+
+          <h1 class="listing-title">{{ listing.title }}</h1>
+          <div class="listing-price">{{ formattedPrice }}</div>
+
+          <!-- Quick Action Buttons -->
+          <div class="action-buttons-row">
+            <button class="btn-primary" (click)="showContactModal = true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Contact Seller</span>
+            </button>
+
+            <button class="btn-secondary" (click)="openOfferModal()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <span>Make an Offer</span>
+            </button>
+
+            <button class="btn-icon" [class.saved]="isSaved" (click)="toggleSave()" [title]="isSaved ? 'Remove from saved' : 'Save listing'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" [attr.fill]="isSaved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+
+            <button class="btn-icon" (click)="copyLink()" title="Share listing">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="18" cy="5" r="3"/>
+                <circle cx="6" cy="12" r="3"/>
+                <circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Toast notification for copy link -->
+          <div *ngIf="copyLinkSuccess" class="toast-notification">
+            Link copied to clipboard!
+          </div>
+
+          <!-- Specifications List -->
+          <div class="specs-section">
+            <h3>Item Specifications</h3>
+            <div class="specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">Category</span>
+                <span class="spec-value">{{ listing.category }}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Location</span>
+                <span class="spec-value">{{ listing.city }}</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Status</span>
+                <span class="spec-value active-badge">Active Listing</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">Listing Ref ID</span>
+                <span class="spec-value">#MP-{{ listing.id }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description Section -->
+          <div class="description-section">
+            <h3>Description</h3>
+            <p>{{ listing.description }}</p>
+          </div>
+        </div>
+
+        <!-- Seller Info Card with Link to Manage Offers -->
+        <div class="seller-card">
+          <div class="seller-avatar">
+            <span>{{ listing.city.charAt(0) }}</span>
+          </div>
+
+          <div class="seller-details">
+            <div class="seller-header">
+              <h4>Verified Seller</h4>
+              <span class="seller-badge">Pro Member</span>
+            </div>
+            <p class="seller-sub">Typically responds within 1 hour</p>
+          </div>
+
+          <div class="seller-actions-group">
+            <a [routerLink]="['/listings', listing.id, 'offers']" class="seller-offers-link">
+              <span>View Offers Page</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Seller Modal -->
+  <div *ngIf="showContactModal" class="modal-backdrop" (click)="showContactModal = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Contact Seller</h3>
+        <button class="close-btn" (click)="showContactModal = false">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p>Send a message directly to the seller regarding <strong>{{ listing?.title }}</strong>.</p>
+        <div class="form-group">
+          <label>Your Message</label>
+          <textarea rows="4" placeholder="Hi, is this item still available? Where can we meet?"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="showContactModal = false">Cancel</button>
+        <button class="btn-primary" (click)="showContactModal = false">Send Message</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Make an Offer Modal -->
+  <div *ngIf="showOfferModal" class="modal-backdrop" (click)="showOfferModal = false">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Make an Offer</h3>
+        <button class="close-btn" (click)="showOfferModal = false">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Success Banner & Notification Dispatch Confirmation -->
+        <div *ngIf="offerSuccessMessage" class="alert-success-box">
+          <div class="success-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h4>Offer Dispatched!</h4>
+          </div>
+          <p>{{ offerSuccessMessage }}</p>
+
+          <!-- Notification Badges -->
+          <div class="notification-badges" *ngIf="notificationDetails">
+            <div class="notif-badge email">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <span>Email Alert Sent to <code>{{ notificationDetails.emailRecipient }}</code></span>
+            </div>
+
+            <div class="notif-badge whatsapp">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>WhatsApp Alert Sent to <code>{{ notificationDetails.whatsAppRecipient }}</code></span>
+            </div>
+          </div>
+
+          <div class="offer-next-step">
+            <a [routerLink]="['/listings', listing?.id, 'offers']" (click)="showOfferModal = false" class="view-offers-btn">
+              View Seller Offers Page
+            </a>
+          </div>
+        </div>
+
+        <!-- Input Form -->
+        <div *ngIf="!offerSuccessMessage" class="offer-form">
+          <p class="asking-info">Listed Price: <strong>{{ formattedPrice }}</strong></p>
+
+          <div class="form-group">
+            <label for="buyer-name">Your Full Name <span class="req">*</span></label>
+            <input id="buyer-name" type="text" [(ngModel)]="offerBuyerName" placeholder="e.g. Alex Morgan" required />
+          </div>
+
+          <div class="form-group">
+            <label for="buyer-email">Your Email Address <span class="req">*</span></label>
+            <input id="buyer-email" type="email" [(ngModel)]="offerBuyerEmail" placeholder="alex@example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="buyer-phone">Your Phone (WhatsApp) Number</label>
+            <input id="buyer-phone" type="tel" [(ngModel)]="offerBuyerPhone" placeholder="+27 82 123 4567" />
+          </div>
+
+          <div class="form-group">
+            <label for="offer-amount">Your Offer Amount (ZAR) <span class="req">*</span></label>
+            <input id="offer-amount" type="number" [(ngModel)]="offerAmount" placeholder="e.g. 1400" required />
+          </div>
+
+          <div class="form-group">
+            <label for="offer-msg">Message / Note to Seller</label>
+            <textarea id="offer-msg" rows="3" [(ngModel)]="offerMessage" placeholder="I can pay cash today and collect at your location."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" *ngIf="!offerSuccessMessage">
+        <button class="btn-cancel" (click)="showOfferModal = false">Cancel</button>
+        <button
+          class="btn-primary"
+          [disabled]="submittingOffer || !offerBuyerName || !offerBuyerEmail || !offerAmount"
+          (click)="submitOffer()"
+        >
+          <span>{{ submittingOffer ? 'Sending Notifications...' : 'Submit Offer & Notify Seller' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
