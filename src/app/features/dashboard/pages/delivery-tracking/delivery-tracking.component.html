@@ -1,0 +1,61 @@
+<app-page-layout>
+  <div class="delivery-tracking-page">
+    <header class="page-header">
+      <h1>My Deliveries</h1>
+      <p>Track the status of items you're buying or selling.</p>
+    </header>
+
+    <div class="tab-navigation">
+      <button class="tab-btn" [class.active]="activeTab === 'buying'" (click)="setActiveTab('buying')">
+        Items I'm Buying ({{ deliveriesAsBuyer.length }})
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'selling'" (click)="setActiveTab('selling')">
+        Items I'm Selling ({{ deliveriesAsSeller.length }})
+      </button>
+    </div>
+
+    <div class="content-area">
+      <div *ngIf="loading" class="loading-spinner">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <div *ngIf="!loading && !error">
+        <div *ngIf="activeTab === 'buying'">
+          <app-empty-state *ngIf="deliveriesAsBuyer.length === 0"
+            title="No Purchases with Delivery"
+            message="When you accept an offer on an item that requires shipping, the delivery details will appear here.">
+          </app-empty-state>
+          <div class="deliveries-list">
+            <div *ngFor="let delivery of deliveriesAsBuyer" class="delivery-item">
+              <div class="item-info">
+                <h2>{{ delivery.offer?.listing?.title }}</h2>
+                <p>Offer: {{ delivery.offer?.amountZar | currency:'ZAR':'symbol' }}</p>
+              </div>
+              <app-delivery-status [delivery]="delivery"></app-delivery-status>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeTab === 'selling'">
+          <app-empty-state *ngIf="deliveriesAsSeller.length === 0"
+            title="No Sales with Delivery"
+            message="When a seller accepts your offer and ships the item, you can track it here.">
+          </app-empty-state>
+          <div class="deliveries-list">
+            <div *ngFor="let delivery of deliveriesAsSeller" class="delivery-item">
+              <div class="item-info">
+                <h2>{{ delivery.offer?.listing?.title }}</h2>
+                <p>Offer from {{ delivery.offer?.buyerName }}: {{ delivery.offer?.amountZar | currency:'ZAR':'symbol' }}</p>
+              </div>
+              <app-delivery-status [delivery]="delivery"></app-delivery-status>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

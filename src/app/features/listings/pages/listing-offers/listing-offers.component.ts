@@ -57,7 +57,7 @@ export class ListingOffersComponent implements OnInit {
 
     this.offerService.updateOfferStatus(offer.id, newStatus).subscribe({
       next: (updated) => {
-        offer.status = updated.status;
+        Object.assign(offer, updated);
         this.updatingOfferId = null;
         this.statusMessage = `Offer from ${offer.buyerName} has been ${newStatus.toLowerCase()}.`;
         setTimeout(() => (this.statusMessage = ''), 4000);

@@ -1,0 +1,25 @@
+<div class="delivery-status-container" *ngIf="delivery">
+  <h4>Delivery Details</h4>
+  <div class="status-section">
+    <strong>Status:</strong>
+    <span class="status" [ngClass]="delivery.status | lowercase">{{ delivery.status }}</span>
+  </div>
+  <div class="details-grid">
+    <div class="detail-item">
+      <span class="label">Distance:</span>
+      <span class="value">{{ delivery.distanceKm | number:'1.1-2' }} km</span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Delivery Fee:</span>
+      <span class="value">{{ delivery.deliveryFeeZar | currency:'ZAR':'symbol' }}</span>
+    </div>
+    <div class="detail-item" *ngIf="delivery.trackingNumber">
+      <span class="label">Tracking #:</span>
+      <span class="value">{{ delivery.trackingNumber }}</span>
+    </div>
+    <div class="detail-item" *ngIf="delivery.estimatedDeliveryDate">
+      <span class="label">Estimated Delivery:</span>
+      <span class="value">{{ delivery.estimatedDeliveryDate | date:'longDate' }}</span>
+    </div>
+  </div>
+</div>

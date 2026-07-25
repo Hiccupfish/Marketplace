@@ -182,6 +182,7 @@
 
             <div class="accepted-note" *ngIf="offer.status === 'ACCEPTED'">
               ✓ Offer accepted! You can now contact {{ offer.buyerName }} to finalize payment.
+              <app-delivery-status *ngIf="offer.delivery" [delivery]="offer.delivery"></app-delivery-status>
             </div>
 
             <div class="rejected-note" *ngIf="offer.status === 'REJECTED'">

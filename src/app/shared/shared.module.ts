@@ -17,6 +17,7 @@ import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { PricePipe } from './pipes/price.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { PageLayoutComponent } from './components/page-layout/page-layout.component';
+import { DeliveryStatusComponent } from './components/delivery-status/delivery-status.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PageLayoutComponent } from './components/page-layout/page-layout.compon
     PricePipe,
     TruncatePipe,
     PhoneFormatDirective,
-    PageLayoutComponent
+    PageLayoutComponent,
+    DeliveryStatusComponent
   ],
   imports: [CommonModule, FormsModule, RouterModule],
   exports: [
@@ -49,7 +51,9 @@ import { PageLayoutComponent } from './components/page-layout/page-layout.compon
     ConfirmDialogComponent,
     PricePipe,
     TruncatePipe,
-    PhoneFormatDirective
+    PhoneFormatDirective,
+    PageLayoutComponent,
+    DeliveryStatusComponent
   ]
 })
 export class SharedModule {}

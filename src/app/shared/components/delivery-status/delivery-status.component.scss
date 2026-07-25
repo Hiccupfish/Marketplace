@@ -1,0 +1,43 @@
+@import "../../../../assets/styles/variables";
+
+.delivery-status-container {
+  border: 1px solid $color-grey-light;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f9f9f9;
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    border-bottom: 1px solid $color-grey-light;
+    padding-bottom: 8px;
+  }
+
+  .status-section {
+    margin-bottom: 16px;
+    .status {
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: white;
+
+      &.pending { background-color: $color-warning; }
+      &.in_transit { background-color: $color-info; }
+      &.delivered { background-color: $color-success; }
+      &.failed { background-color: $color-danger; }
+    }
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+
+    .detail-item {
+      .label {
+        font-weight: 600;
+        margin-right: 8px;
+      }
+    }
+  }
+}

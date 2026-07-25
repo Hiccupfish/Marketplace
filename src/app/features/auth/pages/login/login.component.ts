@@ -8,8 +8,13 @@ export class LoginComponent {
   password = '';
   error = '';
   loading = false;
+  showPassword = false;
 
   constructor(private readonly auth: AuthService, private readonly router: Router) {}
+
+  toggleShowPassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   submit(): void {
     this.error = '';

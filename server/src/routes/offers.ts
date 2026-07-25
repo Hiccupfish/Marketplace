@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import haversine from 'haversine-distance';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -41,7 +42,7 @@ router.post('/', async (req: Request, res: Response) => {
     // Simulate Email Dispatch
     const emailSubject = `New Offer Received for "${listing.title}"`;
     const emailBody = `Hi ${listing.seller?.name || 'Seller'},\n\n` +
-      `${buyerName} has submitted a new offer of R ${amountZar.toLocaleString()} for your item "${listing.title}".\n\n` +
+      `${buyerName} has submitted a new offer of R ${amountZzar.toLocaleString()} for your item "${listing.title}".\n\n` +
       `Message: "${message || 'No additional message'}"\n` +
       `Buyer Contact: ${buyerEmail} ${buyerPhone ? '(' + buyerPhone + ')' : ''}\n\n` +
       `Review and accept or reject this offer here: http://localhost:4200/listings/${listingId}/offers\n\n` +
@@ -138,14 +139,58 @@ router.patch('/:id/status', async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Status must be ACCEPTED or REJECTED.' });
     }
 
-    const updatedOffer = await prisma.offer.update({
-      where: { id: offerId },
-      data: { status }
-    });
+    if (status === 'ACCEPTED') {
+      const updatedOffer = await prisma.$transaction(async (tx) => {
+        const offer = await tx.offer.findUnique({
+          where: { id: offerId },
+          include: { listing: { include: { seller: true } } },
+        });
 
-    console.log(`[OFFER UPDATED]: Offer #${offerId} set to ${status}`);
+        if (!offer) {
+          throw new Error('Offer not found.');
+        }
 
-    return res.json(updatedOffer);
+        const seller = offer.listing.seller;
+        const buyer = await tx.seller.findUnique({ where: { email: offer.buyerEmail } });
+
+        if (seller && buyer && seller.latitude && seller.longitude && buyer.latitude && buyer.longitude) {
+          const distance = haversine({ latitude: seller.latitude, longitude: seller.longitude }, { latitude: buyer.latitude, longitude: buyer.longitude });
+          const distanceKm = distance / 1000;
+          const deliveryFee = distanceKm * 5; // R5 per km
+
+          await tx.delivery.create({
+            data: {
+              offerId: offer.id,
+              distanceKm: distanceKm,
+              deliveryFeeZar: deliveryFee,
+              status: 'PENDING',
+            },
+          });
+        } else {
+          console.log(`[DELIVERY SKIPPED]: Location data missing for offer #${offerId}.`);
+        }
+
+        const updated = await tx.offer.update({
+          where: { id: offerId },
+          data: { status },
+          include: { delivery: true },
+        });
+
+        return updated;
+      });
+
+      console.log(`[OFFER UPDATED]: Offer #${offerId} set to ${status}`);
+      return res.json(updatedOffer);
+
+    } else {
+      // For 'REJECTED' status
+      const updatedOffer = await prisma.offer.update({
+        where: { id: offerId },
+        data: { status },
+      });
+      console.log(`[OFFER UPDATED]: Offer #${offerId} set to ${status}`);
+      return res.json(updatedOffer);
+    }
   } catch (err: any) {
     console.error('Error updating offer status:', err);
     return res.status(500).json({ message: 'Failed to update offer status.' });

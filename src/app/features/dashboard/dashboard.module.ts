@@ -5,6 +5,8 @@ import { DashboardHomeComponent } from './pages/dashboard-home/dashboard-home.co
 import { MyListingsComponent } from './pages/my-listings/my-listings.component';
 import { ProfileSettingsComponent } from './pages/profile-settings/profile-settings.component';
 import { VerificationComponent } from './pages/verification/verification.component';
+import { DeliveryTrackingComponent } from './pages/delivery-tracking/delivery-tracking.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -12,13 +14,15 @@ import { VerificationComponent } from './pages/verification/verification.compone
     MyListingsComponent,
     ProfileSettingsComponent,
     VerificationComponent,
+    DeliveryTrackingComponent,
   ],
-  imports: [CommonModule, DashboardRoutingModule],
+  imports: [CommonModule, DashboardRoutingModule, SharedModule],
   exports: [
     DashboardHomeComponent,
     MyListingsComponent,
     ProfileSettingsComponent,
     VerificationComponent,
+    DeliveryTrackingComponent,
   ],
 })
 export class DashboardModule {}

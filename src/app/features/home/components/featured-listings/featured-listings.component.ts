@@ -9,13 +9,27 @@ import { ListingService } from '../../../../shared/services/listing.service';
 })
 export class FeaturedListingsComponent implements OnInit {
   featuredListings: Listing[] = [];
+  loading = true;
+  error = '';
 
-  constructor(private listingService: ListingService) {}
+  constructor(private readonly listingService: ListingService) {}
 
   ngOnInit(): void {
-    this.listingService.getListings().subscribe((listings) => {
-      // Take first three listings as featured (could be refined)
-      this.featuredListings = listings.slice(0, 3);
+    this.loadListings();
+  }
+
+  loadListings(): void {
+    this.loading = true;
+    this.error = '';
+    this.listingService.getListings().subscribe({
+      next: (listings) => {
+        this.featuredListings = listings.slice(0, 3);
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = err.error?.message || 'Unable to load listings. Make sure the backend API is running.';
+        this.loading = false;
+      },
     });
   }
 }
