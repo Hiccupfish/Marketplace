@@ -7,8 +7,20 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'listings',
-    loadChildren: () => import('./features/listings/listings.module').then(m => m.ListingsModule)
+    path: 'products',
+    loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule)
+  },
+  {
+    path: 'services',
+    loadChildren: () => import('./features/services/services.module').then(m => m.ServicesModule)
+  },
+  {
+    path: 'requests',
+    loadChildren: () => import('./features/requests/requests.module').then(m => m.RequestsModule)
+  },
+  {
+    path: 'deliveries',
+    loadChildren: () => import('./features/deliveries/deliveries.module').then(m => m.DeliveriesModule)
   },
   {
     path: 'auth',

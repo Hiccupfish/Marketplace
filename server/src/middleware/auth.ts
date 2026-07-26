@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export interface AuthRequest extends Request {
-  user?: { id: number; email: string };
+  user?: { id: string; email: string };
 }
 
 export const authenticateToken = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -16,7 +16,7 @@ export const authenticateToken = (req: AuthRequest, res: Response, next: NextFun
   }
   try {
     const secret = process.env.JWT_SECRET as string;
-    const payload = jwt.verify(token, secret) as { userId: number; email: string };
+    const payload = jwt.verify(token, secret) as { userId: string; email: string };
     req.user = { id: payload.userId, email: payload.email };
     next();
   } catch (err) {

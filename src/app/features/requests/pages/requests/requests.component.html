@@ -1,0 +1,184 @@
+<div class="requests-page">
+  <div class="requests-container">
+    <div class="page-header">
+      <div class="header-content">
+        <h1>Request Marketplace</h1>
+        <p>Post what you need and receive professional proposals from verified service providers and businesses.</p>
+      </div>
+      <a routerLink="/requests/create" class="create-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Post a Request
+      </a>
+    </div>
+
+    <div class="filters-bar">
+      <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+          placeholder="Search requests..."
+          class="search-input"
+        />
+        <button class="search-btn" (click)="onSearch()">Search</button>
+      </div>
+
+      <div class="filter-group">
+        <select [(ngModel)]="selectedCategory" (change)="onFilterChange()" class="filter-select">
+          <option value="">All Categories</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+
+        <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="filter-select">
+          <option value="">All Statuses</option>
+          <option *ngFor="let status of statuses" [value]="status">{{ status.replace(/_/g, ' ') }}</option>
+        </select>
+
+        <select [(ngModel)]="selectedType" (change)="onFilterChange()" class="filter-select">
+          <option value="">All Types</option>
+          <option value="PRODUCT">Products</option>
+          <option value="SERVICE">Services</option>
+        </select>
+
+        <button class="clear-filters-btn" (click)="clearFilters()" *ngIf="searchQuery || selectedCategory || selectedStatus || selectedType">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <div class="results-info" *ngIf="!loading && requests.length > 0">
+      Showing {{ requests.length }} of {{ totalPages * limit }} requests
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-banner">
+      <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ error }}</span>
+      <button class="retry-btn" (click)="loadRequests()">Retry</button>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div class="requests-grid skeleton-grid" *ngIf="loading">
+      <div class="skeleton-card" *ngFor="let item of [1,2,3,4,5,6]">
+        <div class="skeleton-header">
+          <div class="skeleton-badge"></div>
+          <div class="skeleton-badge"></div>
+        </div>
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line text"></div>
+        <div class="skeleton-line text short"></div>
+        <div class="skeleton-footer">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-line name"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && !error && requests.length === 0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="8" y1="11" x2="14" y2="11"/>
+      </svg>
+      <h2>No requests found</h2>
+      <p>No requests match your current filters. Be the first to post a request!</p>
+      <a routerLink="/requests/create" class="create-listing-btn">Post a New Request</a>
+    </div>
+
+    <!-- Requests Grid -->
+    <div class="requests-grid" *ngIf="!loading && !error && requests.length > 0">
+      <a *ngFor="let request of requests; trackBy: trackByRequestId" [routerLink]="['/requests', request.id]" class="request-card">
+        <div class="card-top">
+          <span class="type-badge" [style.backgroundColor]="getTypeColor(request.marketplaceType)">
+            {{ getTypeLabel(request.marketplaceType) }}
+          </span>
+          <span class="status-badge" [style.backgroundColor]="getStatusColor(request.status)">
+            {{ request.status.replace(/_/g, ' ') }}
+          </span>
+        </div>
+
+        <h3 class="card-title">{{ request.title }}</h3>
+        <p class="card-description">{{ request.description }}</p>
+
+        <div class="card-meta">
+          <div class="meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>{{ request.location || 'Location not specified' }}</span>
+          </div>
+          <div class="meta-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+            <span>{{ request.category.name }}</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="budget-info">
+            <span class="budget-label">Budget</span>
+            <span class="budget-value">{{ formatBudget(request.budget) }}</span>
+          </div>
+          <div class="proposal-count">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>{{ request.proposalCount }} proposals</span>
+          </div>
+        </div>
+
+        <div class="card-requester">
+          <div class="requester-avatar">
+            <img *ngIf="request.requester.profilePicture; else avatarPlaceholder" [src]="request.requester.profilePicture" [alt]="request.requester.name" />
+            <ng-template #avatarPlaceholder>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+            </ng-template>
+          </div>
+          <div class="requester-info">
+            <span class="requester-name">{{ request.requester.name }}</span>
+            <span class="post-time">{{ getTimeAgo(request.createdAt) }}</span>
+          </div>
+          <svg *ngIf="request.requester.isVerified" class="verified-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="!loading && totalPages > 1">
+      <button class="page-btn" [disabled]="page === 1" (click)="prevPage()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Previous
+      </button>
+      <span class="page-info">Page {{ page }} of {{ totalPages }}</span>
+      <button class="page-btn" [disabled]="page === totalPages" (click)="nextPage()">
+        Next
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="my-proposals-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>My Proposals</h1>
+      <a routerLink="/requests" class="create-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Browse Requests
+      </a>
+    </div>
+
+    <div class="error-banner" *ngIf="error" role="alert">
+      <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ error }}</span>
+      <button class="retry-btn" (click)="loadMyProposals()">Retry</button>
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading your proposals...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && !error && offers.length === 0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <h2>No proposals submitted</h2>
+      <p>You haven't submitted any proposals yet. Browse open requests and start pitching.</p>
+      <a routerLink="/requests" class="create-listing-btn">Browse Requests</a>
+    </div>
+
+    <div class="proposals-list" *ngIf="!loading && offers.length > 0">
+      <div *ngFor="let offer of offers" class="proposal-item" (click)="viewRequest(offer.request.id)">
+        <div class="item-top">
+          <span class="request-title">{{ offer.request.title }}</span>
+          <span class="proposal-status" [style.backgroundColor]="getStatusColor(offer.status)">{{ offer.status }}</span>
+        </div>
+        <div class="price-section">
+          <span class="price">R {{ offer.price.toLocaleString('en-ZA') }}</span>
+          <span class="time-ago">{{ getTimeAgo(offer.createdAt) }}</span>
+        </div>
+        <div class="requester-info" *ngIf="offer.request.requester">
+          <span>For: {{ offer.request.requester.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,157 @@
+<div class="create-request-page">
+  <div class="create-request-container">
+    <div class="page-header">
+      <div>
+        <h1>Post a Request</h1>
+        <p>Tell us what you need and receive professional proposals</p>
+      </div>
+      <a routerLink="/requests" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Requests
+      </a>
+    </div>
+
+    <div class="form-card" *ngIf="!submitted; else successTemplate">
+      <div class="alert-error" *ngIf="error" role="alert">
+        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+
+      <form (ngSubmit)="submit()">
+        <div class="form-section">
+          <h2 class="section-title">What do you need?</h2>
+
+          <div class="type-selector">
+            <button type="button" class="type-option" [class.active]="marketplaceType === 'SERVICE'" (click)="marketplaceType = 'SERVICE'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Service</span>
+            </button>
+            <button type="button" class="type-option" [class.active]="marketplaceType === 'PRODUCT'" (click)="marketplaceType = 'PRODUCT'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              <span>Product</span>
+            </button>
+          </div>
+
+          <div class="input-group">
+            <label for="title">Title <span class="required">*</span></label>
+            <input id="title" type="text" [(ngModel)]="title" name="title" placeholder="e.g. Need a mechanic to replace clutch" required />
+          </div>
+
+          <div class="input-group">
+            <label for="description">Description <span class="required">*</span></label>
+            <textarea id="description" [(ngModel)]="description" name="description" rows="5" placeholder="Describe what you need in detail..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="category">Category <span class="required">*</span></label>
+            <select id="category" [(ngModel)]="categoryId" name="category" required>
+              <option value="">Select a category</option>
+              <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Details & Preferences</h2>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label>Budget</label>
+              <div class="toggle-group">
+                <button type="button" class="toggle-btn" [class.active]="hasBudget" (click)="toggleBudget()">
+                  {{ hasBudget ? 'Set' : 'None' }}
+                </button>
+                <input *ngIf="hasBudget" type="number" [(ngModel)]="budget" name="budget" placeholder="R 0.00" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label>Location</label>
+              <input type="text" [(ngModel)]="location" name="location" placeholder="City or area" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Deadline</label>
+            <div class="toggle-group">
+              <button type="button" class="toggle-btn" [class.active]="hasDeadline" (click)="toggleDeadline()">
+                {{ hasDeadline ? 'Set' : 'None' }}
+              </button>
+              <input *ngIf="hasDeadline" type="date" [(ngModel)]="deadline" name="deadline" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="fulfilment">Preferred Fulfilment</label>
+            <select id="fulfilment" [(ngModel)]="preferredFulfilment" name="preferredFulfilment">
+              <option value="">Select preference</option>
+              <option value="ONSITE">On-site</option>
+              <option value="REMOTE">Remote</option>
+              <option value="PICKUP">Pickup</option>
+              <option value="DELIVERY">Delivery</option>
+              <option value="FLEXIBLE">Flexible</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Images</label>
+            <div class="images-preview" *ngIf="images.length > 0">
+              <div class="image-chip" *ngFor="let img of images; let i = index">
+                <img [src]="img" alt="Request image" />
+                <button type="button" class="remove-img" (click)="removeImage(i)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="add-image-btn" (click)="addImageUrl()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add Image URL
+            </button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="goToRequests()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="loading">
+            <span *ngIf="loading" class="spinner"></span>
+            <span>{{ loading ? 'Posting...' : 'Post Request' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <ng-template #successTemplate>
+      <div class="success-card">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <h2>Request Posted Successfully!</h2>
+        <p>Matching service providers and businesses will be notified immediately. Start receiving proposals shortly.</p>
+        <div class="success-actions">
+          <button class="primary-btn" (click)="goToRequests()">View Requests</button>
+          <button class="secondary-btn" (click)="submitted = false">Post Another</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

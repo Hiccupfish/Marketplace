@@ -1,0 +1,60 @@
+<div class="my-requests-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>My Requests</h1>
+      <a routerLink="/requests/create" class="create-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        New Request
+      </a>
+    </div>
+
+    <div class="error-banner" *ngIf="error" role="alert">
+      <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ error }}</span>
+      <button class="retry-btn" (click)="loadMyRequests()">Retry</button>
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading your requests...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && !error && requests.length === 0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="18" x2="12" y2="12"/>
+        <line x1="9" y1="15" x2="15" y2="15"/>
+      </svg>
+      <h2>No requests yet</h2>
+      <p>You haven't posted any requests. Post your first request to start receiving proposals.</p>
+      <a routerLink="/requests/create" class="create-listing-btn">Post a Request</a>
+    </div>
+
+    <div class="requests-list" *ngIf="!loading && requests.length > 0">
+      <div *ngFor="let request of requests" class="request-item" (click)="viewRequest(request.id)">
+        <div class="item-top">
+          <span class="type-badge" [style.backgroundColor]="request.marketplaceType === 'PRODUCT' ? '#0d6efd' : '#52c41a'">
+            {{ request.marketplaceType === 'PRODUCT' ? 'Product' : 'Service' }}
+          </span>
+          <span class="status-badge" [style.backgroundColor]="getStatusColor(request.status)">
+            {{ request.status.replace(/_/g, ' ') }}
+          </span>
+        </div>
+        <h3>{{ request.title }}</h3>
+        <p>{{ request.description }}</p>
+        <div class="item-footer">
+          <span class="proposal-count">{{ request.proposalCount }} proposals</span>
+          <span class="time-ago">{{ getTimeAgo(request.createdAt) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

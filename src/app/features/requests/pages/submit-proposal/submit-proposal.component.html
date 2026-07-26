@@ -1,0 +1,135 @@
+<div class="submit-proposal-page">
+  <div class="proposal-container">
+    <div class="page-header">
+      <div>
+        <h1>Submit a Proposal</h1>
+        <p *ngIf="request">Craft a compelling proposal for "{{ request.title }}"</p>
+      </div>
+      <button class="back-btn" (click)="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back
+      </button>
+    </div>
+
+    <div class="proposal-content" *ngIf="!loading && request; else loadingTemplate">
+      <div class="request-summary">
+        <h3>{{ request.title }}</h3>
+        <p>{{ request.description }}</p>
+        <div class="summary-meta">
+          <span>Budget: {{ request.budget ? 'R ' + request.budget.toLocaleString('en-ZA') : 'Negotiable' }}</span>
+          <span>Location: {{ request.location || 'Not specified' }}</span>
+        </div>
+      </div>
+
+      <div class="alert-error" *ngIf="error" role="alert">
+        <svg class="alert-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+
+      <form (ngSubmit)="submit()" class="proposal-form">
+        <div class="form-section">
+          <h2 class="section-title">Your Proposal</h2>
+
+          <div class="input-group">
+            <label for="price">Proposed Price (ZAR) <span class="required">*</span></label>
+            <div class="price-input-wrapper">
+              <span class="currency">R</span>
+              <input id="price" type="number" [(ngModel)]="price" name="price" placeholder="0.00" min="0" step="0.01" required />
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label for="completion">Estimated Completion Time</label>
+              <input id="completion" type="text" [(ngModel)]="estimatedCompletionTime" name="completion" placeholder="e.g. 2 days, 1 week" />
+            </div>
+            <div class="input-group">
+              <label for="availability">Availability</label>
+              <input id="availability" type="text" [(ngModel)]="availability" name="availability" placeholder="e.g. Can start immediately" />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="proposalMessage">Why should they choose you? <span class="required">*</span></label>
+            <textarea id="proposalMessage" [(ngModel)]="proposalMessage" name="proposalMessage" rows="5" placeholder="Explain your approach, qualifications, and what makes you the best fit..." required></textarea>
+          </div>
+
+          <div class="input-group">
+            <label for="experience">Relevant Experience</label>
+            <textarea id="experience" [(ngModel)]="experience" name="experience" rows="3" placeholder="Briefly describe your relevant experience..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="section-title">Portfolio</h2>
+
+          <div class="input-group">
+            <label>Portfolio Images</label>
+            <div class="images-preview" *ngIf="portfolioImages.length > 0">
+              <div class="image-chip" *ngFor="let img of portfolioImages; let i = index">
+                <img [src]="img" alt="Portfolio" />
+                <button type="button" class="remove-img" (click)="removePortfolioImage(i)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="add-image-btn" (click)="addPortfolioImage()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add Portfolio Image URL
+            </button>
+          </div>
+
+          <div class="input-group">
+            <label>Previous Work / Before & After</label>
+            <div class="images-preview" *ngIf="previousWork.length > 0">
+              <div class="image-chip" *ngFor="let img of previousWork; let i = index">
+                <img [src]="img" alt="Previous work" />
+                <button type="button" class="remove-img" (click)="removePreviousWork(i)">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="add-image-btn" (click)="addPreviousWork()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add Previous Work URL
+            </button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="goBack()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner"></span>
+            <span>{{ submitting ? 'Submitting...' : 'Submit Proposal' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading request details...</p>
+  </div>
+</ng-template>

@@ -12,93 +12,64 @@ const prisma = new client_1.PrismaClient();
 // Helper to generate JWT
 const generateToken = (userId, email) => {
     const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        throw new Error('JWT_SECRET is not defined in the environment variables.');
+    }
     return jsonwebtoken_1.default.sign({ userId, email }, secret, { expiresIn: '7d' });
 };
-// Register a new seller
+// POST /api/auth/register - Register a new user
 router.post('/register', async (req, res) => {
-    const { name, email, password, phone, city, profileImage } = req.body;
-    if (!name || !email || !password) {
-        return res.status(400).json({ message: 'Name, email and password are required' });
+    const { name, email, password, phoneNumber, location, profilePicture } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
     }
     try {
-        const existing = await prisma.seller.findUnique({ where: { email } });
-        if (existing) {
+        const existingUser = await prisma.user.findUnique({ where: { email } });
+        if (existingUser) {
             return res.status(409).json({ message: 'Email already in use' });
         }
-        const hashed = await (0, hash_1.hashPassword)(password);
-        const seller = await prisma.seller.create({
+        const hashedPassword = await (0, hash_1.hashPassword)(password);
+        const user = await prisma.user.create({
             data: {
-                name,
                 email,
-                password: hashed,
-                phone,
-                city,
-                avatarUrl: profileImage,
-            },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                phone: true,
-                city: true,
-                avatarUrl: true,
+                password: hashedPassword,
+                name,
+                phoneNumber,
+                location,
+                profilePicture,
             },
         });
-        const token = generateToken(seller.id, seller.email);
-        return res.status(201).json({ token, user: seller });
+        const { password: _, ...safeUser } = user;
+        const token = generateToken(user.id, user.email);
+        return res.status(201).json({ token, user: safeUser });
     }
     catch (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error during registration' });
     }
 });
-// Login
+// POST /api/auth/login - Login a user
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password required' });
+        return res.status(400).json({ message: 'Email and password are required' });
     }
     try {
-        const seller = await prisma.seller.findUnique({ where: { email } });
-        if (!seller) {
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        const valid = await (0, hash_1.comparePassword)(password, seller.password);
-        if (!valid) {
+        const isValidPassword = await (0, hash_1.comparePassword)(password, user.password);
+        if (!isValidPassword) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        const token = generateToken(seller.id, seller.email);
-        const { password: _, ...safeUser } = seller;
+        const { password: _, ...safeUser } = user;
+        const token = generateToken(user.id, user.email);
         return res.json({ token, user: safeUser });
     }
     catch (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Server error during login' });
     }
-});
-// Get current authenticated user
-router.get('/me', async (req, res) => {
-    // @ts-ignore – auth middleware adds user
-    const auth = req.user;
-    if (!auth) {
-        return res.status(401).json({ message: 'Unauthenticated' });
-    }
-    const seller = await prisma.seller.findUnique({
-        where: { id: auth.id },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            phone: true,
-            city: true,
-            avatarUrl: true,
-            bio: true,
-            category: true,
-            rating: true,
-            reviewCount: true,
-            verified: true,
-        },
-    });
-    return res.json(seller);
 });
 exports.default = router;

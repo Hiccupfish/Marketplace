@@ -1,73 +1,358 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-model Seller {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String   @unique
-  password    String
-  phone       String?
-  city        String?
-  latitude    Float?
-  longitude   Float?
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String  @id @default(cuid())
+  email            String  @unique
+  name             String?
+  password         String
+  phoneNumber      String?
+  location         String?
+  profilePicture   String?
+  isVerified       Boolean @default(false)
+  isAdmin          Boolean @default(false)
+  accountType      String  @default("INDIVIDUAL")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Role-specific profiles
+  sellerProfile    SellerProfile?
+  providerProfile  ServiceProviderProfile?
+  driverProfile    DriverProfile?
+  businessProfile  BusinessProfile?
+
+  // Creations
+  products         Product[]
+  services         Service[]
+  requests         Request[]
+  portfolioItems   PortfolioItem[]
+  notifications    Notification[]
+
+  // Interactions
+  productOffers    ProductOffer[]
+  serviceQuotes    ServiceQuote[]
+  requestOffers    RequestOffer[]
+  deliveryOffers   DeliveryOffer[]
+  negotiationsSent NegotiationMessage[] @relation("NegotiationSender")
+
+  // Feedback and Moderation
+  reviewsGiven     Review[] @relation("ReviewsGiven")
+  reviewsReceived  Review[] @relation("ReviewsReceived")
+  reportsMade      Report[] @relation("ReportedBy")
+  verification     Verification?
+}
+
+model SellerProfile {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @unique
+}
+
+model BusinessProfile {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName          String
+  logoUrl               String?
+  description           String?
+  category              String?
+  contactNumber         String?
+  email                 String?
+  physicalAddress       String?
+  city                  String?
+  province              String?
+  website               String?
+  operatingHours        String?
+  gallery               String?
+  socialLinks           String?
+  isVerified            Boolean  @default(false)
+  completedTransactions Int      @default(0)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model ServiceProviderProfile {
+  id          String @id @default(cuid())
+  user        User   @relation(fields: [userId], references: [id])
+  userId      String @unique
   bio         String?
-  category    String?
-  rating      Float    @default(0)
-  reviewCount Int      @default(0)
-  verified    Boolean  @default(false)
-  avatarUrl   String?
-  listings    Listing[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Stored as a JSON string: '["url1", "url2"]'
+  portfolio   String?
 }
 
-model Listing {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  priceZar    Float
-  category    String
-  city        String
-  sellerId    Int
-  rating      Float    @default(0)
-  isVerified  Boolean  @default(false)
-  seller      Seller   @relation(fields: [sellerId], references: [id])
-  offers      Offer[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model DriverProfile {
+  id                String  @id @default(cuid())
+  user              User    @relation(fields: [userId], references: [id])
+  userId            String  @unique
+  vehicleType       String?
+  licensePlate      String?
+  completedDeliveries Int     @default(0)
 }
 
-model Offer {
-  id          Int      @id @default(autoincrement())
-  listingId   Int
-  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  buyerName   String
-  buyerEmail  String
-  buyerPhone  String?
-  amountZar   Float
+// Products Marketplace (formerly Listings)
+model Product {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  price         Float
+  sellerId      String
+  seller        User     @relation(fields: [sellerId], references: [id])
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+  location      String?
+  isAvailable   Boolean  @default(true)
+  fulfilmentOptions String @default("COLLECTION")
+  collectionAddress String?
+  collectionInstructions String?
+  collectionDays String?
+  collectionHours String?
+  deliveryEnabled Boolean @default(false)
+  // Stored as a JSON string: '["url1", "url2"]'
+  images        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  offers        ProductOffer[]
+  reports       Report[]
+  deliveryJob   DeliveryJob?
+}
+
+model ProductOffer {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User     @relation(fields: [buyerId], references: [id])
+  price     Float
+  // OfferStatus: PENDING, ACCEPTED, REJECTED, CANCELLED
+  status    String   @default("PENDING")
+  fulfilmentMethod String @default("COLLECTION")
+  deliveryAddress String?
+  deliveryJob DeliveryJob?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Services Marketplace
+model Service {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  providerId    String
+  provider      User     @relation(fields: [providerId], references: [id])
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+  serviceArea   String
+  availability  String
+  startingPrice Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  quotes        ServiceQuote[]
+  reviews       Review[]
+}
+
+model ServiceQuote {
+  id          String   @id @default(cuid())
+  serviceId   String
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  customerId  String
+  customer    User     @relation(fields: [customerId], references: [id])
+  price       Float
+  details     String
+  // QuoteStatus: PENDING, ACCEPTED, REJECTED, CANCELLED
   status      String   @default("PENDING")
-  message     String?
-  delivery    Delivery?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model Delivery {
-  id                      Int       @id @default(autoincrement())
-  offerId                 Int       @unique
-  offer                   Offer     @relation(fields: [offerId], references: [id])
-  status                  String    @default("PENDING") // PENDING, IN_TRANSIT, DELIVERED, FAILED
-  distanceKm              Float?
-  deliveryFeeZar          Float?
-  trackingNumber          String?   @unique
-  estimatedDeliveryDate   DateTime?
-  createdAt               DateTime  @default(now())
-  updatedAt               DateTime  @updatedAt
+// Requests Marketplace
+model Request {
+  id                  String    @id @default(cuid())
+  title               String
+  description         String
+  marketplaceType     String    @default("SERVICE") // PRODUCT | SERVICE
+  requesterId         String
+  requester           User      @relation(fields: [requesterId], references: [id])
+  categoryId          String
+  category            Category  @relation(fields: [categoryId], references: [id])
+  budget              Float?
+  location            String?
+  deadline            DateTime?
+  preferredFulfilment String?
+  // Stored as a JSON string: '["url1", "url2"]'
+  images              String?
+  // RequestStatus: OPEN, RECEIVING_PROPOSALS, UNDER_REVIEW, NEGOTIATING, ACCEPTED, IN_PROGRESS, COMPLETED, CANCELLED, EXPIRED
+  status              String    @default("OPEN")
+  shortlistedCount    Int       @default(0)
+  proposalCount       Int       @default(0)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  offers              RequestOffer[]
+  negotiations        NegotiationMessage[]
+  notifications       Notification[]
 }
 
+model RequestOffer {
+  id                     String   @id @default(cuid())
+  requestId              String
+  request                Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  providerId             String
+  provider               User     @relation(fields: [providerId], references: [id])
+  price                  Float
+  estimatedCompletionTime String?
+  availability           String?
+  proposalMessage        String?  // Why the customer should choose them
+  experience             String?
+  // Stored as a JSON string: '["url1", "url2"]'
+  portfolioImages        String?
+  previousWork           String?
+  isShortlisted          Boolean  @default(false)
+  // OfferStatus: PENDING, VIEWED, SHORTLISTED, ACCEPTED, REJECTED, CANCELLED, WITHDRAWN
+  status                 String   @default("PENDING")
+  viewedAt               DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  negotiations           NegotiationMessage[]
+}
+
+model NegotiationMessage {
+  id             String    @id @default(cuid())
+  requestId      String
+  request        Request   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  offerId        String?
+  requestOffer   RequestOffer? @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User      @relation("NegotiationSender", fields: [senderId], references: [id])
+  message        String
+  // MessageType: TEXT, COUNTER_OFFER, INFO_REQUEST, SITE_VISIT, DEADLINE_CHANGE
+  messageType    String    @default("TEXT")
+  offerPrice     Float?
+  offerDeadline  DateTime?
+  attachmentUrl  String?
+  isRead         Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  requestId String?
+  request   Request? @relation(fields: [requestId], references: [id])
+  // NotificationType: NEW_REQUEST_MATCH, NEW_PROPOSAL, MESSAGE_RECEIVED, PROPOSAL_ACCEPTED, DEADLINE_REMINDER, STATUS_CHANGE
+  type      String
+  title     String
+  message   String
+  relatedId String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  description String?
+  imageUrl    String?
+  videoUrl    String?
+  category    String?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+// Delivery Marketplace
+model DeliveryJob {
+  id              String   @id @default(cuid())
+  productId       String   @unique
+  product         Product  @relation(fields: [productId], references: [id])
+  productOfferId  String?  @unique
+  productOffer    ProductOffer? @relation(fields: [productOfferId], references: [id])
+  pickupAddress   String
+  deliveryAddress String
+  // DeliveryStatus: OPEN, DRIVER_OFFERED, DRIVER_SELECTED, IN_TRANSIT, DELIVERED, COMPLETED, CANCELLED
+  status          String   @default("OPEN")
+  selectedDriverId  String?
+  selectedOfferId   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  offers          DeliveryOffer[]
+}
+
+model DeliveryOffer {
+  id            String   @id @default(cuid())
+  jobId         String
+  job           DeliveryJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  driverId      String
+  driver        User     @relation(fields: [driverId], references: [id])
+  fee           Float
+  estimatedTime String
+  vehicleType   String?
+  message       String?
+  // OfferStatus: PENDING, ACCEPTED, REJECTED, CANCELLED
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Shared Models
+model Category {
+  id       String @id @default(cuid())
+  name     String @unique
+  icon     String?
+
+  products Product[]
+  services Service[]
+  requests Request[]
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  rating      Int
+  comment     String?
+  reviewerId  String
+  reviewer    User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  revieweeId  String
+  reviewee    User     @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+  
+  serviceId   String?
+  service     Service? @relation(fields: [serviceId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  reason      String
+  reporterId  String
+  reporter    User     @relation("ReportedBy", fields: [reporterId], references: [id])
+  
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id])
+  
+  reportedUserId String?
+  
+  createdAt   DateTime @default(now())
+}
+
+model Verification {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  documentUrl    String
+  status         String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  reviewedBy     String?  // Admin ID
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

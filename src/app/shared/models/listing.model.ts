@@ -1,7 +1,5 @@
-import { Location } from './location.model';
-
 export interface Listing {
-  id: number;
+  id: number | string;
   title: string;
   description: string;
   priceZar: number;

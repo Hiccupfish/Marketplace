@@ -1,27 +1,32 @@
 <section class="categories-section">
-
   <div class="categories-section__header">
-    <h2>Browse Categories</h2>
-    <p>Find services and products by category</p>
-  </div>
-
-  <div class="categories-section__grid">
-
-    <div
-      class="category-card"
-      *ngFor="let category of categories"
-      (click)="selectCategory(category)"
-    >
-      <div class="category-card__icon">
-        {{ category.icon }}
-      </div>
-
-      <div class="category-card__name">
-        {{ category.name }}
-      </div>
-
+    <div>
+      <span class="categories-section__tag">Explore</span>
+      <h2>Browse Categories</h2>
+      <p>Discover products, trusted professionals and local opportunities near you.</p>
     </div>
 
+    <a class="categories-section__view-all" routerLink="/products">View All &rarr;</a>
   </div>
 
+  <div class="categories-section__grid" *ngIf="categories?.length; else emptyState">
+    <button
+      type="button"
+      class="category-card"
+      [class]="'category-card--' + (i % 4)"
+      *ngFor="let category of categories; let i = index; trackBy: trackByCategoryId"
+      (click)="selectCategory(category)"
+    >
+      <div class="category-card__icon" aria-hidden="true">{{ category.icon }}</div>
+      <h3 class="category-card__name">{{ category.name }}</h3>
+      <p class="category-card__description">{{ category.description }}</p>
+      <div class="category-card__footer">
+        <span class="category-card__arrow" aria-hidden="true">&rarr;</span>
+      </div>
+    </button>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="categories-section__empty">No categories available right now.</p>
+  </ng-template>
 </section>
