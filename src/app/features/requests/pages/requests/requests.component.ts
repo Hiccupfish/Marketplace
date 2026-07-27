@@ -110,6 +110,10 @@ export class RequestsComponent implements OnInit {
     return type === 'PRODUCT' ? 'Product' : 'Service';
   }
 
+  formatStatus(status: string): string {
+    return status ? status.replace(/_/g, ' ') : '';
+  }
+
   formatBudget(budget?: number): string {
     if (!budget) return 'Budget: Negotiable';
     return 'R ' + budget.toLocaleString('en-ZA');

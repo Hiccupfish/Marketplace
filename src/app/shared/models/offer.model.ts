@@ -3,7 +3,7 @@ import { Delivery } from './delivery.model';
 
 export interface Offer {
   id: number;
-  listingId: number;
+  listingId: number | string;
   listing?: Listing;
   buyerName: string;
   buyerEmail: string;

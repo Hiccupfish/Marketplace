@@ -6,7 +6,7 @@ import { Listing } from '../models/listing.model';
 
 export interface Offer {
   id?: number;
-  listingId: number;
+  listingId: number | string;
   buyerName: string;
   buyerEmail: string;
   buyerPhone?: string;

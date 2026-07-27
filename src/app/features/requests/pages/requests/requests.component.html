@@ -38,7 +38,7 @@
 
         <select [(ngModel)]="selectedStatus" (change)="onFilterChange()" class="filter-select">
           <option value="">All Statuses</option>
-          <option *ngFor="let status of statuses" [value]="status">{{ status.replace(/_/g, ' ') }}</option>
+          <option *ngFor="let status of statuses" [value]="status">{{ formatStatus(status) }}</option>
         </select>
 
         <select [(ngModel)]="selectedType" (change)="onFilterChange()" class="filter-select">
@@ -105,7 +105,7 @@
             {{ getTypeLabel(request.marketplaceType) }}
           </span>
           <span class="status-badge" [style.backgroundColor]="getStatusColor(request.status)">
-            {{ request.status.replace(/_/g, ' ') }}
+            {{ formatStatus(request.status) }}
           </span>
         </div>
 

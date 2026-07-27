@@ -53,6 +53,10 @@ export class RequestDetailsComponent implements OnInit {
     return colors[status] || '#8c8c8c';
   }
 
+  formatStatus(status: string): string {
+    return status ? status.replace(/_/g, ' ') : '';
+  }
+
   getProposalStatusColor(status: string): string {
     const colors: Record<string, string> = {
       'PENDING': '#8c8c8c',

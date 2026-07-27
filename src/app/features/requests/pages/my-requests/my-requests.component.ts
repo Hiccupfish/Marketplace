@@ -53,6 +53,10 @@ export class MyRequestsComponent implements OnInit {
     return colors[status] || '#8c8c8c';
   }
 
+  formatStatus(status: string): string {
+    return status ? status.replace(/_/g, ' ') : '';
+  }
+
   formatBudget(budget?: number): string {
     if (!budget) return 'Negotiable';
     return 'R ' + budget.toLocaleString('en-ZA');

@@ -45,7 +45,7 @@
             {{ request.marketplaceType === 'PRODUCT' ? 'Product' : 'Service' }}
           </span>
           <span class="status-badge" [style.backgroundColor]="getStatusColor(request.status)">
-            {{ request.status.replace(/_/g, ' ') }}
+            {{ formatStatus(request.status) }}
           </span>
         </div>
         <h3>{{ request.title }}</h3>
