@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,10 +10,10 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   brand = 'Marketplace';
   searchQuery = '';
-  isLoggedIn = false;
+  get isLoggedIn(): boolean { return this.auth.isAuthenticated(); }
   userName = 'User';
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router, private readonly auth: AuthService) {}
 
   onSearch(): void {
     const query = this.searchQuery.trim();
@@ -23,7 +24,7 @@ export class NavbarComponent {
   }
 
   logout(): void {
-    this.isLoggedIn = false;
+    this.auth.logout();
     this.router.navigate(['/']);
   }
 }

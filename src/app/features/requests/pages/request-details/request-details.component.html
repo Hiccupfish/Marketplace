@@ -194,8 +194,15 @@
 </div>
 
 <ng-template #loadingTemplate>
-  <div class="loading-state">
-    <div class="spinner"></div>
-    <p>Loading request details...</p>
+  <div *ngIf="error; else loadingState" class="loading-state error-state">
+    <h2>Unable to open this request</h2>
+    <p>{{ error }}</p>
+    <button type="button" class="back-btn" (click)="goBack()">Back to Requests</button>
   </div>
+  <ng-template #loadingState>
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading request details...</p>
+    </div>
+  </ng-template>
 </ng-template>

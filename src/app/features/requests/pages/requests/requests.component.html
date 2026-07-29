@@ -99,69 +99,10 @@
 
     <!-- Requests Grid -->
     <div class="requests-grid" *ngIf="!loading && !error && requests.length > 0">
-      <a *ngFor="let request of requests; trackBy: trackByRequestId" [routerLink]="['/requests', request.id]" class="request-card">
-        <div class="card-top">
-          <span class="type-badge" [style.backgroundColor]="getTypeColor(request.marketplaceType)">
-            {{ getTypeLabel(request.marketplaceType) }}
-          </span>
-          <span class="status-badge" [style.backgroundColor]="getStatusColor(request.status)">
-            {{ formatStatus(request.status) }}
-          </span>
-        </div>
-
-        <h3 class="card-title">{{ request.title }}</h3>
-        <p class="card-description">{{ request.description }}</p>
-
-        <div class="card-meta">
-          <div class="meta-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <span>{{ request.location || 'Location not specified' }}</span>
-          </div>
-          <div class="meta-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-            </svg>
-            <span>{{ request.category.name }}</span>
-          </div>
-        </div>
-
-        <div class="card-footer">
-          <div class="budget-info">
-            <span class="budget-label">Budget</span>
-            <span class="budget-value">{{ formatBudget(request.budget) }}</span>
-          </div>
-          <div class="proposal-count">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span>{{ request.proposalCount }} proposals</span>
-          </div>
-        </div>
-
-        <div class="card-requester">
-          <div class="requester-avatar">
-            <img *ngIf="request.requester.profilePicture; else avatarPlaceholder" [src]="request.requester.profilePicture" [alt]="request.requester.name" />
-            <ng-template #avatarPlaceholder>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </ng-template>
-          </div>
-          <div class="requester-info">
-            <span class="requester-name">{{ request.requester.name }}</span>
-            <span class="post-time">{{ getTimeAgo(request.createdAt) }}</span>
-          </div>
-          <svg *ngIf="request.requester.isVerified" class="verified-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <polyline points="9 12 11 14 15 10"/>
-          </svg>
-        </div>
-      </a>
+<app-request-card
+  *ngFor="let request of requests; trackBy: trackByRequestId"
+  [request]="request">
+</app-request-card>
     </div>
 
     <!-- Pagination -->

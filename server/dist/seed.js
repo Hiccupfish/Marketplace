@@ -1,62 +1,176 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
+const hash_1 = require("./utils/hash");
 const prisma = new client_1.PrismaClient();
 async function main() {
-    // Clear existing data
-    await prisma.listing.deleteMany();
-    await prisma.seller.deleteMany();
-    // Create mock sellers
-    const seller1 = await prisma.seller.create({
-        data: {
-            name: 'Alice Seller',
-            email: 'alice@example.com',
-            password: '$2a$10$placeholderhash', // password will be hashed via registration normally
-            phone: '123-456-7890',
-            city: 'New York',
-            avatarUrl: null,
+    // Seed categories
+    const categories = [
+        { name: 'Electronics', icon: 'electronics' },
+        { name: 'Vehicles', icon: 'vehicles' },
+        { name: 'Property', icon: 'property' },
+        { name: 'Fashion', icon: 'fashion' },
+        { name: 'Home & Garden', icon: 'home' },
+        { name: 'Services', icon: 'services' },
+        { name: 'Other', icon: 'other' },
+    ];
+    for (const cat of categories) {
+        await prisma.category.upsert({
+            where: { name: cat.name },
+            update: {},
+            create: cat,
+        });
+    }
+    // Create a sample South African seller
+    const sellerEmail = 'seller@kasiverse.co.za';
+    const seller = await prisma.user.upsert({
+        where: { email: sellerEmail },
+        update: {},
+        create: {
+            email: sellerEmail,
+            name: 'Kasiverse Seller',
+            password: await (0, hash_1.hashPassword)('Password123!'),
+            phoneNumber: '+27 71 123 4567',
+            location: 'Cape Town, Western Cape, South Africa',
+            isVerified: true,
+        }
+    });
+    // Helper to find category id
+    const getCategoryId = async (name) => {
+        const c = await prisma.category.findUnique({ where: { name } });
+        if (!c)
+            throw new Error(`Category ${name} not found`);
+        return c.id;
+    };
+    // Seed example products with South African context
+    const products = [
+        {
+            title: 'Samsung Galaxy S23 (128GB) - Unlocked',
+            description: 'Well-kept Samsung Galaxy S23, 128GB, black. Minor signs of use. Battery 90%.',
+            price: 9999.0, // ZAR
+            categoryName: 'Electronics',
+            location: 'Cape Town, Western Cape',
+            images: JSON.stringify(['https://example.com/images/galaxy-s23-1.jpg']),
+            deliveryEnabled: true,
+            fulfilmentOptions: 'COLLECTION,DELIVERY'
         },
-    });
-    const seller2 = await prisma.seller.create({
-        data: {
-            name: 'Bob Trader',
-            email: 'bob@example.com',
-            password: '$2a$10$placeholderhash',
-            phone: '987-654-3210',
-            city: 'Los Angeles',
-            avatarUrl: null,
+        {
+            title: 'Used Toyota Corolla 2015 - Manual',
+            description: 'Reliable Toyota Corolla with full service history. 180,000 km. Good condition.',
+            price: 95000.0,
+            categoryName: 'Vehicles',
+            location: 'Johannesburg, Gauteng',
+            images: JSON.stringify(['https://example.com/images/corolla-2015-1.jpg']),
+            deliveryEnabled: false,
+            fulfilmentOptions: 'COLLECTION'
         },
+        {
+            title: 'Handmade African Beaded Necklace',
+            description: 'Unique handmade beaded necklace made by local artisans in KwaZulu-Natal.',
+            price: 350.0,
+            categoryName: 'Fashion',
+            location: 'Durban, KwaZulu-Natal',
+            images: JSON.stringify(['https://example.com/images/beaded-necklace.jpg']),
+            deliveryEnabled: true,
+            fulfilmentOptions: 'COLLECTION,DELIVERY'
+        },
+        {
+            title: 'Solid Oak Dining Table (Seats 6)',
+            description: 'Custom solid oak dining table made in Cape Town. Includes local delivery within metro areas.',
+            price: 8500.0,
+            categoryName: 'Home & Garden',
+            location: 'Cape Town, Western Cape',
+            images: JSON.stringify(['https://example.com/images/dining-table.jpg']),
+            deliveryEnabled: true,
+            fulfilmentOptions: 'COLLECTION,DELIVERY'
+        }
+    ];
+    for (const p of products) {
+        const categoryId = await getCategoryId(p.categoryName);
+        // upsert by title + seller to avoid duplicates
+        await prisma.product.upsert({
+            where: { id: `${p.title}-${seller.id}` },
+            update: {
+                price: p.price,
+                description: p.description,
+                location: p.location,
+                images: p.images,
+                deliveryEnabled: p.deliveryEnabled,
+                fulfilmentOptions: p.fulfilmentOptions
+            },
+            create: {
+                id: `${p.title}-${seller.id}`,
+                title: p.title,
+                description: p.description,
+                price: p.price,
+                sellerId: seller.id,
+                categoryId,
+                location: p.location,
+                images: p.images,
+                deliveryEnabled: p.deliveryEnabled,
+                fulfilmentOptions: p.fulfilmentOptions
+            }
+        });
+    }
+    // Create a sample South African service provider
+    const providerEmail = 'provider@kasiverse.co.za';
+    const provider = await prisma.user.upsert({
+        where: { email: providerEmail },
+        update: {},
+        create: {
+            email: providerEmail,
+            name: 'Kasiverse Provider',
+            password: await (0, hash_1.hashPassword)('Password123!'),
+            phoneNumber: '+27 82 765 4321',
+            location: 'Durban, KwaZulu-Natal, South Africa',
+            isVerified: true,
+        }
     });
-    // Create mock listings
-    await prisma.listing.createMany({
-        data: [
-            {
-                title: 'Vintage Chair',
-                description: 'A comfortable vintage wooden chair.',
-                priceZar: 120.0,
-                category: 'Furniture',
-                city: 'New York',
-                sellerId: seller1.id,
-            },
-            {
-                title: 'Antique Lamp',
-                description: 'An antique lamp with brass finish.',
-                priceZar: 85.5,
-                category: 'Lighting',
-                city: 'Los Angeles',
-                sellerId: seller2.id,
-            },
-            {
-                title: 'Modern Sofa',
-                description: 'A sleek modern sofa for living rooms.',
-                priceZar: 350.0,
-                category: 'Furniture',
-                city: 'New York',
-                sellerId: seller1.id,
-            },
-        ],
+    // Ensure provider profile exists
+    await prisma.serviceProviderProfile.upsert({
+        where: { userId: provider.id },
+        update: {},
+        create: {
+            userId: provider.id,
+            bio: 'Experienced local tradesperson offering reliable services across KZN.',
+            portfolio: JSON.stringify([]),
+        }
     });
-    console.log('Seed data inserted successfully');
+    // Seed example services
+    const services = [
+        {
+            title: 'Home Electrical Repair',
+            description: 'Qualified electrician offering fault finding and repairs for home electrics.',
+            categoryName: 'Services',
+            serviceArea: 'Durban',
+            startingPrice: 450.0
+        },
+        {
+            title: 'Garden Landscaping & Maintenance',
+            description: 'Professional landscaping, lawn care and regular maintenance.',
+            categoryName: 'Home & Garden',
+            serviceArea: 'Cape Town',
+            startingPrice: 300.0
+        },
+        {
+            title: 'Mobile Phone Repair (Screen & Battery)',
+            description: 'Fast, reliable screen replacements and battery swaps for popular models.',
+            categoryName: 'Electronics',
+            serviceArea: 'Johannesburg',
+            startingPrice: 250.0
+        }
+    ];
+    for (const s of services) {
+        const categoryId = await getCategoryId(s.categoryName);
+        const existing = await prisma.service.findFirst({ where: { title: s.title, providerId: provider.id } });
+        if (existing) {
+            await prisma.service.update({ where: { id: existing.id }, data: { description: s.description, serviceArea: s.serviceArea, startingPrice: s.startingPrice } });
+        }
+        else {
+            await prisma.service.create({ data: { title: s.title, description: s.description, providerId: provider.id, categoryId, serviceArea: s.serviceArea, availability: 'AVAILABLE', startingPrice: s.startingPrice } });
+        }
+    }
+    console.log('Categories, seller, products, provider and services seeded successfully');
 }
 main()
     .catch((e) => {

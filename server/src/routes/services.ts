@@ -1,25 +1,74 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 
 const router = Router();
+const prisma = new PrismaClient();
 
-// GET /api/services - Get all services (with filtering)
-router.get('/', (req, res) => {
-  res.json({ message: 'Get all services' });
+// GET /api/services - list services with optional filters
+router.get('/', async (req: Request, res: Response) => {
+  const { search, category, serviceArea } = req.query;
+  const filters: any = {};
+  if (search) {
+    filters.OR = [
+      { title: { contains: String(search), mode: 'insensitive' } },
+      { description: { contains: String(search), mode: 'insensitive' } },
+    ];
+  }
+  if (category) filters.category = { name: String(category) };
+  if (serviceArea) filters.serviceArea = { contains: String(serviceArea), mode: 'insensitive' };
+
+  try {
+    const services = await prisma.service.findMany({
+      where: filters,
+      include: { provider: { select: { id: true, name: true, profilePicture: true, location: true } }, category: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(services);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting services' });
+  }
 });
 
-// GET /api/services/:id - Get a single service
-router.get('/:id', (req, res) => {
-  res.json({ message: `Get service ${req.params.id}` });
+// GET /api/services/:id - get single service
+router.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const service = await prisma.service.findUnique({ where: { id }, include: { provider: { select: { id: true, name: true, profilePicture: true, location: true } }, category: true } });
+    if (!service) return res.status(404).json({ message: 'Service not found' });
+    res.json(service);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting service' });
+  }
 });
 
-// POST /api/services - Create a new service
-router.post('/', (req, res) => {
-  res.status(201).json({ message: 'Create a new service' });
-});
+// POST /api/services - create a new service (authenticated)
+router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const providerId = req.user?.id;
+  if (!providerId) return res.status(401).json({ message: 'Unauthenticated' });
 
-// POST /api/services/:id/quotes - Create a quote for a service
-router.post('/:id/quotes', (req, res) => {
-    res.status(201).json({ message: `Create a quote for service ${req.params.id}` });
+  const { title, description, categoryId, serviceArea, startingPrice } = req.body;
+  if (!title || !categoryId) return res.status(400).json({ message: 'Missing required fields: title, categoryId' });
+
+  try {
+    const service = await prisma.service.create({
+      data: {
+        title,
+        description,
+        provider: { connect: { id: providerId } },
+        category: { connect: { id: categoryId } },
+        serviceArea,
+        availability: 'AVAILABLE',
+        startingPrice: startingPrice ? parseFloat(startingPrice) : undefined,
+      },
+    });
+    res.status(201).json(service);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error creating service' });
+  }
 });
 
 export default router;

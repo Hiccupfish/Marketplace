@@ -1,0 +1,37 @@
+<article class="service-card">
+
+  <div class="service-card__image">
+    <img
+      [src]="image"
+      [alt]="service?.title">
+  </div>
+
+  <div class="service-card__content">
+
+    <span class="service-card__category">
+      {{ service?.category?.name || 'Service' }}
+    </span>
+
+    <h3>{{ service?.title }}</h3>
+
+    <p>{{ service?.description }}</p>
+
+    <div class="service-card__location">
+      📍 {{ serviceLocation }}
+    </div>
+
+    <div class="service-card__footer">
+
+      <div class="service-card__price">
+        {{ formattedPrice }}
+      </div>
+
+      <button type="button">
+        View Service
+      </button>
+
+    </div>
+
+  </div>
+
+</article>

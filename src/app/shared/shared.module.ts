@@ -18,6 +18,8 @@ import { PricePipe } from './pipes/price.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { PageLayoutComponent } from './components/page-layout/page-layout.component';
 import { DeliveryStatusComponent } from './components/delivery-status/delivery-status.component';
+import { ServiceCardComponent } from './components/service-card/service-card.component';
+import { RequestCardComponent } from './components/request-card/request-card.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { DeliveryStatusComponent } from './components/delivery-status/delivery-s
     TruncatePipe,
     PhoneFormatDirective,
     PageLayoutComponent,
-    DeliveryStatusComponent
+    DeliveryStatusComponent,
+    ServiceCardComponent,
+    RequestCardComponent
   ],
   imports: [CommonModule, FormsModule, RouterModule],
   exports: [
@@ -53,7 +57,9 @@ import { DeliveryStatusComponent } from './components/delivery-status/delivery-s
     TruncatePipe,
     PhoneFormatDirective,
     PageLayoutComponent,
-    DeliveryStatusComponent
+    DeliveryStatusComponent,
+    ServiceCardComponent,
+    RequestCardComponent
   ]
 })
 export class SharedModule {}

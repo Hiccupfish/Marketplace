@@ -1,0 +1,31 @@
+<section class="services-page">
+  <header>
+    <p class="eyebrow">Services Marketplace</p>
+    <h1>Local Services</h1>
+  </header>
+
+  <div *ngIf="isLoading" class="state">Loading services...</div>
+  <div *ngIf="error" class="state state--error">{{ error }}</div>
+
+  <div *ngIf="!isLoading && !error && services.length === 0" class="state">No services found.</div>
+
+  <div class="services-grid" *ngIf="services.length">
+    <a class="service-card" *ngFor="let s of services" [routerLink]="['/services', s.id]">
+      <div class="service-card__top">
+        <span class="service-card__category">{{ s.category?.name || 'Services' }}</span>
+        <span class="service-card__price">From R {{ s.startingPrice | number:'1.0-0' }}</span>
+      </div>
+      <h2>{{ s.title }}</h2>
+      <p>{{ s.description }}</p>
+      <div class="service-card__meta">📍 {{ s.serviceArea || s.provider?.location }}</div>
+    </a>
+  </div>
+</section>
+<!-- <div class="services-grid" *ngIf="services.length">
+
+  <app-service-card
+    *ngFor="let service of services"
+    [service]="service">
+  </app-service-card>
+
+</div> -->

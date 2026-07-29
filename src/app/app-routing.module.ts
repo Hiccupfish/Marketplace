@@ -11,6 +11,10 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./features/products/products.module').then(m => m.ProductsModule)
   },
   {
+    path: 'listings',
+    loadChildren: () => import('./features/listings/listings.module').then(m => m.ListingsModule)
+  },
+  {
     path: 'services',
     loadChildren: () => import('./features/services/services.module').then(m => m.ServicesModule)
   },

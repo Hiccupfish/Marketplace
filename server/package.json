@@ -9,6 +9,9 @@
     "seed": "ts-node src/seed.ts",
     "start": "node dist/server.js"
   },
+  "prisma": {
+    "seed": "ts-node ./src/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.12.0",
     "bcryptjs": "^2.4.3",

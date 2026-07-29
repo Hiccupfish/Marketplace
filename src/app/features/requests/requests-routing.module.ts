@@ -14,10 +14,10 @@ const routes: Routes = [
   { path: 'create', component: CreateRequestComponent },
   { path: 'my', component: MyRequestsComponent },
   { path: 'my/proposals', component: MyProposalsComponent },
-  { path: ':id', component: RequestDetailsComponent },
+  { path: 'notifications', component: NotificationsComponent },
   { path: ':id/propose', component: SubmitProposalComponent },
   { path: ':id/negotiations', component: NegotiationsComponent },
-  { path: 'notifications', component: NotificationsComponent },
+  { path: ':id', component: RequestDetailsComponent },
 ];
 
 @NgModule({

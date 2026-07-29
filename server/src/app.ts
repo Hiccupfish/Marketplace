@@ -7,6 +7,7 @@ import productsRouter from './routes/products';
 import servicesRouter from './routes/services';
 import requestsRouter from './routes/requests';
 import deliveriesRouter from './routes/deliveries';
+import categoriesRouter from './routes/categories';
 import usersRouter from './routes/users';
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/services', servicesRouter);
 app.use('/api/requests', requestsRouter);
+app.use('/api/categories', categoriesRouter);
 app.use('/api/deliveries', deliveriesRouter);
 app.use('/api/users', usersRouter);
 
