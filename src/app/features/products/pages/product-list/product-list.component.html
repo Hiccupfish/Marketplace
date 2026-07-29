@@ -1,0 +1,33 @@
+<section class="products-page">
+  <header class="products-page__header">
+    <div>
+      <p class="eyebrow">Marketplace</p>
+      <h1>Products in South Africa</h1>
+      <p class="subtitle">Browse local listings from verified sellers across the country.</p>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="state">Loading products...</div>
+  <div *ngIf="errorMessage" class="state state--error">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && !errorMessage && listings.length === 0" class="state">
+    No products are available right now.
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && listings.length > 0" class="products-grid">
+    <article class="product-card" *ngFor="let listing of listings">
+      <div class="product-card__top">
+        <span class="product-card__category">{{ listing.category }}</span>
+        <span class="product-card__price">R {{ listing.priceZar | number:'1.0-0' }}</span>
+      </div>
+
+      <h2>{{ listing.title }}</h2>
+      <p>{{ listing.description }}</p>
+
+      <div class="product-card__meta">
+        <span>📍 {{ listing.city }}</span>
+        <span>🕒 {{ listing.createdAt | date:'mediumDate' }}</span>
+      </div>
+    </article>
+  </div>
+</section>
