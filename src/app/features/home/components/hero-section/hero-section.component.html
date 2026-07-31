@@ -1,25 +1,52 @@
 <section class="hero">
+
   <div class="hero__container">
 
     <div class="hero__content">
 
-      <p class="eyebrow">LOCAL MARKETPLACE</p>
+      <span class="hero__badge">
+        🇿🇦 South Africa's Local Marketplace
+      </span>
 
       <h1 class="hero__title">
-        Find trusted local sellers & artisans near you
+        Discover trusted
+        <span>services & products</span>
+        near you
       </h1>
 
       <p class="hero__subtitle">
-        From mechanics to painters, electronics to furniture—discover verified businesses and skilled people in your community.
+        Buy products, hire skilled professionals, or post what you need and receive
+        competitive quotes from trusted businesses and verified local service providers.
       </p>
 
+      <!-- Search -->
       <div class="hero__search">
 
-        <input
-          type="text"
-          placeholder="Search services or products..."
-          [(ngModel)]="searchQuery"
-        />
+        <div class="search-box">
+
+          <svg
+            class="search-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+
+          </svg>
+
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search services, products or businesses..." />
+
+        </div>
 
         <button (click)="onSearch()">
           Search
@@ -27,14 +54,74 @@
 
       </div>
 
+      <!-- Quick Navigation -->
+      <div class="hero__quick-actions">
+
+        <button routerLink="/products">
+          🛍 Products
+        </button>
+
+        <button routerLink="/services">
+          🛠 Services
+        </button>
+
+        <button routerLink="/requests">
+          📋 Requests
+        </button>
+
+        <button routerLink="/deliveries">
+          🚚 Deliveries
+        </button>
+
+      </div>
+
+      <!-- Popular Categories -->
+      <div class="hero__section-title">
+        Popular Categories
+      </div>
+
       <div class="hero__categories">
-        <span (click)="filter('mechanics')">Mechanics</span>
-        <span (click)="filter('painters')">Painters</span>
-        <span (click)="filter('electronics')">Electronics</span>
-        <span (click)="filter('plumbing')">Plumbing</span>
+
+        <span (click)="filter('electronics')">💻 Electronics</span>
+
+        <span (click)="filter('home repairs')">🏠 Home Repairs</span>
+
+        <span (click)="filter('plumbing')">🔧 Plumbing</span>
+
+        <span (click)="filter('mechanics')">🚗 Mechanics</span>
+
+        <span (click)="filter('beauty')">💄 Beauty</span>
+
+        <span (click)="filter('cleaning')">🧹 Cleaning</span>
+
+        <span (click)="filter('gardening')">🌿 Gardening</span>
+
+        <span (click)="filter('moving')">📦 Moving</span>
+
+      </div>
+
+      <!-- Marketplace Stats -->
+      <div class="hero__stats">
+
+        <div class="hero__stat">
+          <h3>10K+</h3>
+          <span>Marketplace Listings</span>
+        </div>
+
+        <div class="hero__stat">
+          <h3>2K+</h3>
+          <span>Verified Businesses</span>
+        </div>
+
+        <div class="hero__stat">
+          <h3>98%</h3>
+          <span>Customer Satisfaction</span>
+        </div>
+
       </div>
 
     </div>
 
   </div>
+
 </section>
