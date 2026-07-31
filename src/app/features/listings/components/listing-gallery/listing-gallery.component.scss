@@ -1,19 +1,19 @@
+@import "../../../../../assets/styles/variables";
+
 .listing-gallery {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Main image */
 .listing-gallery__main img {
   width: 100%;
   height: 300px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid #eaeaea;
+  border: 1px solid $border-soft;
 }
 
-/* Thumbnails */
 .listing-gallery__thumbnails {
   display: flex;
   gap: 8px;
@@ -36,5 +36,5 @@
 }
 
 .listing-gallery__thumbnails img.active {
-  border-color: #055c8d;
+  border-color: $accent;
 }

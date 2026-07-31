@@ -1,103 +1,112 @@
-.hero{
-    background:#0d1117;
-    padding:5rem 1.5rem;
+@import "../../../../../assets/styles/variables";
+
+$card-top:     rgba(26, 30, 38, .92);
+$card-bottom:  rgba(14, 16, 21, .95);
+
+.hero {
+  background:
+    radial-gradient(ellipse 900px 500px at 20% -10%, rgba(240, 168, 72, .07), transparent),
+    $bg-dark;
+  padding: 5rem 1.5rem;
 }
 
-.hero__container{
-    max-width:1200px;
-    margin:auto;
+.hero__container {
+  max-width: 1200px;
+  margin: auto;
 }
 
-.hero__content{
-
-    background:linear-gradient(
-        180deg,
-        rgba(28,31,38,.95),
-        rgba(18,20,26,.95)
-    );
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:22px;
-
-    padding:4rem;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.45),
-        inset 0 1px 0 rgba(255,255,255,.03);
-
+.hero__content {
+  background: linear-gradient(180deg, $card-top, $card-bottom);
+  border: 1px solid $border-soft;
+  border-radius: 22px;
+  padding: 4rem;
+  text-align: center;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, .45),
+    inset 0 1px 0 rgba(255, 255, 255, .04);
 }
 
 .hero__badge {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  padding: .55rem 1rem;
+  padding: .55rem 1.1rem;
   border-radius: 999px;
-  background: #eef8fc;
-  color: #087bad;
+  background: $accent-dim;
+  color: $accent;
   font-size: .8rem;
   font-weight: 700;
-  border: 1px solid #d8eaf4;
+  letter-spacing: .01em;
+  border: 1px solid rgba(240, 168, 72, .3);
 }
 
 .hero__title {
   margin: 1.5rem 0 1rem;
-  color: #172033;
+  color: $text-primary;
   font-size: clamp(2.5rem, 6vw, 4rem);
   line-height: 1.1;
-  letter-spacing: -.05em;
-}
+  letter-spacing: -.03em;
+  font-weight: 700;
 
-.hero__title span {
-  color: #087bad;
+  span {
+    color: $accent;
+  }
 }
 
 .hero__subtitle {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto 2.5rem;
-  color: #617085;
+  color: $text-muted;
   font-size: 1.1rem;
-  line-height: 1.8;
+  line-height: 1.75;
 }
+
+// ---- Search ---------------------------------------------------
 
 .hero__search {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  max-width: 720px;
+  margin: 0 auto 2rem;
 }
 
 .search-box {
   flex: 1;
   display: flex;
   align-items: center;
-  background: white;
-  border: 1px solid #cfd9e4;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid $border-soft;
   border-radius: 10px;
   overflow: hidden;
-  transition: .2s;
-}
+  transition: border-color .2s, box-shadow .2s;
 
-.search-box:focus-within {
-  border-color: #087bad;
-  box-shadow: 0 0 0 4px rgba(8,123,173,.12);
-}
+  &:focus-within {
+    border-color: $accent;
+    box-shadow: 0 0 0 4px $accent-glow;
+  }
 
-.search-box svg {
-  width: 18px;
-  height: 18px;
-  color: #8f9fb2;
-  margin-left: 1rem;
-}
+  svg {
+    width: 18px;
+    height: 18px;
+    color: $text-faint;
+    margin-left: 1rem;
+    flex-shrink: 0;
+  }
 
-.search-box input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 0 1rem;
-  height: 52px;
-  font-size: .96rem;
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0 1rem;
+    height: 52px;
+    font-size: .96rem;
+    color: $text-primary;
+
+    &::placeholder {
+      color: $text-faint;
+    }
+  }
 }
 
 .hero__search button {
@@ -105,41 +114,56 @@
   padding: 0 2rem;
   border: none;
   border-radius: 10px;
-  background: #087bad;
-  color: white;
+  background: $accent;
+  color: #1a1305;
   font-weight: 700;
   cursor: pointer;
-  transition: .2s;
-  box-shadow: 0 6px 18px rgba(8,123,173,.22);
+  transition: background .2s, transform .2s;
+  box-shadow: 0 6px 18px rgba(240, 168, 72, .25);
+
+  &:hover {
+    background: #f5b666;
+    transform: translateY(-1px);
+  }
 }
 
-.hero__search button:hover {
-  background: #056c9a;
-}
+// ---- Quick actions ---------------------------------------------
 
 .hero__quick-actions {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
 }
 
 .action-btn {
-  border: 1px solid #d8eaf4;
-  background: #fff;
+  border: 1px solid $border-soft;
+  background: rgba(255, 255, 255, .03);
   padding: .8rem 1.2rem;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
-  color: #42536a;
-  transition: .2s;
+  font-size: .92rem;
+  color: $text-muted;
+  transition: background .2s, color .2s, border-color .2s;
+
+  &:hover {
+    background: $accent-dim;
+    color: $accent;
+    border-color: rgba(240, 168, 72, .3);
+  }
 }
 
-.action-btn:hover {
-  background: #087bad;
-  color: white;
-  border-color: #087bad;
+// ---- Categories --------------------------------------------------
+
+.hero__section-title {
+  color: $text-faint;
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 1rem;
 }
 
 .hero__categories {
@@ -147,58 +171,66 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: .75rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
+
+  span {
+    padding: .7rem 1.1rem;
+    background: rgba(255, 255, 255, .03);
+    border: 1px solid $border-soft;
+    border-radius: 999px;
+    color: $text-muted;
+    font-size: .88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s, transform .2s;
+
+    &:hover {
+      background: $accent;
+      color: #1a1305;
+      border-color: $accent;
+      transform: translateY(-1px);
+    }
+  }
 }
 
-.hero__categories span {
-  padding: .7rem 1rem;
-  background: #f3f8fb;
-  border: 1px solid #d8eaf4;
-  border-radius: 999px;
-  color: #556579;
-  font-size: .9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.hero__categories span:hover {
-  background: #087bad;
-  color: white;
-  border-color: #087bad;
-}
+// ---- Stats ------------------------------------------------------
 
 .hero__stats {
   display: flex;
   justify-content: center;
   gap: 4rem;
-  padding-top: 2rem;
-  border-top: 1px solid #edf2f7;
+  padding-top: 2.5rem;
+  border-top: 1px solid $border-soft;
 }
 
-.stat {
+.hero__stat {
   display: flex;
   flex-direction: column;
+  gap: .25rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  span {
+    color: $text-faint;
+    font-size: .85rem;
+  }
 }
 
-.stat strong {
-  font-size: 1.7rem;
-  color: #172033;
-}
+// ---- Responsive ---------------------------------------------------
 
-.stat span {
-  color: #617085;
-  font-size: .9rem;
-}
-
-@media (max-width:768px) {
+@media (max-width: 768px) {
 
   .hero {
     padding: 2rem 1rem;
   }
 
   .hero__content {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
 
   .hero__search {
@@ -209,9 +241,12 @@
     width: 100%;
   }
 
+  .hero__quick-actions {
+    gap: .6rem;
+  }
+
   .hero__stats {
     flex-direction: column;
     gap: 1.5rem;
   }
-
 }

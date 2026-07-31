@@ -1,7 +1,7 @@
 @import "../../../../assets/styles/variables";
 
 .delivery-status-container {
-  border: 1px solid $color-grey-light;
+  border: 1px solid $border-soft;
   border-radius: 8px;
   padding: 16px;
   background-color: #f9f9f9;
@@ -9,7 +9,7 @@
   h4 {
     margin-top: 0;
     margin-bottom: 16px;
-    border-bottom: 1px solid $color-grey-light;
+    border-bottom: 1px solid $border-soft;
     padding-bottom: 8px;
   }
 

@@ -1,26 +1,53 @@
+@import "../../../../../assets/styles/variables";
+
 .home-page {
   display: flex;
   flex-direction: column;
   width: 100%;
+  background: $bg-dark;
 }
 
 /* Content wrapper */
 .home-page__content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 100%;
+  margin: 0;
+  padding: 1.5rem;
 }
 
 /* Section spacing */
 .home-page__section {
-  margin-top: 40px;
+  margin-top: 4.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid $border-soft;
+
+  &:first-child {
+    margin-top: 3rem;
+    padding-top: 0;
+    border-top: none;
+  }
 }
 
 /* Section headings */
 .home-page__section h2 {
-  font-size: 22px;
-  margin-bottom: 15px;
-  color: #f8fafc;
-  border-left: 4px solid #055c8d;
-  padding-left: 10px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 1.5rem;
+  color: $text-primary;
+  border-left: 4px solid $accent;
+  padding-left: .8rem;
+}
+
+@media (max-width: 768px) {
+  .home-page__content {
+    padding: 1rem;
+  }
+
+  .home-page__section {
+    margin-top: 3rem;
+  }
+
+  .home-page__section h2 {
+    font-size: 1.35rem;
+  }
 }

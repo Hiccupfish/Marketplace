@@ -1,3 +1,5 @@
+@import "../../../../assets/styles/variables";
+
 .category-card {
   display: flex;
   flex-direction: column;
@@ -5,9 +7,9 @@
   justify-content: center;
 
   padding: 14px;
-  border: 1px solid #eaeaea;
+  border: 1px solid $border-soft;
   border-radius: 12px;
-  background: #fff;
+  background: $card-bg;
 
   cursor: pointer;
   transition: all 0.2s ease;
@@ -16,7 +18,7 @@
 
 .category-card:hover {
   transform: translateY(-3px);
-  border-color: #055c8d;
+  border-color: $accent-border;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 

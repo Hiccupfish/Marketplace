@@ -1,3 +1,5 @@
+@import "../../../../assets/styles/variables";
+
 .search-bar {
   display: flex;
   gap: 10px;
@@ -8,32 +10,33 @@
 .search-bar__input {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid $border-soft;
   border-radius: 8px;
   outline: none;
   font-size: 14px;
+  background: $card-bg;
+  color: $text-primary;
 }
 
 .search-bar__input:focus {
-  border-color: #055c8d;
+  border-color: $accent;
 }
 
 .search-bar__button {
   padding: 10px 14px;
   border: none;
   border-radius: 8px;
-  background: #055c8d;
-  color: white;
+  background: $accent;
+  color: $bg-dark;
   cursor: pointer;
   font-weight: 500;
   transition: 0.2s ease;
 }
 
 .search-bar__button:hover {
-  background: #044a70;
+  background: $accent-hover;
 }
 
-/* Mobile responsiveness */
 @media (max-width: 600px) {
   .search-bar {
     flex-direction: column;

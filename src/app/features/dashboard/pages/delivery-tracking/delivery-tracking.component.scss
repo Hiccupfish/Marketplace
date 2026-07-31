@@ -1,7 +1,5 @@
 @import "../../../../../assets/styles/variables";
 
-@import "../../../../../assets/styles/variables";
-
 .delivery-tracking-page {
   .page-header {
     margin-bottom: 2rem;
@@ -10,7 +8,7 @@
   .tab-navigation {
     display: flex;
     gap: 0.5rem;
-    border-bottom: 1px solid $color-grey-light;
+    border-bottom: 1px solid $border-soft;
     margin-bottom: 2rem;
 
     .tab-btn {
@@ -20,10 +18,10 @@
       cursor: pointer;
       font-size: 1rem;
       position: relative;
-      color: $color-text-secondary;
+      color: $text-muted;
 
       &.active {
-        color: $color-primary;
+        color: $accent;
         font-weight: 600;
 
         &::after {
@@ -33,7 +31,7 @@
           left: 0;
           right: 0;
           height: 3px;
-          background-color: $color-primary;
+          background-color: $accent;
         }
       }
     }
@@ -44,7 +42,7 @@
     gap: 1.5rem;
 
     .delivery-item {
-      border: 1px solid $color-grey-light;
+      border: 1px solid $border-soft;
       border-radius: 8px;
       padding: 1.5rem;
       background-color: white;
@@ -58,7 +56,7 @@
         }
         p {
           margin: 0;
-          color: $color-text-secondary;
+          color: $text-muted;
         }
       }
     }

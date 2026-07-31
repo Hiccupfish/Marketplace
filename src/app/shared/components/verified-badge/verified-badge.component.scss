@@ -1,10 +1,12 @@
+@import "../../../../assets/styles/variables";
+
 :host {
   display: inline-block;
 }
 
 .verified-badge {
-  background: #e7f7ec;
+  background: rgba(16, 185, 129, .12);
   border-radius: 999px;
-  color: #1b7f3a;
+  color: $color-success;
   padding: 0.25rem 0.5rem;
 }
