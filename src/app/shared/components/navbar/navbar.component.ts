@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  brand = 'Marketplace';
+  brand = 'Kasiverse';
   searchQuery = '';
   get isLoggedIn(): boolean { return this.auth.isAuthenticated(); }
   userName = 'User';
