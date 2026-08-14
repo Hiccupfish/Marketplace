@@ -14,8 +14,10 @@ dotenv.config();
 
 const app = express();
 
+// CORS configuration: Permissive for testing phase
+// Uses origin: true to reflect requesting origin, required for credentials: true with any-origin access
 app.use(cors({
-  origin: 'https://marketplace-umber-delta.vercel.app',
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
