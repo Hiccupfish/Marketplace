@@ -1,13 +1,30 @@
 @import "./assets/styles/variables";
 
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
+  width: 100%;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
   background: $bg-dark;
   font-family: 'Inter', sans-serif;
-
   color: $text-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+app-root {
+  display: block;
+  width: 100%;
 }

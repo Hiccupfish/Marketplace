@@ -1,0 +1,13 @@
+Angular
+   ↓
+Vercel
+https://marketplace-umber-delta.vercel.app
+   ↓
+Express API
+   ↓
+Render
+https://marketplace-1-qev4.onrender.com
+   ↓
+Prisma
+   ↓
+Database
