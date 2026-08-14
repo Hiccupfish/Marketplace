@@ -1,0 +1,24 @@
+// ---- Global design tokens -------------------------------------
+$bg-dark:       #0a0d12;
+$card-bg:       rgba(255, 255, 255, .03);
+$card-bg-hover: rgba(255, 255, 255, .05);
+$border-soft:   rgba(255, 255, 255, .08);
+
+$text-primary:  #f3f5f8;
+$text-muted:    #97a1b3;
+$text-faint:    #6b7386;
+
+$accent:        #f0a848;
+$accent-hover:  #f5b666;
+$accent-dim:    rgba(240, 168, 72, .14);
+$accent-border: rgba(240, 168, 72, .3);
+$accent-glow:   rgba(240, 168, 72, .25);
+
+// ---- Semantic / status colors -------------------------------------
+$color-warning:  #f59e0b;
+$color-info:     #3b82f6;
+$color-success:  #10b981;
+$color-danger:   #ef4444;
+
+// ---- Shadows -------------------------------------------------------
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, .15);

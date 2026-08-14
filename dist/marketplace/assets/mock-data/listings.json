@@ -1,0 +1,17 @@
+[
+  {
+    "id": "listing-1",
+    "title": "Vintage Camera",
+    "description": "A simple placeholder listing.",
+    "price": 120,
+    "currency": "USD",
+    "categoryId": "category-1",
+    "location": {
+      "city": "Boston",
+      "country": "USA"
+    },
+    "imageUrl": "",
+    "verified": true,
+    "rating": 4.5
+  }
+]

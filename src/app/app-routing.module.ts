@@ -43,6 +43,14 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule)
   },
   {
+    path: 'my-products',
+    loadChildren: () => import('./features/my-products/my-products.module').then(m => m.MyProductsModule)
+  },
+  {
+    path: 'my-services',
+    loadChildren: () => import('./features/my-services/my-services.module').then(m => m.MyServicesModule)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

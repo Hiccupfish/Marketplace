@@ -2,6 +2,13 @@
   <div class="bg-glow bg-glow-1"></div>
   <div class="bg-glow bg-glow-2"></div>
 
+  <!-- Login Intent Modal -->
+  <app-login-intent-modal
+    *ngIf="showIntentModal"
+    (intentSelected)="onIntentSelected($event)"
+    (cancelled)="onIntentCancelled()"
+  ></app-login-intent-modal>
+
   <div class="login-container">
     <div class="hero-panel">
       <div class="brand-badge">

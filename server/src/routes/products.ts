@@ -5,6 +5,28 @@ import { authenticateToken, AuthRequest } from '../middleware/auth';
 const router = Router();
 const prisma = new PrismaClient();
 
+// GET /api/products/my-products - Get authenticated user's products
+router.get('/my-products', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const products = await prisma.product.findMany({
+      where: { sellerId: userId },
+      include: {
+        seller: { select: { id: true, name: true, profilePicture: true, location: true } },
+        category: true,
+        offers: { include: { buyer: { select: { id: true, name: true, profilePicture: true } } }, orderBy: { createdAt: 'desc' } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(products);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting your products' });
+  }
+});
+
 // GET /api/products - Get all products with optional filters
 router.get('/', async (req: Request, res: Response) => {
   const { search, category, location, sellerId } = req.query;

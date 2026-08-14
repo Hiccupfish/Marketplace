@@ -20,6 +20,7 @@ import { PageLayoutComponent } from './components/page-layout/page-layout.compon
 import { DeliveryStatusComponent } from './components/delivery-status/delivery-status.component';
 import { ServiceCardComponent } from './components/service-card/service-card.component';
 import { RequestCardComponent } from './components/request-card/request-card.component';
+import { LoginIntentModalComponent } from './components/login-intent-modal/login-intent-modal.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RequestCardComponent } from './components/request-card/request-card.com
     PageLayoutComponent,
     DeliveryStatusComponent,
     ServiceCardComponent,
-    RequestCardComponent
+    RequestCardComponent,
+    LoginIntentModalComponent
   ],
   imports: [CommonModule, FormsModule, RouterModule],
   exports: [
@@ -59,7 +61,9 @@ import { RequestCardComponent } from './components/request-card/request-card.com
     PageLayoutComponent,
     DeliveryStatusComponent,
     ServiceCardComponent,
-    RequestCardComponent
+    RequestCardComponent,
+    LoginIntentModalComponent
   ]
 })
 export class SharedModule {}
+

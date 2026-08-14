@@ -1,0 +1,52 @@
+<div class="modal-backdrop" (click)="cancel()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>What would you like to do?</h2>
+      <button class="close-btn" (click)="cancel()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-subtitle">Choose how you'd like to use Kasiverse:</p>
+
+      <div class="intent-options">
+        <button type="button" class="intent-option" (click)="selectIntent('BUY')">
+          <span class="intent-icon">🛒</span>
+          <div class="intent-content">
+            <h3>Buy Products & Services</h3>
+            <p>Browse products and services available on the marketplace.</p>
+          </div>
+        </button>
+
+        <button type="button" class="intent-option" (click)="selectIntent('SELL_PRODUCTS')">
+          <span class="intent-icon">📦</span>
+          <div class="intent-content">
+            <h3>Sell Products</h3>
+            <p>Manage products that I am selling.</p>
+          </div>
+        </button>
+
+        <button type="button" class="intent-option" (click)="selectIntent('OFFER_SERVICES')">
+          <span class="intent-icon">🛠️</span>
+          <div class="intent-content">
+            <h3>Offer Services</h3>
+            <p>Manage services that I am offering.</p>
+          </div>
+        </button>
+
+        <button type="button" class="intent-option" (click)="selectIntent('BUSINESS')">
+          <span class="intent-icon">🏢</span>
+          <div class="intent-content">
+            <h3>Business</h3>
+            <p>Access business-related marketplace functionality.</p>
+          </div>
+        </button>
+      </div>
+
+      <p class="modal-note">You can change these preferences anytime in your account settings.</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>

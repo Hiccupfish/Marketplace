@@ -1,0 +1,87 @@
+<div class="my-services-wrapper">
+  <div class="my-services-container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <h1>My Services</h1>
+        <p>Manage your service offerings and track customer quotes</p>
+      </div>
+      <button class="create-btn" (click)="createService()">
+        <span>+ Add Service</span>
+      </button>
+    </div>
+
+    <!-- Error Alert -->
+    <div class="alert alert-error" *ngIf="error">
+      <span class="alert-icon">⚠️</span>
+      <span>{{ error }}</span>
+      <button class="alert-close" (click)="closeError()">×</button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your services...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && services.length === 0 && !error" class="empty-state">
+      <div class="empty-state-icon">📋</div>
+      <h2>No Services Yet</h2>
+      <p>Start offering your services to potential customers</p>
+      <button class="btn-primary" (click)="createService()">Create Your First Service</button>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid" *ngIf="!loading && services.length > 0">
+      <div class="service-card" *ngFor="let service of services">
+        <!-- Image -->
+        <div class="service-image">
+          <img [src]="getServiceImageUrl(service.image)" [alt]="service.title" />
+          <span class="service-status" [class.available]="service.isAvailable" [class.unavailable]="!service.isAvailable">
+            {{ service.isAvailable ? '✓ Available' : '✗ Unavailable' }}
+          </span>
+        </div>
+
+        <!-- Info -->
+        <div class="service-info">
+          <h3>{{ service.title }}</h3>
+          <p class="service-category">{{ service.category }}</p>
+          <p class="service-description">{{ service.description }}</p>
+
+          <div class="service-meta">
+            <span class="price">{{ service.priceRange }}</span>
+            <span class="location">📍 {{ service.location }}</span>
+          </div>
+
+          <div class="quotes-count">
+            {{ getQuoteCount(service) }} Quote{{ getQuoteCount(service) !== 1 ? 's' : '' }}
+          </div>
+
+          <p class="created-date">
+            Created {{ service.createdAt | date: 'short' }}
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="service-actions">
+          <div *ngIf="deletingServiceId !== service.id">
+            <button class="btn-toggle-availability" [class.unavailable]="!service.isAvailable" (click)="toggleAvailability(service)">
+              {{ service.isAvailable ? '🔒 Mark Unavailable' : '🔓 Mark Available' }}
+            </button>
+            <button (click)="editService(service.id)">✏️ Edit</button>
+            <button class="btn-delete" (click)="deleteService(service.id)">🗑️ Delete</button>
+          </div>
+
+          <div class="delete-confirm" *ngIf="deletingServiceId === service.id">
+            <p>Delete this service permanently?</p>
+            <div class="confirm-actions">
+              <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+              <button class="btn-confirm-delete" (click)="confirmDelete(service.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,9 +16,12 @@ export interface RegistrationData extends AuthCredentials {
   city?: string;
 }
 
+export type LoginIntent = 'BUY' | 'SELL_PRODUCTS' | 'OFFER_SERVICES' | 'BUSINESS' | null;
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly INTENT_STORAGE_KEY = 'auth_login_intent';
 
   constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) {}
 
@@ -30,6 +33,30 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(tap((response) => this.tokenService.saveToken(response.token)));
   }
 
-  logout(): void { this.tokenService.clearToken(); }
-  isAuthenticated(): boolean { return Boolean(this.tokenService.getToken()); }
+  logout(): void { 
+    this.tokenService.clearToken(); 
+    this.clearLoginIntent();
+  }
+
+  isAuthenticated(): boolean { 
+    return Boolean(this.tokenService.getToken()); 
+  }
+
+  // Login intent management
+  setLoginIntent(intent: LoginIntent): void {
+    if (intent) {
+      sessionStorage.setItem(this.INTENT_STORAGE_KEY, intent);
+    } else {
+      this.clearLoginIntent();
+    }
+  }
+
+  getLoginIntent(): LoginIntent {
+    return (sessionStorage.getItem(this.INTENT_STORAGE_KEY) as LoginIntent) || null;
+  }
+
+  clearLoginIntent(): void {
+    sessionStorage.removeItem(this.INTENT_STORAGE_KEY);
+  }
+}
 }
