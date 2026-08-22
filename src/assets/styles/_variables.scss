@@ -1,24 +1,24 @@
 // ---- Global design tokens -------------------------------------
-$bg-dark:       #0a0d12;
-$card-bg:       rgba(255, 255, 255, .03);
-$card-bg-hover: rgba(255, 255, 255, .05);
-$border-soft:   rgba(255, 255, 255, .08);
+$bg-light:      #fdfaf5;   // warm off-white, not clinical #fff
+$card-bg:       #ffffff;
+$card-bg-hover: #fffaf0;
+$border-soft:   rgba(20, 20, 20, .08);
 
-$text-primary:  #f3f5f8;
-$text-muted:    #97a1b3;
-$text-faint:    #6b7386;
+$text-primary:  #1c1c1e;
+$text-muted:    #5c5f66;
+$text-faint:    #8a8d94;
 
-$accent:        #f0a848;
-$accent-hover:  #f5b666;
-$accent-dim:    rgba(240, 168, 72, .14);
-$accent-border: rgba(240, 168, 72, .3);
-$accent-glow:   rgba(240, 168, 72, .25);
+$accent:        #e08e2b;   // slightly deepened gold — needs more saturation to hold contrast on white than it did on dark
+$accent-hover:  #c97a1f;
+$accent-dim:    rgba(224, 142, 43, .12);
+$accent-border: rgba(224, 142, 43, .3);
+$accent-glow:   rgba(224, 142, 43, .2);
 
 // ---- Semantic / status colors -------------------------------------
-$color-warning:  #f59e0b;
-$color-info:     #3b82f6;
-$color-success:  #10b981;
-$color-danger:   #ef4444;
+$color-warning:  #d97706;
+$color-info:     #2563eb;
+$color-success:  #059669;
+$color-danger:   #dc2626;
 
 // ---- Shadows -------------------------------------------------------
-$shadow-sm: 0 2px 8px rgba(0, 0, 0, .15);
+$shadow-sm: 0 2px 8px rgba(20, 20, 20, .06);
