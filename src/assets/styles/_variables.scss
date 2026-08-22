@@ -1,18 +1,18 @@
 // ---- Global design tokens -------------------------------------
-$bg-light:      #fdfaf5;   // warm off-white, not clinical #fff
+$bg-light:      #fefbf6;   // warm off-white, not clinical #fff
 $card-bg:       #ffffff;
-$card-bg-hover: #fffaf0;
+$card-bg-hover: #fff8ec;   // warm hover tint, echoes the accent instead of generic gray
 $border-soft:   rgba(20, 20, 20, .08);
 
 $text-primary:  #1c1c1e;
 $text-muted:    #5c5f66;
 $text-faint:    #8a8d94;
 
-$accent:        #e08e2b;   // slightly deepened gold — needs more saturation to hold contrast on white than it did on dark
-$accent-hover:  #c97a1f;
-$accent-dim:    rgba(224, 142, 43, .12);
-$accent-border: rgba(224, 142, 43, .3);
-$accent-glow:   rgba(224, 142, 43, .2);
+$accent:        #f5a623;   // sunflower gold — brighter, more saturated, more "cheerful marketplace"
+$accent-hover:  #e0940f;
+$accent-dim:    rgba(245, 166, 35, .12);
+$accent-border: rgba(245, 166, 35, .35);
+$accent-glow:   rgba(245, 166, 35, .22);
 
 // ---- Semantic / status colors -------------------------------------
 $color-warning:  #d97706;
@@ -22,3 +22,5 @@ $color-danger:   #dc2626;
 
 // ---- Shadows -------------------------------------------------------
 $shadow-sm: 0 2px 8px rgba(20, 20, 20, .06);
+$shadow-md: 0 8px 24px rgba(20, 20, 20, .08);
+$shadow-lg: 0 18px 40px rgba(20, 20, 20, .12);
