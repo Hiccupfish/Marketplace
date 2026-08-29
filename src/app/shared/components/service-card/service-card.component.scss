@@ -3,25 +3,25 @@
 .service-card {
   display: flex;
   flex-direction: column;
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  box-shadow: $shadow-sm;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   height: 100%;
 }
 
 .service-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: $shadow-md;
 }
 
 .service-card__image {
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: $card-bg;
+  background: $surface-card;
 }
 
 .service-card__image img {
@@ -41,8 +41,8 @@
 .service-card__category {
   display: inline-block;
   align-self: flex-start;
-  background: $accent-dim;
-  color: $accent;
+  background: $accent-primary-soft;
+  color: $accent-primary;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.75rem;
@@ -57,7 +57,7 @@
 }
 
 .service-card__content p {
-  color: $text-muted;
+  color: $text-on-light-muted;
   line-height: 1.5;
   margin-bottom: 1rem;
 
@@ -68,7 +68,7 @@
 }
 
 .service-card__location {
-  color: $text-muted;
+  color: $text-on-light-muted;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
@@ -88,8 +88,8 @@
 
 .service-card__footer button {
   border: none;
-  background: $accent;
-  color: $bg-dark;
+  background: $accent-primary;
+  color: $text-on-light;
   padding: 0.65rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -98,5 +98,5 @@
 }
 
 .service-card__footer button:hover {
-  background: $accent-hover;
+  background: $accent-primary-hover;
 }

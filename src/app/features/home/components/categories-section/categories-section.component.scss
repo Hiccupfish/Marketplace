@@ -14,9 +14,9 @@
 
 .categories-section__tag {
   display: inline-block;
-  background: $accent-dim;
-  color: $accent;
-  border: 1px solid rgba(240, 168, 72, .3);
+  background: $accent-primary-soft;
+  color: $accent-primary;
+  border: 1px solid $accent-primary-soft;
   padding: .35rem .8rem;
   border-radius: 999px;
   font-size: .8rem;
@@ -29,19 +29,19 @@
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: -.02em;
-  color: $text-primary;
+  color: $text-on-light;
 }
 
 .categories-section__header p {
   margin-top: .6rem;
-  color: $text-muted;
+  color: $text-on-light-muted;
   max-width: 550px;
 }
 
 .categories-section__view-all {
   text-decoration: none;
   font-weight: 600;
-  color: $accent;
+  color: $accent-primary;
   white-space: nowrap;
 }
 
@@ -57,7 +57,7 @@
 
 .categories-section__empty {
   text-align: center;
-  color: $text-muted;
+  color: $text-on-light-muted;
   padding: 3rem 0;
 }
 
@@ -67,8 +67,8 @@
   align-items: flex-start;
   text-align: left;
   padding: 1.5rem 1.25rem;
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 16px;
   cursor: pointer;
   transition: all .25s ease;
@@ -79,13 +79,13 @@
 
 .category-card:hover {
   transform: translateY(-6px);
-  background: $card-bg-hover;
-  border-color: rgba(240, 168, 72, .35);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, .35);
+  background: $accent-primary-soft;
+  border-color: $accent-primary-soft;
+  box-shadow: $shadow-md;
 }
 
 .category-card:focus-visible {
-  outline: 2px solid $accent;
+  outline: 2px solid $accent-primary;
   outline-offset: 3px;
 }
 
@@ -100,23 +100,23 @@
   margin-bottom: 14px;
 }
 
-/* Rotate icon tint per position, 4 colors cycling — dark-safe tints */
-.category-card--0 .category-card__icon { background: rgba(96, 165, 250, .16); }
-.category-card--1 .category-card__icon { background: rgba(52, 211, 153, .16); }
-.category-card--2 .category-card__icon { background: rgba(240, 168, 72, .18); }
-.category-card--3 .category-card__icon { background: rgba(192, 132, 252, .16); }
+/* Rotate icon tint per position, 4 colors cycling — light-safe tints */
+.category-card--0 .category-card__icon { background: $tag-tint-1; }
+.category-card--1 .category-card__icon { background: $tag-tint-2; }
+.category-card--2 .category-card__icon { background: $tag-tint-3; }
+.category-card--3 .category-card__icon { background: $tag-tint-4; }
 
 .category-card__name {
   margin: 0 0 4px;
   font-size: 1rem;
   font-weight: 700;
-  color: $text-primary;
+  color: $text-on-light;
 }
 
 .category-card__description {
   margin: 0;
   font-size: .85rem;
-  color: $text-muted;
+  color: $text-on-light-muted;
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -130,12 +130,12 @@
   width: 100%;
   margin-top: 16px;
   padding-top: 12px;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid $border-on-light;
 }
 
 .category-card__arrow {
   font-size: 1.2rem;
-  color: $accent;
+  color: $accent-primary;
   transition: transform .2s;
 }
 

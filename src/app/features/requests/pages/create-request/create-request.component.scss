@@ -1,10 +1,10 @@
-@import "../../../../../styles/variables";
+@import "../../../../../assets/styles/variables";
 
 :host {
   display: block;
   min-height: 100vh;
-  background-color: $bg-dark;
-  color: $text-primary;
+  background-color: $surface-page;
+  color: $text-on-light;
 }
 
 .create-request-page {
@@ -32,12 +32,12 @@
       font-size: clamp(1.6rem, 3.5vw, 2.2rem);
       font-weight: 800;
       margin: 0 0 0.5rem;
-      color: #fff;
+      color: $text-on-light;
     }
 
     p {
       margin: 0;
-      color: $text-secondary;
+      color: $text-on-light-muted;
       font-size: 1rem;
     }
   }
@@ -47,7 +47,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: $text-secondary;
+      color: $text-on-light-muted;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -60,13 +60,13 @@
   }
 
   &:hover {
-    color: $accent;
+    color: $accent-primary;
   }
 }
 
 .form-card {
-  background: $bg-card;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 20px;
   padding: 2.5rem;
 }
@@ -76,10 +76,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
-  background: rgba(220, 53, 69, 0.12);
-  border: 1px solid rgba(220, 53, 69, 0.3);
+  background: rgba($red, 0.12);
+  border: 1px solid rgba($red, 0.3);
   border-radius: 10px;
-  color: #ff6b6b;
+  color: $red;
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
 
@@ -120,10 +120,10 @@
     align-items: center;
     gap: 0.75rem;
     padding: 1.5rem;
-    background: rgba(18, 18, 18, 0.6);
-    border: 2px solid rgba(255, 255, 255, 0.08);
+    background: $surface-card;
+      border: 2px solid $border-on-light;
     border-radius: 16px;
-    color: $text-secondary;
+        color: $text-on-light-muted;
     cursor: pointer;
     transition: all 0.25s ease;
 
@@ -138,14 +138,14 @@
     }
 
     &.active {
-      border-color: $accent;
-      background: rgba(13, 110, 253, 0.1);
-      color: #fff;
-      box-shadow: 0 0 20px rgba(13, 110, 253, 0.15);
+      border-color: $accent-primary;
+      background: rgba($green, 0.1);
+      color: $text-on-light;
+      box-shadow: 0 0 20px rgba($green, 0.15);
     }
 
     &:hover:not(.active) {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: $border-on-light;
     }
   }
 }
@@ -157,11 +157,11 @@
     display: block;
     font-size: 0.85rem;
     font-weight: 600;
-    color: lighten($text-secondary, 15%);
+      color: $text-on-light;
     margin-bottom: 0.4rem;
 
     .required {
-      color: #ff4d4f;
+      color: $red;
     }
   }
 
@@ -172,22 +172,22 @@
   select {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: rgba(18, 18, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 10px;
-    color: #fff;
+      color: $text-on-light;
     font-size: 0.925rem;
     outline: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+      color: $text-on-light-muted;
     }
 
     &:focus {
-      border-color: $accent;
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+      border-color: $accent-primary;
+      box-shadow: 0 0 0 3px $accent-primary-soft;
     }
   }
 
@@ -199,8 +199,8 @@
   select {
     cursor: pointer;
     option {
-      background: #1e1e1e;
-      color: #fff;
+      background: $surface-card;
+      color: $text-on-light;
     }
   }
 }
@@ -222,19 +222,19 @@
 
   .toggle-btn {
     padding: 0.5rem 1rem;
-    background: rgba(18, 18, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 8px;
-    color: $text-secondary;
+        color: $text-on-light-muted;
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
 
     &.active {
-      background: rgba(13, 110, 253, 0.15);
-      border-color: $accent;
-      color: $accent;
+      background: rgba($green, 0.15);
+      border-color: $accent-primary;
+      color: $accent-primary;
     }
   }
 
@@ -272,7 +272,7 @@
       background: rgba(0, 0, 0, 0.7);
       border: none;
       border-radius: 50%;
-      color: #fff;
+      color: $text-on-light;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -294,7 +294,7 @@
   background: transparent;
   border: 1px dashed rgba(255, 255, 255, 0.2);
   border-radius: 10px;
-  color: $text-secondary;
+      color: $text-on-light-muted;
   font-size: 0.85rem;
   cursor: pointer;
   margin-top: 0.5rem;
@@ -306,8 +306,8 @@
   }
 
   &:hover {
-    border-color: $accent;
-    color: $accent;
+    border-color: $accent-primary;
+    color: $accent-primary;
   }
 }
 
@@ -327,7 +327,7 @@
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
-  color: $text-secondary;
+      color: $text-on-light-muted;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -344,7 +344,7 @@
   align-items: center;
   gap: 8px;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
+  background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -352,7 +352,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 4px 15px rgba($green, 0.3);
 
   .spinner {
     width: 18px;
@@ -365,7 +365,7 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.45);
+    box-shadow: 0 6px 20px rgba($green, 0.45);
   }
 
   &:disabled {
@@ -381,7 +381,7 @@
 .success-card {
   text-align: center;
   padding: 4rem 2rem;
-  background: $bg-card;
+  background: $surface-card;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
 
@@ -389,7 +389,7 @@
     width: 72px;
     height: 72px;
     margin: 0 auto 1.5rem;
-    color: #52c41a;
+    color: $green;
 
     svg {
       width: 100%;
@@ -404,7 +404,7 @@
   }
 
   p {
-    color: $text-secondary;
+        color: $text-on-light-muted;
     margin: 0 0 2rem;
     max-width: 500px;
     margin-left: auto;
@@ -434,7 +434,7 @@
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
+  background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
   border: none;
   color: #fff;
 
@@ -446,10 +446,11 @@
 .secondary-btn {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: $text-secondary;
+      color: $text-on-light-muted;
 
   &:hover {
     border-color: rgba(255, 255, 255, 0.3);
     color: #fff;
   }
 }
+

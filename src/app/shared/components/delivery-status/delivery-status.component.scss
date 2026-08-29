@@ -1,15 +1,15 @@
 @import "../../../../assets/styles/variables";
 
 .delivery-status-container {
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
   padding: 16px;
-  background-color: #f9f9f9;
+  background-color: $surface-card;
 
   h4 {
     margin-top: 0;
     margin-bottom: 16px;
-    border-bottom: 1px solid $border-soft;
+    border-bottom: 1px solid $border-on-light;
     padding-bottom: 8px;
   }
 

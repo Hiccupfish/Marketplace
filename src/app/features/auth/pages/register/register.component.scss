@@ -1,10 +1,10 @@
-@import "../../../../../styles/variables";
+@import "../../../../../assets/styles/variables";
 
 :host {
   display: block;
   min-height: calc(100vh - 70px);
-  background-color: $bg-dark;
-  color: $text-primary;
+  background-color: $surface-page;
+  color: $text-on-light;
 }
 
 .register-wrapper {
@@ -33,7 +33,7 @@
   left: -5%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(13, 110, 253, 0.6) 0%, rgba(102, 16, 242, 0) 70%);
+  background: radial-gradient(circle, rgba($green, 0.6) 0%, rgba($indigo, 0) 70%);
 }
 
 .bg-glow-2 {
@@ -41,7 +41,7 @@
   right: -5%;
   width: 550px;
   height: 550px;
-  background: radial-gradient(circle, rgba(102, 16, 242, 0.5) 0%, rgba(13, 110, 253, 0) 70%);
+  background: radial-gradient(circle, rgba($indigo, 0.5) 0%, rgba($green, 0) 70%);
 }
 
 /* Main Container Layout */
@@ -52,20 +52,20 @@
   grid-template-columns: 1fr 1.15fr;
   max-width: 1080px;
   width: 100%;
-  background: rgba(30, 30, 30, 0.65);
+  background: $surface-card;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid $border-on-light;
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(13, 110, 253, 0.1);
+  box-shadow: $shadow-lg;
   overflow: hidden;
 }
 
 /* Hero / Left Banner */
 .hero-panel {
   padding: 3.5rem 3rem;
-  background: linear-gradient(145deg, rgba(13, 110, 253, 0.08) 0%, rgba(102, 16, 242, 0.12) 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(145deg, $accent-primary-soft 0%, rgba($indigo, 0.06) 100%);
+  border-right: 1px solid $border-on-light;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -76,12 +76,12 @@
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  background: rgba(13, 110, 253, 0.15);
-  border: 1px solid rgba(13, 110, 253, 0.3);
+  background: rgba($green, 0.15);
+  border: 1px solid rgba($green, 0.3);
   border-radius: 30px;
   font-size: 0.825rem;
   font-weight: 600;
-  color: lighten($accent, 15%);
+  color: $accent-primary;
   letter-spacing: 0.3px;
   width: fit-content;
   margin-bottom: 1.5rem;
@@ -89,9 +89,9 @@
   .brand-dot {
     width: 7px;
     height: 7px;
-    background-color: $accent;
+    background-color: $accent-primary;
     border-radius: 50%;
-    box-shadow: 0 0 8px $accent;
+    box-shadow: 0 0 8px $accent-primary;
   }
 }
 
@@ -100,7 +100,7 @@
   font-weight: 800;
   line-height: 1.25;
   margin: 0 0 1rem 0;
-  background: linear-gradient(135deg, #ffffff 0%, #d0d7de 100%);
+  background: linear-gradient(135deg, $text-on-light 0%, $text-on-light-muted 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -108,7 +108,7 @@
 .hero-subtitle {
   font-size: 1rem;
   line-height: 1.6;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   margin: 0 0 2.5rem 0;
 }
 
@@ -129,12 +129,12 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: rgba(13, 110, 253, 0.12);
-  border: 1px solid rgba(13, 110, 253, 0.25);
+  background: rgba($green, 0.12);
+  border: 1px solid rgba($green, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: lighten($accent, 10%);
+  color: $accent-primary;
 
   svg {
     width: 20px;
@@ -147,13 +147,13 @@
     margin: 0 0 0.25rem 0;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #ffffff;
+      color: $text-on-light;
   }
 
   p {
     margin: 0;
     font-size: 0.85rem;
-    color: $text-secondary;
+    color: $text-on-light-muted;
     line-height: 1.45;
   }
 }
@@ -173,12 +173,12 @@
     font-size: 1.75rem;
     font-weight: 700;
     margin: 0 0 0.5rem 0;
-    color: #ffffff;
+      color: $text-on-light;
   }
 
   p {
     margin: 0;
-    color: $text-secondary;
+    color: $text-on-light-muted;
     font-size: 0.925rem;
   }
 }
@@ -189,10 +189,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
-  background: rgba(220, 53, 69, 0.12);
-  border: 1px solid rgba(220, 53, 69, 0.3);
+  background: rgba($red, 0.12);
+  border: 1px solid rgba($red, 0.3);
   border-radius: 10px;
-  color: #ff6b6b;
+  color: $color-danger;
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
   animation: fadeIn 0.25s ease-in-out;
@@ -211,7 +211,7 @@
   .alert-dismiss {
     background: none;
     border: none;
-    color: #ff6b6b;
+    color: $color-danger;
     cursor: pointer;
     padding: 0;
     display: flex;
@@ -252,11 +252,11 @@
   label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: lighten($text-secondary, 15%);
+    color: $text-on-light-muted;
   }
 
   .required-star {
-    color: #ff4d4f;
+    color: $red;
   }
 }
 
@@ -270,7 +270,7 @@
     left: 14px;
     width: 18px;
     height: 18px;
-    color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     pointer-events: none;
     transition: color 0.2s ease;
   }
@@ -283,29 +283,29 @@
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
     font-size: 0.925rem;
-    color: #ffffff;
+      color: $text-on-light;
     outline: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+      color: $text-on-light-muted;
     }
 
     &:focus {
-      border-color: $accent;
-      background: rgba(18, 18, 18, 0.85);
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+      border-color: $accent-primary;
+      background: $accent-primary-soft;
+      box-shadow: 0 0 0 3px $accent-primary-soft;
 
       ~ .input-icon {
-        color: $accent;
+        color: $accent-primary;
       }
     }
 
     &.invalid {
-      border-color: #ff4d4f;
+      border-color: $red;
       &:focus {
-        box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.2);
+        box-shadow: 0 0 0 3px rgba($red, 0.2);
       }
     }
   }
@@ -315,7 +315,7 @@
     right: 12px;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     cursor: pointer;
     padding: 4px;
     display: flex;
@@ -325,8 +325,8 @@
     transition: color 0.2s, background-color 0.2s;
 
     &:hover {
-      color: #ffffff;
-      background-color: rgba(255, 255, 255, 0.08);
+      color: $text-on-light;
+      background-color: $accent-primary-soft;
     }
 
     svg {
@@ -338,7 +338,7 @@
 
 .error-hint {
   font-size: 0.775rem;
-  color: #ff4d4f;
+  color: $red;
   margin-top: 0.2rem;
 }
 
@@ -353,7 +353,7 @@
 .strength-bar-track {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: $accent-primary-soft;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -364,16 +364,16 @@
   transition: width 0.3s ease, background-color 0.3s ease;
 
   &.weak {
-    background-color: #ff4d4f;
+    background-color: $red;
   }
   &.fair {
-    background-color: #faad14;
+    background-color: $gold;
   }
   &.good {
-    background-color: #1890ff;
+    background-color: $indigo;
   }
   &.strong {
-    background-color: #52c41a;
+    background-color: $green;
   }
 }
 
@@ -381,22 +381,22 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.775rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
 
   .strength-value {
     font-weight: 600;
 
     &.weak {
-      color: #ff4d4f;
+      color: $red;
     }
     &.fair {
-      color: #faad14;
+      color: $gold;
     }
     &.good {
-      color: #1890ff;
+      color: $indigo;
     }
     &.strong {
-      color: #52c41a;
+      color: $green;
     }
   }
 }
@@ -413,7 +413,7 @@
   cursor: pointer;
   user-select: none;
   font-size: 0.85rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   position: relative;
 
   input[type="checkbox"] {
@@ -424,8 +424,8 @@
     width: 0;
 
     &:checked ~ .checkmark {
-      background-color: $accent;
-      border-color: $accent;
+      background-color: $accent-primary;
+      border-color: $accent-primary;
 
       &:after {
         display: block;
@@ -439,8 +439,8 @@
     height: 18px;
     width: 18px;
     flex-shrink: 0;
-    background-color: rgba(18, 18, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: $accent-primary-soft;
+    border: 1px solid $border-on-light;
     border-radius: 4px;
     transition: all 0.2s ease;
 
@@ -452,7 +452,7 @@
       top: 2px;
       width: 4px;
       height: 9px;
-      border: solid white;
+      border: solid $text-on-light;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
     }
@@ -462,14 +462,14 @@
     line-height: 1.45;
 
     a {
-      color: lighten($accent, 10%);
+      color: $accent-primary;
       text-decoration: none;
       font-weight: 500;
       transition: color 0.2s;
 
       &:hover {
         text-decoration: underline;
-        color: lighten($accent, 20%);
+        color: $accent-primary-hover;
       }
     }
   }
@@ -480,10 +480,10 @@
   margin-top: 0.75rem;
   height: 48px;
   width: 100%;
-  background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
+  background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
   border: none;
   border-radius: 10px;
-  color: #ffffff;
+  color: $text-on-light;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -491,7 +491,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 6px 20px rgba(13, 110, 253, 0.35);
+  box-shadow: 0 6px 20px rgba($green, 0.35);
   transition: all 0.25s ease;
 
   .btn-arrow {
@@ -502,7 +502,7 @@
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.5);
+    box-shadow: 0 8px 25px rgba($green, 0.5);
 
     .btn-arrow {
       transform: translateX(4px);
@@ -524,8 +524,8 @@
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
+  border: 2px solid $border-on-light;
+  border-top-color: $accent-primary;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -552,17 +552,17 @@
   margin-top: 2rem;
   text-align: center;
   font-size: 0.9rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
 
   .login-link {
-    color: lighten($accent, 15%);
+  color: $accent-primary;
     font-weight: 600;
     text-decoration: none;
     margin-left: 6px;
     transition: color 0.2s;
 
     &:hover {
-      color: #ffffff;
+      color: $text-on-light;
       text-decoration: underline;
     }
   }

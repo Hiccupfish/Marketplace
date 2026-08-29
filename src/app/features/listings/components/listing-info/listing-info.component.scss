@@ -10,7 +10,7 @@
   font-size: 24px;
   font-weight: 700;
   margin: 0;
-  color: $text-primary;
+  color: $text-on-light;
 }
 
 .listing-info__meta {
@@ -18,11 +18,11 @@
   flex-wrap: wrap;
   gap: 10px;
   font-size: 13px;
-  color: $text-muted;
+  color: $text-on-light-muted;
 }
 
 .listing-info__verified {
-  background: rgba(16, 185, 129, .12);
+  background: rgba($green, .12);
   color: $color-success;
   padding: 2px 8px;
   border-radius: 12px;
@@ -32,12 +32,12 @@
 .listing-info__price {
   font-size: 18px;
   font-weight: 600;
-  color: $accent;
+  color: $accent-primary;
 }
 
 .listing-info__description p {
   margin: 0;
-  color: $text-muted;
+  color: $text-on-light-muted;
   line-height: 1.5;
 }
 
@@ -49,8 +49,8 @@
 
 .btn-primary {
   padding: 10px 14px;
-  background: $accent;
-  color: $bg-dark;
+  background: $accent-primary;
+  color: $text-on-light;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -58,9 +58,10 @@
 
 .btn-secondary {
   padding: 10px 14px;
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
   cursor: pointer;
-  color: $text-primary;
+  color: $text-on-light;
 }
+

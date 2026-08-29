@@ -59,4 +59,3 @@ export class AuthService {
     sessionStorage.removeItem(this.INTENT_STORAGE_KEY);
   }
 }
-}

@@ -10,31 +10,31 @@
 .search-bar__input {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
   outline: none;
   font-size: 14px;
-  background: $card-bg;
-  color: $text-primary;
+  background: $surface-card;
+  color: $text-on-light;
 }
 
 .search-bar__input:focus {
-  border-color: $accent;
+  border-color: $accent-primary;
 }
 
 .search-bar__button {
   padding: 10px 14px;
   border: none;
   border-radius: 8px;
-  background: $accent;
-  color: $bg-dark;
+  background: $accent-primary;
+  color: $text-on-light;
   cursor: pointer;
   font-weight: 500;
   transition: 0.2s ease;
 }
 
 .search-bar__button:hover {
-  background: $accent-hover;
+  background: $accent-primary-hover;
 }
 
 @media (max-width: 600px) {

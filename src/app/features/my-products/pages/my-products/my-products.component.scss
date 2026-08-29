@@ -1,4 +1,4 @@
-@import "../../../../assets/styles/variables";
+@import "../../../../../assets/styles/variables";
 
 .my-products-wrapper {
   min-height: calc(100vh - 64px);
@@ -22,13 +22,13 @@
       margin: 0 0 0.5rem 0;
       font-size: 28px;
       font-weight: 700;
-      color: $text-primary;
+      color: $text-on-light;
     }
 
     p {
       margin: 0;
       font-size: 14px;
-      color: $text-muted;
+      color: $text-on-light-muted;
     }
   }
 }
@@ -38,8 +38,8 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: $accent;
-  color: $bg-dark;
+  background: $accent-primary;
+      color: $text-on-light;
   border: none;
   border-radius: 8px;
   font-weight: 600;
@@ -54,7 +54,7 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba($accent, 0.3);
+    box-shadow: $shadow-md;
   }
 
   &:active {
@@ -71,9 +71,9 @@
   margin-bottom: 20px;
 
   &.alert-error {
-    background: rgba(220, 53, 69, 0.1);
-    border: 1px solid rgba(220, 53, 69, 0.3);
-    color: #dc3545;
+    background: rgba($red, 0.1);
+    border: 1px solid rgba($red, 0.3);
+    color: $red;
 
     .alert-icon {
       color: inherit;
@@ -109,7 +109,7 @@
 
   p {
     margin-top: 1rem;
-    color: $text-muted;
+      color: $text-on-light-muted;
   }
 }
 
@@ -125,20 +125,20 @@
   h2 {
     font-size: 24px;
     font-weight: 700;
-    color: $text-primary;
+        color: $text-on-light;
     margin: 0 0 0.5rem 0;
   }
 
   p {
     font-size: 14px;
-    color: $text-muted;
+      color: $text-on-light-muted;
     margin: 0 0 2rem 0;
   }
 
   .btn-primary {
     padding: 10px 24px;
-    background: $accent;
-    color: $bg-dark;
+    background: $accent-primary;
+        color: $text-on-light;
     border: none;
     border-radius: 8px;
     font-weight: 600;
@@ -147,7 +147,7 @@
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba($accent, 0.3);
+      box-shadow: $shadow-md;
     }
   }
 }
@@ -159,8 +159,8 @@
 }
 
 .product-card {
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
@@ -168,8 +168,8 @@
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: $accent;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-color: $accent-primary;
+    box-shadow: $shadow-md;
   }
 }
 
@@ -178,7 +178,7 @@
   width: 100%;
   height: 200px;
   overflow: hidden;
-  background: $bg-dark;
+  background: $product-tint-1;
 
   img {
     width: 100%;
@@ -190,6 +190,12 @@
   .product-card:hover & img {
     transform: scale(1.05);
   }
+}
+
+.products-grid .product-card:nth-child(4n+1) .product-image { background: $product-tint-1; }
+.products-grid .product-card:nth-child(4n+2) .product-image { background: $product-tint-2; }
+.products-grid .product-card:nth-child(4n+3) .product-image { background: $product-tint-3; }
+.products-grid .product-card:nth-child(4n+4) .product-image { background: $product-tint-4; }
 
   .product-status {
     position: absolute;
@@ -201,14 +207,33 @@
     font-weight: 600;
 
     &.available {
-      background: #52c41a;
+      background: $green;
       color: white;
     }
 
     &.unavailable {
-      background: #faad14;
+      background: $gold;
       color: white;
     }
+  }
+
+.product-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.available {
+    background: $green;
+    color: white;
+  }
+
+  &.unavailable {
+    background: $gold;
+    color: white;
   }
 }
 
@@ -222,7 +247,7 @@
     margin: 0 0 4px 0;
     font-size: 16px;
     font-weight: 600;
-    color: $text-primary;
+        color: $text-on-light;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -231,14 +256,14 @@
   .product-category {
     margin: 0 0 8px 0;
     font-size: 12px;
-    color: $accent;
+      color: $accent-primary;
     font-weight: 500;
   }
 
   .product-description {
     margin: 0 0 12px 0;
     font-size: 13px;
-    color: $text-muted;
+      color: $text-on-light-muted;
     line-height: 1.4;
     flex: 1;
   }
@@ -252,27 +277,27 @@
 
     .price {
       font-weight: 600;
-      color: $accent;
+      color: $accent-primary;
     }
 
     .location {
-      color: $text-muted;
+      color: $text-on-light-muted;
     }
   }
 
   .offers-count {
     padding: 6px 12px;
-    background: rgba($accent, 0.1);
+    background: rgba($accent-primary, 0.1);
     border-radius: 6px;
     font-size: 12px;
     font-weight: 500;
-    color: $accent;
+      color: $accent-primary;
     margin-bottom: 8px;
   }
 
   .created-date {
     font-size: 12px;
-    color: $text-muted;
+      color: $text-on-light-muted;
   }
 }
 
@@ -281,7 +306,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px 16px;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid $border-on-light;
 
   button {
     display: flex;
@@ -289,7 +314,7 @@
     justify-content: center;
     gap: 6px;
     padding: 8px 12px;
-    border: 1px solid $border-soft;
+    border: 1px solid $border-on-light;
     border-radius: 6px;
     background: transparent;
     cursor: pointer;
@@ -303,42 +328,42 @@
     }
 
     &:hover {
-      background: rgba($accent, 0.05);
-      border-color: $accent;
-      color: $accent;
+      background: $accent-primary-soft;
+      border-color: $accent-primary;
+      color: $accent-primary;
     }
   }
 
   .btn-delete {
-    color: #dc3545;
-    border-color: #dc3545;
+    color: $red;
+    border-color: $red;
 
     &:hover {
-      background: rgba(220, 53, 69, 0.1);
-      border-color: #dc3545;
+      background: rgba($red, 0.1);
+      border-color: $red;
     }
   }
 
   .btn-toggle-availability.unavailable {
-    color: #faad14;
-    border-color: #faad14;
+    color: $gold;
+    border-color: $gold;
 
     &:hover {
-      background: rgba(250, 173, 20, 0.1);
+      background: rgba($gold, 0.1);
     }
   }
 }
 
 .delete-confirm {
   padding: 12px;
-  background: rgba(220, 53, 69, 0.1);
+  background: rgba($red, 0.1);
   border-radius: 6px;
   text-align: center;
 
   p {
     margin: 0 0 8px 0;
     font-size: 13px;
-    color: #dc3545;
+    color: $red;
     font-weight: 500;
   }
 
@@ -352,18 +377,18 @@
       font-size: 12px !important;
 
       &.btn-cancel {
-        border-color: $border-soft !important;
-        color: $text-primary !important;
+        border-color: $border-on-light !important;
+        color: $text-on-light !important;
 
         &:hover {
-          border-color: $text-primary !important;
+          border-color: $text-on-light !important;
         }
       }
 
       &.btn-confirm-delete {
-        background: #dc3545 !important;
+        background: $red !important;
         color: white !important;
-        border-color: #dc3545 !important;
+        border-color: $red !important;
 
         &:hover {
           opacity: 0.8;

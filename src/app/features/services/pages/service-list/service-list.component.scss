@@ -7,7 +7,7 @@
 }
 .eyebrow {
   text-transform: uppercase;
-  color: $text-faint;
+  color: $text-on-light-muted;
   font-weight: 700;
 }
 .services-grid {
@@ -17,8 +17,8 @@
   margin-top: 1rem;
 }
 .service-card {
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 10px;
   padding: 1rem;
 }
@@ -30,19 +30,19 @@
 }
 .state {
   padding: 1rem;
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
 }
 .state--error {
   color: $color-danger;
-  background: rgba(239, 68, 68, .12);
+  background: rgba($red, .12);
 }
 
 .services-page {
   min-height: calc(100vh - 70px);
   padding: 3rem 1.5rem 4rem;
-  color: $text-primary;
+  color: $text-on-light;
 }
 .services-page header {
   max-width: 680px;
@@ -54,7 +54,7 @@
   letter-spacing: -.035em;
 }
 .eyebrow {
-  color: $accent;
+  color: $eyebrow-color;
   font-size: .78rem;
   letter-spacing: .12em;
 }
@@ -69,59 +69,61 @@
   flex-direction: column;
   padding: 1.4rem;
   overflow: hidden;
-  border-color: $border-soft;
+  border-color: $border-on-light;
   border-radius: 16px;
-  background: linear-gradient(145deg, $bg-dark, rgba(10, 13, 18, .98));
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .2);
-  color: $text-primary;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
+  border-radius: 16px;
+  color: $text-on-light;
+  box-shadow: $shadow-md;
   transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 .service-card:hover {
   transform: translateY(-4px);
-  border-color: $accent-border;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, .35);
+  border-color: $accent-primary-soft;
+  box-shadow: $shadow-lg;
 }
 .service-card__top {
   margin-bottom: .6rem;
 }
 .service-card__category {
-  color: $accent-dim;
+  color: $accent-primary-soft;
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
 }
 .service-card__price {
-  color: $accent;
+  color: $eyebrow-color;
   font-weight: 750;
 }
 .service-card h2 {
   margin: .5rem 0;
-  color: $text-primary;
+  color: $text-on-light;
   font-size: 1.15rem;
   line-height: 1.35;
 }
 .service-card p {
-  color: $text-muted;
+  color: $text-on-light-muted;
   font-size: .92rem;
   line-height: 1.55;
 }
 .service-card__meta {
   margin-top: auto;
   padding-top: 1rem;
-  color: $text-faint;
+  color: $text-on-light-muted;
   font-size: .84rem;
 }
 .state {
   padding: 1.25rem;
-  border-color: $border-soft;
+  border-color: $border-on-light;
   border-radius: 12px;
-  background: $card-bg;
-  color: $text-faint;
+  background: $surface-card;
+  color: $text-on-light-muted;
 }
 .state--error {
-  border-color: rgba(239, 68, 68, .35);
-  background: rgba(239, 68, 68, .12);
+  border-color: rgba($red, .35);
+  background: rgba($red, .12);
   color: $color-danger;
 }
 

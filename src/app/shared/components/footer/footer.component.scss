@@ -1,8 +1,8 @@
 @import "../../../../assets/styles/variables";
 
 .footer {
-  background: $bg-dark;
-  color: $text-primary;
+  background: $surface-page;
+  color: $text-on-light;
   padding: 30px 20px;
   margin-top: 40px;
 }
@@ -22,7 +22,7 @@
 
 .footer__brand p {
   font-size: 13px;
-  color: $text-faint;
+  color: $text-on-light-muted;
 }
 
 .footer__links {
@@ -32,13 +32,13 @@
 }
 
 .footer__links a {
-  color: $text-faint;
+  color: $text-on-light-muted;
   text-decoration: none;
   font-size: 14px;
 }
 
 .footer__links a:hover {
-  color: $accent;
+  color: $accent-primary;
 }
 
 .footer__safety h4 {
@@ -47,14 +47,14 @@
 
 .footer__safety p {
   font-size: 13px;
-  color: $text-faint;
+  color: $text-on-light-muted;
 }
 
 .footer__bottom {
   text-align: center;
   margin-top: 20px;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid $border-on-light;
   padding-top: 10px;
   font-size: 12px;
-  color: $text-faint;
+  color: $text-on-light-muted;
 }

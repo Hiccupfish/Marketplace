@@ -41,12 +41,11 @@ export class LoginComponent implements OnInit {
     this.auth.login({ email: this.email, password: this.password }).subscribe({
       next: () => {
         // Navigate based on login intent
-        const redirectMap: { [key in LoginIntent]: string } = {
+        const redirectMap: Record<string, string> = {
           'BUY': '/listings',
           'SELL_PRODUCTS': '/my-products',
           'OFFER_SERVICES': '/my-services',
-          'BUSINESS': '/business',
-          'null': '/listings'
+          'BUSINESS': '/business'
         };
         const redirect = redirectMap[intent] || '/listings';
         this.auth.clearLoginIntent(); // Clear after using

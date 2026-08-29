@@ -14,13 +14,13 @@
   margin: 0 0 0.25rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: $text-faint;
+  color: $text-on-light-muted;
   font-size: 0.8rem;
   font-weight: 700;
 }
 
 .subtitle {
-  color: $text-muted;
+  color: $text-on-light-muted;
   margin-top: 0.35rem;
 }
 
@@ -31,11 +31,11 @@
 }
 
 .product-card {
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: $shadow-sm;
 }
 
 .product-card__top {
@@ -46,11 +46,11 @@
 }
 
 .product-card__category {
-  background: rgba(240, 168, 72, .12);
+  background: $accent-primary-soft;
   padding: 0.3rem 0.6rem;
   border-radius: 999px;
   font-size: 0.8rem;
-  color: $accent;
+      color: $accent-primary;
 }
 
 .product-card__price {
@@ -61,11 +61,11 @@
 .product-card h2 {
   font-size: 1.05rem;
   margin: 0 0 0.5rem;
-  color: $text-primary;
+  color: $text-on-light;
 }
 
 .product-card p {
-  color: $text-muted;
+  color: $text-on-light-muted;
   margin: 0 0 0.75rem;
 }
 
@@ -73,20 +73,20 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  color: $text-faint;
+  color: $text-on-light-muted;
   font-size: 0.9rem;
 }
 
 .state {
   padding: 1rem;
-  background: $card-bg;
-  border: 1px solid $border-soft;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
-  color: $text-muted;
+  color: $text-on-light-muted;
 }
 
 .state--error {
   color: $color-danger;
-  background: rgba(239, 68, 68, .12);
+  background: rgba($red, .12);
   border-color: $color-danger;
 }

@@ -1,10 +1,10 @@
-@import "../../../../../styles/variables";
+@import "../../../../../assets/styles/variables";
 
 :host {
   display: block;
   min-height: calc(100vh - 70px);
-  background-color: $bg-dark;
-  color: $text-primary;
+  background-color: $surface-page;
+  color: $text-on-light;
 }
 
 .listings-page-wrapper {
@@ -30,7 +30,7 @@
   left: 10%;
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(13, 110, 253, 0.5) 0%, rgba(102, 16, 242, 0) 70%);
+  background: radial-gradient(circle, rgba($green, 0.5) 0%, rgba($indigo, 0) 70%);
 }
 
 .bg-glow-2 {
@@ -38,7 +38,7 @@
   right: 5%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(102, 16, 242, 0.4) 0%, rgba(13, 110, 253, 0) 70%);
+  background: radial-gradient(circle, rgba($indigo, 0.4) 0%, rgba($green, 0) 70%);
 }
 
 .listings-container {
@@ -65,14 +65,14 @@
   font-weight: 800;
   margin: 0 0 0.75rem 0;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #ffffff 0%, #d0d7de 100%);
+  background: linear-gradient(135deg, $text-on-light 0%, $text-on-light-muted 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .hero-subtitle {
   font-size: 1.05rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   margin: 0 0 2rem 0;
   line-height: 1.5;
 }
@@ -90,7 +90,7 @@
     left: 18px;
     width: 20px;
     height: 20px;
-    color: rgba(255, 255, 255, 0.4);
+    color: $text-on-light-muted;
     pointer-events: none;
     transition: color 0.2s ease;
   }
@@ -99,29 +99,27 @@
     width: 100%;
     height: 54px;
     padding: 0 48px 0 52px;
-    background: rgba(30, 30, 30, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 30px;
     font-size: 1rem;
-    color: #ffffff;
+    color: $text-on-light;
     outline: none;
     transition: all 0.25s ease;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-sm;
     box-sizing: border-box;
 
     &::placeholder {
-      color: rgba(255, 255, 255, 0.35);
+      color: $text-on-light-muted;
     }
 
     &:focus {
-      border-color: $accent;
-      background: rgba(30, 30, 30, 0.95);
-      box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25), 0 10px 35px rgba(0, 0, 0, 0.4);
+      border-color: $accent-primary;
+      background: $surface-card;
+      box-shadow: 0 0 0 4px $accent-primary-soft, $shadow-sm;
 
       ~ .search-icon {
-        color: $accent;
+        color: $accent-primary;
       }
     }
   }
@@ -129,9 +127,9 @@
   .clear-search-btn {
     position: absolute;
     right: 16px;
-    background: rgba(255, 255, 255, 0.1);
+    background: $accent-primary-soft;
     border: none;
-    color: #ffffff;
+    color: $text-on-light;
     width: 26px;
     height: 26px;
     border-radius: 50%;
@@ -142,7 +140,7 @@
     transition: background 0.2s;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: $accent-primary-soft;
     }
 
     svg {
@@ -162,27 +160,27 @@
 
   .category-chip {
     padding: 8px 18px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    color: $text-secondary;
+    color: $text-on-light-muted;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
+      background: $surface-alt;
+      color: $text-on-light;
       transform: translateY(-1px);
     }
 
     &.active {
-      background: $accent;
-      border-color: $accent;
-      color: #ffffff;
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(13, 110, 253, 0.4);
+    background: $accent-primary;
+    border-color: $accent-primary;
+    color: $text-on-light;
+    font-weight: 600;
+    box-shadow: $shadow-md;
     }
   }
 }
@@ -193,9 +191,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  background: rgba(30, 30, 30, 0.5);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
   border-radius: 14px;
   margin-bottom: 2rem;
   flex-wrap: wrap;
@@ -204,14 +201,14 @@
 
 .results-count {
   font-size: 0.925rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
 
   strong {
-    color: #ffffff;
+    color: $text-on-light;
   }
 
   em {
-    color: lighten($accent, 15%);
+      color: $accent-primary;
     font-style: normal;
     font-weight: 600;
   }
@@ -229,21 +226,21 @@
   align-items: center;
   gap: 8px;
   font-size: 0.875rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
 
   select {
-    background: rgba(18, 18, 18, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 8px;
     padding: 6px 12px;
     font-size: 0.875rem;
-    color: #ffffff;
+    color: $text-on-light;
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s;
 
     &:focus {
-      border-color: $accent;
+      border-color: $accent-primary;
     }
   }
 }
@@ -251,15 +248,15 @@
 .view-mode-toggle {
   display: flex;
   align-items: center;
-  background: rgba(18, 18, 18, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
   border-radius: 8px;
   padding: 2px;
 
   .toggle-btn {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: $text-on-light-muted;
     padding: 6px 8px;
     border-radius: 6px;
     cursor: pointer;
@@ -269,12 +266,12 @@
     transition: all 0.2s ease;
 
     &:hover {
-      color: #ffffff;
+      color: $text-on-light;
     }
 
     &.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: $accent;
+      background: $accent-primary-soft;
+      color: $accent-primary;
     }
 
     svg {
@@ -289,13 +286,13 @@
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
+  background: linear-gradient(135deg, $accent-primary 0%, $color-info 100%);
   border-radius: 10px;
-  color: #ffffff;
+  color: $text-on-light;
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(13, 110, 253, 0.35);
+  box-shadow: $shadow-md;
   transition: all 0.2s ease;
 
   svg {
@@ -304,8 +301,8 @@
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.5);
+      transform: translateY(-2px);
+      box-shadow: $shadow-lg;
   }
 }
 
@@ -326,15 +323,16 @@
   align-items: center;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
-  background: rgba(220, 53, 69, 0.12);
-  border: 1px solid rgba(220, 53, 69, 0.3);
+    background: $surface-card;
+  border: 1px solid $color-danger;
   border-radius: 14px;
-  margin-bottom: 2rem;
+  color: $color-danger;
+  font-size: 0.875rem;
 
   .error-icon {
     width: 28px;
     height: 28px;
-    color: #ff6b6b;
+    color: $color-danger;
     flex-shrink: 0;
   }
 
@@ -344,38 +342,37 @@
     h3 {
       margin: 0 0 0.25rem 0;
       font-size: 1rem;
-      color: #ff6b6b;
+      color: $color-danger;
     }
 
     p {
       margin: 0;
       font-size: 0.875rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: $text-on-light-muted;
     }
   }
 
   .retry-btn {
     padding: 8px 16px;
-    background: rgba(220, 53, 69, 0.2);
-    border: 1px solid rgba(220, 53, 69, 0.4);
+    background: $accent-primary-soft;
+    border: 1px solid $color-danger;
     border-radius: 8px;
-    color: #ffffff;
+    color: $color-danger;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
 
     &:hover {
-      background: rgba(220, 53, 69, 0.4);
+      background: $color-danger;
+      color: $text-on-light;
     }
   }
 }
-
-/* Skeleton Loading Grid */
 .skeleton-grid {
   .skeleton-card {
-    background: rgba(30, 30, 30, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 16px;
     overflow: hidden;
     height: 320px;
@@ -385,7 +382,7 @@
 
   .skeleton-image {
     height: 180px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+    background: linear-gradient(90deg, $accent-primary-soft 0%, $border-on-light 50%, $accent-primary-soft 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -398,7 +395,7 @@
   }
 
   .skeleton-line {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+    background: linear-gradient(90deg, $accent-primary-soft 0%, $border-on-light 50%, $accent-primary-soft 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
     border-radius: 4px;
@@ -431,9 +428,8 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(30, 30, 30, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+    background: $surface-card;
+  border: 1px dashed $border-on-light;
   border-radius: 20px;
   max-width: 600px;
   margin: 2rem auto;
@@ -443,12 +439,12 @@
     height: 72px;
     margin: 0 auto 1.5rem;
     border-radius: 50%;
-    background: rgba(13, 110, 253, 0.1);
-    border: 1px solid rgba(13, 110, 253, 0.2);
+    background: rgba($green, 0.1);
+    border: 1px solid rgba($green, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: lighten($accent, 15%);
+      color: $accent-primary;
 
     svg {
       width: 36px;
@@ -460,17 +456,17 @@
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 0.75rem 0;
-    color: #ffffff;
+    color: $text-on-light;
   }
 
   p {
     margin: 0 0 2rem 0;
-    color: $text-secondary;
+    color: $text-on-light-muted;
     font-size: 0.95rem;
     line-height: 1.5;
 
     strong {
-      color: #ffffff;
+      color: $text-on-light;
     }
   }
 
@@ -483,35 +479,31 @@
 
     .clear-filters-btn {
       padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      color: #ffffff;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.15);
-      }
+    background: $accent-primary-soft;
+    border: 1px solid $border-on-light;
+    border-radius: 10px;
+    color: $text-on-light;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
     }
 
     .create-listing-btn {
       padding: 10px 20px;
-      background: $accent;
-      border-radius: 10px;
-      color: #ffffff;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(13, 110, 253, 0.35);
-      transition: background 0.2s, transform 0.2s;
+    background: $accent-primary;
+    border-radius: 10px;
+    color: $text-on-light;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: $shadow-md;
+    transition: background 0.2s, transform 0.2s;
 
-      &:hover {
-        background: lighten($accent, 5%);
-        transform: translateY(-2px);
-      }
+    &:hover {
+      background: $accent-primary-hover;
+      transform: translateY(-2px);
+    }
     }
   }
 }

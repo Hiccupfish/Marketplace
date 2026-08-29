@@ -1,12 +1,10 @@
 @import "../../../../../assets/styles/variables";
 
-$card-top:     rgba(26, 30, 38, .92);
-$card-bottom:  rgba(14, 16, 21, .95);
-
 .hero {
   background:
-    radial-gradient(ellipse 900px 500px at 20% -10%, rgba(240, 168, 72, .07), transparent),
-    $bg-dark;
+    radial-gradient(ellipse 900px 500px at 20% -10%, rgba(255, 255, 255, .10), transparent),
+    radial-gradient(ellipse 700px 420px at 90% 10%, rgba($gold, .16), transparent),
+    $green-2;
   padding: 5rem 1.5rem;
 }
 
@@ -16,14 +14,12 @@ $card-bottom:  rgba(14, 16, 21, .95);
 }
 
 .hero__content {
-  background: linear-gradient(180deg, $card-top, $card-bottom);
-  border: 1px solid $border-soft;
+  background: rgba(255, 253, 248, .06);
+  border: 1px solid $border-on-dark;
   border-radius: 22px;
   padding: 4rem;
   text-align: center;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, .45),
-    inset 0 1px 0 rgba(255, 255, 255, .04);
+  box-shadow: $shadow-lg;
 }
 
 .hero__badge {
@@ -32,31 +28,31 @@ $card-bottom:  rgba(14, 16, 21, .95);
   gap: .5rem;
   padding: .55rem 1.1rem;
   border-radius: 999px;
-  background: $accent-dim;
-  color: $accent;
+  background: rgba(255, 253, 248, .10);
+  color: #f0d99d;
   font-size: .8rem;
   font-weight: 700;
   letter-spacing: .01em;
-  border: 1px solid rgba(240, 168, 72, .3);
+  border: 1px solid rgba(240, 217, 157, .35);
 }
 
 .hero__title {
   margin: 1.5rem 0 1rem;
-  color: $text-primary;
+  color: $text-on-dark;
   font-size: clamp(2.5rem, 6vw, 4rem);
   line-height: 1.1;
   letter-spacing: -.03em;
   font-weight: 700;
 
   span {
-    color: $accent;
+    color: $gold;
   }
 }
 
 .hero__subtitle {
   max-width: 640px;
   margin: 0 auto 2.5rem;
-  color: $text-muted;
+  color: #d9e0d9;
   font-size: 1.1rem;
   line-height: 1.75;
 }
@@ -74,21 +70,21 @@ $card-bottom:  rgba(14, 16, 21, .95);
   flex: 1;
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, .04);
-  border: 1px solid $border-soft;
+  background: rgba(255, 253, 248, .96);
+  border: 1px solid rgba(255, 255, 255, .2);
   border-radius: 10px;
   overflow: hidden;
   transition: border-color .2s, box-shadow .2s;
 
   &:focus-within {
-    border-color: $accent;
-    box-shadow: 0 0 0 4px $accent-glow;
+    border-color: $accent-primary;
+    box-shadow: 0 0 0 4px $accent-primary-soft;
   }
 
   svg {
     width: 18px;
     height: 18px;
-    color: $text-faint;
+    color: $text-on-light-muted;
     margin-left: 1rem;
     flex-shrink: 0;
   }
@@ -101,10 +97,10 @@ $card-bottom:  rgba(14, 16, 21, .95);
     padding: 0 1rem;
     height: 52px;
     font-size: .96rem;
-    color: $text-primary;
+    color: $text-on-light;
 
     &::placeholder {
-      color: $text-faint;
+      color: $text-on-light-muted;
     }
   }
 }
@@ -114,15 +110,15 @@ $card-bottom:  rgba(14, 16, 21, .95);
   padding: 0 2rem;
   border: none;
   border-radius: 10px;
-  background: $accent;
-  color: #1a1305;
+  background: $gold;
+  color: $ink;
   font-weight: 700;
   cursor: pointer;
   transition: background .2s, transform .2s;
-  box-shadow: 0 6px 18px rgba(240, 168, 72, .25);
+  box-shadow: 0 6px 18px $accent-primary-soft;
 
   &:hover {
-    background: #f5b666;
+    background: #e0ab4c;
     transform: translateY(-1px);
   }
 }
@@ -138,27 +134,27 @@ $card-bottom:  rgba(14, 16, 21, .95);
 }
 
 .action-btn {
-  border: 1px solid $border-soft;
-  background: rgba(255, 255, 255, .03);
-  padding: .8rem 1.2rem;
+  border: 1px solid $border-on-light;
+  background: transparent;
   border-radius: 10px;
+  padding: .8rem 1.2rem;
   cursor: pointer;
   font-weight: 600;
   font-size: .92rem;
-  color: $text-muted;
+  color: $text-on-dark;
   transition: background .2s, color .2s, border-color .2s;
 
   &:hover {
-    background: $accent-dim;
-    color: $accent;
-    border-color: rgba(240, 168, 72, .3);
+    background: rgba(255, 255, 255, .12);
+    color: $gold;
+    border-color: rgba(255, 255, 255, .24);
   }
 }
 
 // ---- Categories --------------------------------------------------
 
 .hero__section-title {
-  color: $text-faint;
+  color: #d9e0d9;
   font-size: .8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -175,19 +171,19 @@ $card-bottom:  rgba(14, 16, 21, .95);
 
   span {
     padding: .7rem 1.1rem;
-    background: rgba(255, 255, 255, .03);
-    border: 1px solid $border-soft;
+    background: rgba(255, 253, 248, .10);
+    border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 999px;
-    color: $text-muted;
+    color: $text-on-dark;
     font-size: .88rem;
     font-weight: 600;
     cursor: pointer;
     transition: background .2s, color .2s, border-color .2s, transform .2s;
 
-    &:hover {
-      background: $accent;
-      color: #1a1305;
-      border-color: $accent;
+  &:hover {
+    background: $gold;
+    color: $ink;
+    border-color: $gold;
       transform: translateY(-1px);
     }
   }
@@ -200,7 +196,7 @@ $card-bottom:  rgba(14, 16, 21, .95);
   justify-content: center;
   gap: 4rem;
   padding-top: 2.5rem;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid rgba(255, 255, 255, .18);
 }
 
 .hero__stat {
@@ -212,11 +208,11 @@ $card-bottom:  rgba(14, 16, 21, .95);
     margin: 0;
     font-size: 1.7rem;
     font-weight: 700;
-    color: $text-primary;
+    color: $text-on-dark;
   }
 
   span {
-    color: $text-faint;
+    color: #d9e0d9;
     font-size: .85rem;
   }
 }

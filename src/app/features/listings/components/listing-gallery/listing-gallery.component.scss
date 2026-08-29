@@ -11,7 +11,7 @@
   height: 300px;
   object-fit: cover;
   border-radius: 12px;
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
 }
 
 .listing-gallery__thumbnails {
@@ -36,5 +36,6 @@
 }
 
 .listing-gallery__thumbnails img.active {
-  border-color: $accent;
+  border-color: $accent-primary;
 }
+

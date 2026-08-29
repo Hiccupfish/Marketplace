@@ -3,8 +3,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  background-color: $bg-dark;
-  color: $text-primary;
+  background-color: $surface-page;
+  color: $text-on-light;
 }
 
 .request-details-page {
@@ -35,7 +35,7 @@
   padding: 0.5rem 0;
   background: none;
   border: none;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   font-size: 0.9rem;
   cursor: pointer;
   transition: color 0.2s;
@@ -46,7 +46,7 @@
   }
 
   &:hover {
-    color: $accent;
+    color: $accent-primary;
   }
 }
 
@@ -64,7 +64,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: $text-on-light;
 }
 
 .details-content {
@@ -83,11 +83,11 @@
     font-size: 1.75rem;
     font-weight: 800;
     margin: 0 0 1rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   .description {
-    color: $text-secondary;
+    color: $text-on-light-muted;
     font-size: 1rem;
     line-height: 1.7;
     margin: 0 0 1.5rem;
@@ -102,8 +102,8 @@
 }
 
 .info-item {
-  background: $bg-card;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 12px;
   padding: 1rem;
 
@@ -112,7 +112,7 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     margin-bottom: 0.25rem;
   }
 
@@ -120,7 +120,7 @@
     display: block;
     font-size: 0.95rem;
     font-weight: 600;
-    color: #fff;
+    color: $text-on-light;
   }
 }
 
@@ -128,7 +128,7 @@
   h3 {
     font-size: 1rem;
     margin: 0 0 1rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   .images-grid {
@@ -141,15 +141,15 @@
       height: 120px;
       object-fit: cover;
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid $border-on-light;
     }
   }
 }
 
 .requester-sidebar {
   .requester-card {
-    background: $bg-card;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: $surface-card;
+    border: 1px solid $border-on-light;
     border-radius: 16px;
     padding: 1.5rem;
     text-align: center;
@@ -161,7 +161,7 @@
       height: 72px;
       border-radius: 50%;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.1);
+      background: $accent-primary-soft;
       margin: 0 auto 1rem;
       display: flex;
       align-items: center;
@@ -176,14 +176,14 @@
       svg {
         width: 32px;
         height: 32px;
-        color: rgba(255, 255, 255, 0.4);
+    color: $text-on-light-muted;
       }
     }
 
     .requester-name {
       font-size: 1.1rem;
       font-weight: 700;
-      color: #fff;
+      color: $text-on-light;
       margin-bottom: 0.5rem;
     }
 
@@ -192,10 +192,10 @@
       align-items: center;
       gap: 0.4rem;
       padding: 0.3rem 0.75rem;
-      background: rgba(82, 196, 26, 0.15);
-      border: 1px solid rgba(82, 196, 26, 0.3);
+      background: rgba($green, 0.15);
+      border: 1px solid rgba($green, 0.3);
       border-radius: 20px;
-      color: #52c41a;
+      color: $green;
       font-size: 0.8rem;
       font-weight: 600;
 
@@ -208,15 +208,15 @@
 }
 
 .proposals-section {
-  background: $bg-card;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 16px;
   overflow: hidden;
 }
 
 .tabs {
   display: flex;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid $border-on-light;
 
   .tab {
     flex: 1;
@@ -224,19 +224,19 @@
     background: none;
     border: none;
     border-bottom: 3px solid transparent;
-    color: $text-secondary;
+    color: $text-on-light-muted;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 
     &.active {
-      color: $accent;
-      border-bottom-color: $accent;
+      color: $accent-primary;
+      border-bottom-color: $accent-primary;
     }
 
     &:hover:not(.active) {
-      color: #fff;
+      color: $text-on-light;
     }
   }
 }
@@ -252,26 +252,26 @@
   svg {
     width: 48px;
     height: 48px;
-    color: rgba(255, 255, 255, 0.2);
+      color: $text-on-light-muted;
     margin-bottom: 1rem;
   }
 
   h3 {
     font-size: 1.2rem;
     margin: 0 0 0.5rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   p {
-    color: $text-secondary;
+    color: $text-on-light-muted;
     margin: 0 0 1.5rem;
   }
 
   .propose-btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
-    color: #fff;
+    background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
+    color: $text-on-light;
     text-decoration: none;
     border-radius: 10px;
     font-weight: 600;
@@ -290,15 +290,15 @@
 }
 
 .proposal-card {
-  background: rgba(18, 18, 18, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 12px;
   padding: 1.25rem;
   transition: all 0.2s ease;
 
   &.shortlisted {
-    border-color: rgba(114, 46, 209, 0.4);
-    box-shadow: 0 0 15px rgba(114, 46, 209, 0.1);
+    border-color: rgba($indigo, 0.4);
+    box-shadow: 0 0 15px rgba($indigo, 0.1);
   }
 }
 
@@ -319,7 +319,7 @@
     height: 44px;
     border-radius: 50%;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
+      background: $accent-primary-soft;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,14 +334,14 @@
     svg {
       width: 20px;
       height: 20px;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     }
   }
 
   .provider-name {
     font-size: 1rem;
     font-weight: 700;
-    color: #fff;
+    color: $text-on-light;
   }
 
   .provider-meta {
@@ -352,13 +352,13 @@
 
     .business-name {
       font-size: 0.8rem;
-      color: $text-secondary;
+      color: $text-on-light-muted;
     }
 
     .verified-icon {
       width: 14px;
       height: 14px;
-      color: #52c41a;
+      color: $green;
     }
   }
 }
@@ -369,7 +369,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #fff;
+  color: $text-on-light;
 }
 
 .proposal-body {
@@ -381,14 +381,14 @@
     .price {
       font-size: 1.5rem;
       font-weight: 800;
-      color: #fff;
+      color: $text-on-light;
     }
   }
 
   .proposal-details {
     p {
       margin: 0;
-      color: $text-secondary;
+      color: $text-on-light-muted;
       font-size: 0.95rem;
       line-height: 1.6;
     }
@@ -397,17 +397,17 @@
   .proposal-meta {
     margin-top: 0.75rem;
     padding-top: 0.75rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid $border-on-light;
 
     .meta-row {
       display: flex;
       gap: 0.5rem;
       font-size: 0.85rem;
-      color: $text-secondary;
+      color: $text-on-light-muted;
       margin-bottom: 0.25rem;
 
       span:first-child {
-        color: rgba(255, 255, 255, 0.5);
+    color: $text-on-light-muted;
         min-width: 120px;
       }
     }
@@ -419,7 +419,7 @@
   gap: 0.75rem;
   flex-wrap: wrap;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid $border-on-light;
 }
 
 .action-btn {
@@ -432,41 +432,41 @@
   border: none;
 
   &.primary {
-    background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
-    color: #fff;
+    background: linear-gradient(135deg, $green 0%, $green-2 100%);
+    color: $text-on-light;
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(82, 196, 26, 0.3);
+      box-shadow: 0 4px 12px rgba($green, 0.3);
     }
   }
 
   &.secondary {
-    background: $accent;
-    color: #fff;
+    background: $accent-primary;
+    color: $text-on-light;
 
     &:hover {
-      background: lighten($accent, 10%);
+        background: $accent-primary-hover;
     }
   }
 
   &.danger {
-    background: #ff4d4f;
-    color: #fff;
+    background: $red;
+    color: $text-on-light;
 
     &:hover {
-      background: #ff7875;
+      background: $orange;
     }
   }
 
   &.outline {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: $text-secondary;
+    border: 1px solid $border-on-light;
+    color: $text-on-light-muted;
 
     &:hover {
-      border-color: #722ed1;
-      color: #722ed1;
+      border-color: $indigo;
+      color: $indigo;
     }
   }
 }
@@ -475,11 +475,11 @@
   h3 {
     font-size: 1.1rem;
     margin: 0 0 1rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   p {
-    color: $text-secondary;
+    color: $text-on-light-muted;
     line-height: 1.7;
     margin: 0 0 1.5rem;
   }
@@ -494,16 +494,16 @@
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 1rem;
-    background: rgba(18, 18, 18, 0.6);
+      background: $accent-primary-soft;
     border-radius: 8px;
     font-size: 0.9rem;
 
     span:first-child {
-      color: rgba(255, 255, 255, 0.5);
+      color: $text-on-light-muted;
     }
 
     span:last-child {
-      color: #fff;
+      color: $text-on-light;
       font-weight: 600;
     }
   }
@@ -520,17 +520,18 @@
   .spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    border-top-color: $accent;
+    border: 3px solid $border-on-light;
+    border-top-color: $accent-primary;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
 
   p {
-    color: $text-secondary;
+    color: $text-on-light-muted;
   }
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+

@@ -1,26 +1,77 @@
-// ---- Global design tokens -------------------------------------
-$bg-light:      #fefbf6;   // warm off-white, not clinical #fff
-$card-bg:       #ffffff;
-$card-bg-hover: #fff8ec;   // warm hover tint, echoes the accent instead of generic gray
-$border-soft:   rgba(20, 20, 20, .08);
+// ===========================================================================
+// LAYER 1 — PRIMITIVES (raw values, no logic)
+// ===========================================================================
 
-$text-primary:  #1c1c1e;
-$text-muted:    #5c5f66;
-$text-faint:    #8a8d94;
+$ink:     #10130f;
+$cream:   #f7f1e5;
+$sand:    #e8d8bd;
+$gold:    #c99a3a;
+$green:   #174a35;
+$green-2: #0e3326;
+$red:     #a52b24;
+$orange:  #d66b2d;
+$indigo:  #263a69;
+$white:   #fffdf8;
+$muted:   #6f6b61;
 
-$accent:        #f5a623;   // sunflower gold — brighter, more saturated, more "cheerful marketplace"
-$accent-hover:  #e0940f;
-$accent-dim:    rgba(245, 166, 35, .12);
-$accent-border: rgba(245, 166, 35, .35);
-$accent-glow:   rgba(245, 166, 35, .22);
+// Status
+$color-warning:  $gold;
+$color-info:     $indigo;
+$color-success:  $green;
+$color-danger:   $red;
 
-// ---- Semantic / status colors -------------------------------------
-$color-warning:  #d97706;
-$color-info:     #2563eb;
-$color-success:  #059669;
-$color-danger:   #dc2626;
+// ===========================================================================
+// LAYER 2 — SEMANTIC TOKENS (what components actually use)
+// ===========================================================================
 
-// ---- Shadows -------------------------------------------------------
-$shadow-sm: 0 2px 8px rgba(20, 20, 20, .06);
-$shadow-md: 0 8px 24px rgba(20, 20, 20, .08);
-$shadow-lg: 0 18px 40px rgba(20, 20, 20, .12);
+// Surfaces — the app has 4 distinct section backgrounds
+$surface-dark:   $green-2;   // header, hero, topbar
+$surface-page:   $cream;
+$surface-card:   $white;
+$surface-alt:    $sand;      // secondary surface / hover state
+$surface-footer: #0b1c15;
+
+// Text — paired to which surface they sit on
+$text-ink:       $ink;
+$text-muted:     $muted;
+$text-on-dark:   $white;
+
+// Backward-compatible aliases so component files don't need changes
+$text-on-light:        $ink;
+$text-on-light-muted:  $muted;
+
+// Accent
+$accent-primary:       $gold;
+$eyebrow-color:        $red;       // section labels, step numbers — NOT gold
+
+// Backward-compatible hover/soft variants
+$accent-primary-hover:  #b7862f;
+$accent-primary-soft:   $sand;
+
+// Two-stop gradients, not flat colors — match reference file's .vendor and .export classes
+$gradient-vendor: linear-gradient(135deg, #193e2e, #386b51);
+$gradient-export: linear-gradient(135deg, #9c2c24, #d77a36);
+
+// Product-art tile backgrounds — distinct from category tag chips
+$product-tint-1: #e7c37d;
+$product-tint-2: #9bb6a1;
+$product-tint-3: #d9a28c;
+$product-tint-4: #aab8d6;
+
+// Category tag chips — cycle through 4 tints
+$tag-tint-1: $gold;       // Featured
+$tag-tint-2: $green;      // New
+$tag-tint-3: $red;        // Bestseller
+$tag-tint-4: $indigo;     // Artisan
+
+// Reserve $indigo for future badge/section
+$reserved-indigo: $indigo;
+
+// Borders / dividers
+$border-on-light: rgba(16, 19, 15, .12);
+$border-on-dark:  rgba(255, 255, 255, .12);
+
+// Shadows — suited to cream/sand backgrounds
+$shadow-sm: 0 2px 8px rgba(16, 19, 15, .06);
+$shadow-md: 0 8px 24px rgba(16, 19, 15, .08);
+$shadow-lg: 0 18px 40px rgba(16, 19, 15, .12);

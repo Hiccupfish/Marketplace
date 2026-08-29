@@ -12,9 +12,9 @@ html, body {
 }
 
 body {
-  background: $bg-dark;
+  background: $surface-page;
   font-family: 'Inter', sans-serif;
-  color: $text-primary;
+  color: $text-on-light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

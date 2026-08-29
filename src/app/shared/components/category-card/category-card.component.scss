@@ -7,9 +7,9 @@
   justify-content: center;
 
   padding: 14px;
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
   border-radius: 12px;
-  background: $card-bg;
+  background: $surface-card;
 
   cursor: pointer;
   transition: all 0.2s ease;
@@ -18,8 +18,8 @@
 
 .category-card:hover {
   transform: translateY(-3px);
-  border-color: $accent-border;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-color: $accent-primary-soft;
+  box-shadow: $shadow-sm;
 }
 
 .category-card__icon {

@@ -3,8 +3,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  background-color: $bg-dark;
-  color: $text-primary;
+  background-color: $surface-page;
+  color: $text-on-light;
 }
 
 .requests-page {
@@ -33,14 +33,14 @@
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     font-weight: 800;
     margin: 0 0 0.5rem;
-    background: linear-gradient(135deg, #ffffff 0%, #d0d7de 100%);
+    background: linear-gradient(135deg, $text-on-light 0%, $text-on-light-muted 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   p {
     margin: 0;
-    color: $text-secondary;
+      color: $text-on-light-muted;
     font-size: 1.05rem;
     max-width: 600px;
   }
@@ -51,14 +51,14 @@
   align-items: center;
   gap: 8px;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
-  color: #fff;
+  background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
+  color: $text-on-light;
   text-decoration: none;
   border-radius: 10px;
   font-weight: 600;
   font-size: 0.95rem;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 4px 15px $accent-primary-soft;
   white-space: nowrap;
 
   svg {
@@ -68,7 +68,7 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.45);
+      box-shadow: 0 6px 20px $accent-primary-soft;
   }
 }
 
@@ -91,7 +91,7 @@
       transform: translateY(-50%);
       width: 18px;
       height: 18px;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
       pointer-events: none;
     }
 
@@ -99,22 +99,22 @@
       width: 100%;
       height: 46px;
       padding: 0 100px 0 44px;
-      background: rgba(18, 18, 18, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: $surface-card;
+      border: 1px solid $border-on-light;
       border-radius: 10px;
-      color: #fff;
+      color: $text-on-light;
       font-size: 0.925rem;
       outline: none;
       transition: all 0.2s ease;
       box-sizing: border-box;
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.3);
+        color: $text-on-light-muted;
       }
 
       &:focus {
-        border-color: $accent;
-        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+        border-color: $accent-primary;
+        box-shadow: 0 0 0 3px $accent-primary-soft;
       }
     }
 
@@ -125,17 +125,17 @@
       transform: translateY(-50%);
       height: 32px;
       padding: 0 1rem;
-      background: $accent;
+      background: $accent-primary;
       border: none;
       border-radius: 6px;
-      color: #fff;
+      color: $text-on-light;
       font-weight: 600;
       font-size: 0.85rem;
       cursor: pointer;
       transition: background 0.2s;
 
       &:hover {
-        background: lighten($accent, 10%);
+        background: $accent-primary-hover;
       }
     }
   }
@@ -150,10 +150,10 @@
   .filter-select {
     height: 46px;
     padding: 0 1rem;
-    background: rgba(18, 18, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 10px;
-    color: #fff;
+      background: $surface-card;
+      border: 1px solid $border-on-light;
+      border-radius: 10px;
+      color: $text-on-light;
     font-size: 0.925rem;
     outline: none;
     cursor: pointer;
@@ -161,13 +161,13 @@
     min-width: 140px;
 
     &:focus {
-      border-color: $accent;
-      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+      border-color: $accent-primary;
+        box-shadow: 0 0 0 3px $accent-primary-soft;
     }
 
     option {
-      background: #1e1e1e;
-      color: #fff;
+      background: $surface-card;
+      color: $text-on-light;
     }
   }
 
@@ -175,23 +175,23 @@
     height: 46px;
     padding: 0 1rem;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid $border-on-light;
     border-radius: 10px;
-    color: $text-secondary;
+      color: $text-on-light-muted;
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
 
     &:hover {
-      border-color: #ff4d4f;
-      color: #ff4d4f;
+      border-color: $red;
+      color: $red;
     }
   }
 }
 
 .results-info {
   font-size: 0.9rem;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   margin-bottom: 1rem;
 }
 
@@ -200,11 +200,11 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: rgba(220, 53, 69, 0.12);
-  border: 1px solid rgba(220, 53, 69, 0.3);
+  background: rgba($red, 0.12);
+  border: 1px solid rgba($red, 0.3);
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  color: #ff6b6b;
+  color: $red;
 
   .error-icon {
     width: 22px;
@@ -218,18 +218,18 @@
 
   .retry-btn {
     padding: 0.5rem 1rem;
-    background: #fff;
-    border: 1px solid #c53030;
+      background: $surface-card;
+    border: 1px solid $color-danger;
     border-radius: 8px;
-    color: #c53030;
+    color: $color-danger;
     font-weight: 600;
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.2s;
 
     &:hover {
-      background: #c53030;
-      color: #fff;
+      background: $color-danger;
+      color: $text-on-light;
     }
   }
 }
@@ -245,8 +245,8 @@
 }
 
 .request-card {
-  background: $bg-card;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+      background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 16px;
   padding: 1.5rem;
   text-decoration: none;
@@ -259,8 +259,8 @@
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(13, 110, 253, 0.3);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(13, 110, 253, 0.08);
+    border-color: rgba($green, 0.3);
+    box-shadow: 0 12px 30px $shadow-md, 0 0 20px rgba($green, 0.08);
   }
 }
 
@@ -279,7 +279,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #fff;
+  color: $text-on-light;
 }
 
 .card-title {
@@ -287,12 +287,12 @@
   font-weight: 700;
   margin: 0;
   line-height: 1.3;
-  color: #fff;
+  color: $text-on-light;
 }
 
 .card-description {
   margin: 0;
-  color: $text-secondary;
+  color: $text-on-light-muted;
   font-size: 0.9rem;
   line-height: 1.5;
   display: -webkit-box;
@@ -311,12 +311,12 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.85rem;
-    color: $text-secondary;
+      color: $text-on-light-muted;
 
     svg {
       width: 16px;
       height: 16px;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
       flex-shrink: 0;
     }
   }
@@ -327,7 +327,7 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid $border-on-light;
 
   .budget-info {
     display: flex;
@@ -337,13 +337,13 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     }
 
     .budget-value {
       font-size: 0.95rem;
       font-weight: 700;
-      color: #fff;
+      color: $text-on-light;
     }
   }
 
@@ -352,7 +352,7 @@
     align-items: center;
     gap: 0.4rem;
     font-size: 0.85rem;
-    color: $text-secondary;
+      color: $text-on-light-muted;
 
     svg {
       width: 16px;
@@ -366,14 +366,14 @@
   align-items: center;
   gap: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid $border-on-light;
 
   .requester-avatar {
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
+      background: $accent-primary-soft;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -388,7 +388,7 @@
     svg {
       width: 20px;
       height: 20px;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     }
   }
 
@@ -400,7 +400,7 @@
       display: block;
       font-size: 0.9rem;
       font-weight: 600;
-      color: #fff;
+      color: $text-on-light;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -409,14 +409,14 @@
     .post-time {
       display: block;
       font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.4);
+      color: $text-on-light-muted;
     }
   }
 
   .verified-icon {
     width: 18px;
     height: 18px;
-    color: #52c41a;
+    color: $green;
     flex-shrink: 0;
   }
 }
@@ -428,17 +428,17 @@
   gap: 1.5rem;
   margin-top: 2.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid $border-on-light;
 
   .page-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 1.25rem;
-    background: rgba(18, 18, 18, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+      background: $surface-card;
+      border: 1px solid $border-on-light;
     border-radius: 10px;
-    color: $text-primary;
+    color: $text-on-light;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
@@ -450,8 +450,8 @@
     }
 
     &:hover:not(:disabled) {
-      border-color: $accent;
-      color: $accent;
+      border-color: $accent-primary;
+      color: $accent-primary;
     }
 
     &:disabled {
@@ -462,7 +462,7 @@
 
   .page-info {
     font-size: 0.9rem;
-    color: $text-secondary;
+      color: $text-on-light-muted;
   }
 }
 
@@ -473,26 +473,26 @@
   svg {
     width: 64px;
     height: 64px;
-    color: rgba(255, 255, 255, 0.2);
+      color: $text-on-light-muted;
     margin-bottom: 1rem;
   }
 
   h2 {
     font-size: 1.5rem;
     margin: 0 0 0.5rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   p {
-    color: $text-secondary;
+      color: $text-on-light-muted;
     margin: 0 0 1.5rem;
   }
 
   .create-listing-btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, $accent 0%, #6610f2 100%);
-    color: #fff;
+    background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
+    color: $text-on-light;
     text-decoration: none;
     border-radius: 10px;
     font-weight: 600;
@@ -514,8 +514,8 @@
 }
 
 .skeleton-card {
-  background: $bg-card;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+      background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 16px;
   padding: 1.5rem;
   display: flex;
@@ -532,7 +532,7 @@
   height: 24px;
   width: 80px;
   border-radius: 20px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background: linear-gradient(90deg, $accent-primary-soft 25%, $border-on-light 50%, $accent-primary-soft 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -540,7 +540,7 @@
 .skeleton-line {
   height: 14px;
   border-radius: 4px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background: linear-gradient(90deg, $accent-primary-soft 25%, $border-on-light 50%, $accent-primary-soft 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 
@@ -568,14 +568,14 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid $border-on-light;
 }
 
 .skeleton-avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+    background: linear-gradient(90deg, $accent-primary-soft 25%, $border-on-light 50%, $accent-primary-soft 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -584,3 +584,4 @@
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+

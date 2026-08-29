@@ -1,24 +1,77 @@
-// ---- Global design tokens -------------------------------------
-$bg-dark:       #0a0d12;
-$card-bg:       rgba(255, 255, 255, .03);
-$card-bg-hover: rgba(255, 255, 255, .05);
-$border-soft:   rgba(255, 255, 255, .08);
+// ===========================================================================
+// LAYER 1 — PRIMITIVES (raw values, no logic)
+// ===========================================================================
 
-$text-primary:  #f3f5f8;
-$text-muted:    #97a1b3;
-$text-faint:    #6b7386;
+$ink:     #10130f;
+$cream:   #f7f1e5;
+$sand:    #e8d8bd;
+$gold:    #c99a3a;
+$green:   #174a35;
+$green-2: #0e3326;
+$red:     #a52b24;
+$orange:  #d66b2d;
+$indigo:  #263a69;
+$white:   #fffdf8;
+$muted:   #6f6b61;
 
-$accent:        #f0a848;
-$accent-hover:  #f5b666;
-$accent-dim:    rgba(240, 168, 72, .14);
-$accent-border: rgba(240, 168, 72, .3);
-$accent-glow:   rgba(240, 168, 72, .25);
+// Status
+$color-warning:  $gold;
+$color-info:     $indigo;
+$color-success:  $green;
+$color-danger:   $red;
 
-// ---- Semantic / status colors -------------------------------------
-$color-warning:  #f59e0b;
-$color-info:     #3b82f6;
-$color-success:  #10b981;
-$color-danger:   #ef4444;
+// ===========================================================================
+// LAYER 2 — SEMANTIC TOKENS (what components actually use)
+// ===========================================================================
 
-// ---- Shadows -------------------------------------------------------
-$shadow-sm: 0 2px 8px rgba(0, 0, 0, .15);
+// Surfaces — the app has 4 distinct section backgrounds
+$surface-dark:   $green-2;   // header, hero, topbar
+$surface-page:   $cream;
+$surface-card:   $white;
+$surface-alt:    $sand;      // secondary surface / hover state
+$surface-footer: #0b1c15;
+
+// Text — paired to which surface they sit on
+$text-ink:       $ink;
+$text-muted:     $muted;
+$text-on-dark:   $white;
+
+// Backward-compatible aliases so component files don't need changes
+$text-on-light:        $ink;
+$text-on-light-muted:  $muted;
+
+// Accent
+$accent-primary:       $gold;
+$eyebrow-color:        $red;       // section labels, step numbers — NOT gold
+
+// Backward-compatible hover/soft variants
+$accent-primary-hover:  #b7862f;
+$accent-primary-soft:   $sand;
+
+// Two-stop gradients, not flat colors — match reference file's .vendor and .export classes
+$gradient-vendor: linear-gradient(135deg, #193e2e, #386b51);
+$gradient-export: linear-gradient(135deg, #9c2c24, #d77a36);
+
+// Product-art tile backgrounds — distinct from category tag chips
+$product-tint-1: #e7c37d;
+$product-tint-2: #9bb6a1;
+$product-tint-3: #d9a28c;
+$product-tint-4: #aab8d6;
+
+// Category tag chips — cycle through 4 tints
+$tag-tint-1: $gold;       // Featured
+$tag-tint-2: $green;      // New
+$tag-tint-3: $red;        // Bestseller
+$tag-tint-4: $indigo;     // Artisan
+
+// Reserve $indigo for future badge/section
+$reserved-indigo: $indigo;
+
+// Borders / dividers
+$border-on-light: rgba(16, 19, 15, .12);
+$border-on-dark:  rgba(255, 255, 255, .12);
+
+// Shadows — suited to cream/sand backgrounds
+$shadow-sm: 0 2px 8px rgba(16, 19, 15, .06);
+$shadow-md: 0 8px 24px rgba(16, 19, 15, .08);
+$shadow-lg: 0 18px 40px rgba(16, 19, 15, .12);

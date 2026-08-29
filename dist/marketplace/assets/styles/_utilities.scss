@@ -1,5 +1,7 @@
+@import "variables";
+
 .text-muted {
-  color: #6b7280;
+  color: $muted;
 }
 
 .sr-only {

@@ -7,15 +7,15 @@
 }
 
 .rating-stars__star {
-  color: $text-faint;
+  color: $text-on-light-muted;
 }
 
 .rating-stars__star--filled {
-  color: $accent;
+  color: $accent-primary;
 }
 
 .rating-stars__star--half {
-  background: linear-gradient(90deg, $accent 50%, $text-faint 50%);
+  background: linear-gradient(90deg, $accent-primary 50%, $text-on-light-muted 50%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

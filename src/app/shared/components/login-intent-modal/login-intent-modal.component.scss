@@ -14,9 +14,9 @@
 }
 
 .modal-card {
-  background: $card-bg;
+  background: $surface-card;
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: $shadow-md;
   max-width: 500px;
   width: 90%;
   max-height: 90vh;
@@ -40,13 +40,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid $border-soft;
+  border-bottom: 1px solid $border-on-light;
 
   h2 {
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: $text-primary;
+      color: $text-on-light;
   }
 }
 
@@ -54,13 +54,13 @@
   background: none;
   border: none;
   font-size: 28px;
-  color: $text-muted;
+  color: $text-on-light-muted;
   cursor: pointer;
   padding: 0;
   line-height: 1;
 
   &:hover {
-    color: $text-primary;
+      color: $text-on-light;
   }
 }
 
@@ -70,7 +70,7 @@
   .modal-subtitle {
     margin: 0 0 20px 0;
     font-size: 14px;
-    color: $text-muted;
+    color: $text-on-light-muted;
     font-weight: 500;
   }
 }
@@ -87,16 +87,16 @@
   gap: 16px;
   align-items: flex-start;
   padding: 16px;
-  border: 2px solid $border-soft;
+  border: 2px solid $border-on-light;
   border-radius: 8px;
-  background: $bg-dark;
+  background: $surface-card;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
 
   &:hover {
-    border-color: $accent;
-    background: rgba($accent, 0.05);
+    border-color: $accent-primary;
+    background: $accent-primary-soft;
   }
 
   &:active {
@@ -115,30 +115,30 @@
       margin: 0 0 4px 0;
       font-size: 16px;
       font-weight: 600;
-      color: $text-primary;
+      color: $text-on-light;
     }
 
     p {
       margin: 0;
       font-size: 13px;
-      color: $text-muted;
+      color: $text-on-light-muted;
     }
   }
 }
 
 .modal-note {
   font-size: 12px;
-  color: $text-muted;
+  color: $text-on-light-muted;
   text-align: center;
   margin: 0;
   padding: 12px;
-  background: rgba($accent, 0.05);
+  background: $accent-primary-soft;
   border-radius: 6px;
 }
 
 .modal-footer {
   padding: 16px 20px;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid $border-on-light;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -146,17 +146,17 @@
 
 .btn-cancel {
   padding: 8px 16px;
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
   border-radius: 6px;
   background: transparent;
-  color: $text-primary;
+  color: $text-on-light;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: $accent;
-    color: $accent;
+    border-color: $accent-primary;
+    color: $accent-primary;
   }
 }
 

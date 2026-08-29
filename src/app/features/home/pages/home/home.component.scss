@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background: $bg-dark;
+  background: $surface-page;
 }
 
 /* Content wrapper */
@@ -18,7 +18,7 @@
 .home-page__section {
   margin-top: 4.5rem;
   padding-top: 2.5rem;
-  border-top: 1px solid $border-soft;
+  border-top: 1px solid $border-on-light;
 
   &:first-child {
     margin-top: 3rem;
@@ -33,8 +33,8 @@
   font-weight: 700;
   letter-spacing: -.02em;
   margin-bottom: 1.5rem;
-  color: $text-primary;
-  border-left: 4px solid $accent;
+  color: $text-on-light;
+  border-left: 4px solid $accent-primary;
   padding-left: .8rem;
 }
 

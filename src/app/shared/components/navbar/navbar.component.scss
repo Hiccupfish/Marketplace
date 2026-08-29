@@ -5,15 +5,15 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: $bg-dark;
-  border-bottom: 1px solid $border-soft;
+  background: $surface-page;
+  border-bottom: 1px solid $border-on-light;
   gap: 20px;
 }
 
 .navbar__brand {
   font-size: 20px;
   font-weight: 700;
-  color: $accent;
+  color: $accent-primary;
   cursor: pointer;
 }
 
@@ -27,11 +27,11 @@
   width: 100%;
   max-width: 400px;
   padding: 8px 12px;
-  border: 1px solid $border-soft;
+  border: 1px solid $border-on-light;
   border-radius: 8px;
   outline: none;
-  background: $card-bg;
-  color: $text-primary;
+  background: $surface-card;
+  color: $text-on-light;
 }
 
 .navbar__links {
@@ -41,12 +41,12 @@
 
 .navbar__links a {
   text-decoration: none;
-  color: $text-muted;
+  color: $text-on-light-muted;
   font-weight: 500;
 }
 
 .navbar__links a:hover {
-  color: $accent;
+  color: $accent-primary;
 }
 
 .navbar__auth {
@@ -64,11 +64,15 @@
 
 .navbar__auth button:first-child {
   background: transparent;
-  border: 1px solid $accent;
-  color: $accent;
+  border: 1px solid $accent-primary;
+  color: $accent-primary;
 }
 
 .navbar__auth button:last-child {
-  background: $accent;
-  color: $bg-dark;
+  background: $accent-primary;
+  color: $text-on-light;
+
+  &:hover {
+    background: $accent-primary-hover;
+  }
 }

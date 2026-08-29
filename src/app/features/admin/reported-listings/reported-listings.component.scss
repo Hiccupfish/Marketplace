@@ -2,24 +2,24 @@
 
 .reported-listings {
   padding: 2rem;
-  background: linear-gradient(145deg, $bg-dark, rgba(10, 13, 18, .96));
+  background: $surface-card;
+  border: 1px solid $border-on-light;
   border-radius: 1rem;
-  backdrop-filter: blur(12px);
-  color: $text-primary;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  color: $text-on-light;
+  box-shadow: $shadow-md;
 
   .section-title {
     font-family: 'Inter', sans-serif;
     font-size: 2rem;
     margin-bottom: 1.5rem;
     text-align: center;
-    color: $accent;
+    color: $accent-primary;
   }
 
   .table-wrapper {
     overflow-x: auto;
     border-radius: 0.75rem;
-    background: $card-bg;
+    background: $surface-card;
     padding: 1rem;
     backdrop-filter: blur(8px);
   }
@@ -32,15 +32,15 @@
     color: inherit;
 
     th {
-      background: $card-bg-hover;
-      color: $text-muted;
+      background: $accent-primary-soft;
+      color: $text-on-light-muted;
       padding: 0.75rem 1rem;
       text-align: left;
       font-weight: 600;
     }
 
     td {
-      background: $card-bg;
+      background: $surface-card;
       padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: background 0.2s ease;
@@ -49,7 +49,7 @@
     tr {
       cursor: pointer;
       &:hover td {
-        background: $card-bg-hover;
+        background: $accent-primary-soft;
       }
       &.resolved td {
         opacity: 0.6;
@@ -59,16 +59,16 @@
   }
 
   .resolve-btn {
-    background: $accent;
+    background: $accent-primary;
     border: none;
-    color: $bg-dark;
+    color: $text-on-light;
     padding: 0.4rem 0.8rem;
     border-radius: 0.4rem;
     font-size: 0.9rem;
     cursor: pointer;
     transition: transform 0.1s ease, background 0.2s ease;
     &:hover {
-      background: $accent-hover;
+      background: $accent-primary-hover;
     }
     &:active {
       transform: scale(0.97);
@@ -79,6 +79,6 @@
     text-align: center;
     margin-top: 2rem;
     font-size: 1.1rem;
-    color: $text-muted;
+    color: $text-on-light-muted;
   }
 }
