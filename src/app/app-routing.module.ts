@@ -45,6 +45,11 @@ export const appRoutes: Routes = [
     loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule)
   },
   {
+    path: 'providers',
+    redirectTo: 'profile/directory',
+    pathMatch: 'full'
+  },
+  {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule)
   },

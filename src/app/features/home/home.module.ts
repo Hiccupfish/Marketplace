@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeComponent } from './pages/home/home.component';
 import { HeroSectionComponent } from './components/hero-section/hero-section.component';
 import { FeaturedListingsComponent } from './components/featured-listings/featured-listings.component';
 import { CategoriesSectionComponent } from './components/categories-section/categories-section.component';
 import { HowItWorksComponent } from './components/how-it-works/how-it-works.component';
+import { FeaturedProvidersComponent } from './components/featured-providers/featured-providers.component';
 
 @NgModule({
   declarations: [
@@ -14,9 +16,10 @@ import { HowItWorksComponent } from './components/how-it-works/how-it-works.comp
     HeroSectionComponent,
     FeaturedListingsComponent,
     CategoriesSectionComponent,
-    HowItWorksComponent
+    HowItWorksComponent,
+    FeaturedProvidersComponent
   ],
-  imports: [CommonModule, FormsModule, SharedModule],
+  imports: [CommonModule, FormsModule, RouterModule, SharedModule],
   exports: [HomeComponent]
 })
 export class HomeModule {}

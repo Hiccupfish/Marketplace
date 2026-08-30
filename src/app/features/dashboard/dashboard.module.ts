@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardHomeComponent } from './pages/dashboard-home/dashboard-home.component';
 import { MyListingsComponent } from './pages/my-listings/my-listings.component';
@@ -16,7 +18,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     VerificationComponent,
     DeliveryTrackingComponent,
   ],
-  imports: [CommonModule, DashboardRoutingModule, SharedModule],
+  imports: [CommonModule, FormsModule, RouterModule, DashboardRoutingModule, SharedModule],
   exports: [
     DashboardHomeComponent,
     MyListingsComponent,
@@ -25,4 +27,4 @@ import { SharedModule } from 'src/app/shared/shared.module';
     DeliveryTrackingComponent,
   ],
 })
-export class DashboardModule {}
+export class DashboardModule {}

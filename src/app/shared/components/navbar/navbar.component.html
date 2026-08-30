@@ -8,7 +8,7 @@
   <div class="navbar__search">
     <input
       type="text"
-      placeholder="Search services, products..."
+      placeholder="Search services, products, local providers..."
       [(ngModel)]="searchQuery"
       (keyup.enter)="onSearch()"
     />
@@ -17,6 +17,7 @@
   <!-- Links -->
   <div class="navbar__links">
     <a routerLink="/home">Home</a>
+    <a routerLink="/providers">Providers &amp; Businesses</a>
     <a routerLink="/products">Products</a>
     <a routerLink="/services">Services</a>
     <a routerLink="/requests">Requests</a>
@@ -34,6 +35,7 @@
     </button>
 
     <div *ngIf="isLoggedIn" class="navbar__profile">
+      <a routerLink="/dashboard/profile-settings" class="dashboard-link">Seller Studio</a>
       <span>{{ userName }}</span>
       <button type="button" (click)="logout()">Logout</button>
     </div>

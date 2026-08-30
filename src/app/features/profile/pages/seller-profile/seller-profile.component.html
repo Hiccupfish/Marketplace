@@ -1,6 +1,557 @@
-<app-profile-header></app-profile-header>
-<section class="seller-profile">
-  <h1>Seller Profile</h1>
-  <app-seller-listings></app-seller-listings>
-  <app-seller-reviews></app-seller-reviews>
-</section>
+<div class="profile-page-wrapper" *ngIf="profile as p">
+
+  <!-- Hero & Cover Banner -->
+  <header class="profile-hero">
+    <div class="profile-hero__cover" [style.background-color]="p.coverColor">
+      <img *ngIf="p.coverImage" [src]="p.coverImage" [alt]="p.name + ' Cover'" class="cover-img" />
+      <div class="cover-overlay"></div>
+      
+      <div class="profile-hero__nav">
+        <a routerLink="/providers" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span>All Providers &amp; Businesses</span>
+        </a>
+
+        <div class="hero-actions">
+          <button class="action-pill-btn" (click)="copyProfileLink()" title="Share Profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            <span>{{ linkCopied ? 'Link Copied!' : 'Share' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Intro Card -->
+    <div class="profile-hero__main">
+      <div class="hero-container">
+        <div class="profile-identity">
+          <div class="avatar-wrapper">
+            <img [src]="p.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80'" [alt]="p.name" class="avatar-img" />
+            <div class="kind-indicator" [class.business]="p.kind === 'BUSINESS'">
+              {{ p.kind === 'BUSINESS' ? '🏬 Business' : '🛠️ Artisan / Pro' }}
+            </div>
+          </div>
+
+          <div class="profile-titles">
+            <div class="badge-row">
+              <span class="kind-tag" [class.business]="p.kind === 'BUSINESS'">
+                {{ p.kind === 'BUSINESS' ? 'REGISTERED BUSINESS STOREFRONT' : 'INDIVIDUAL SERVICE PROVIDER' }}
+              </span>
+              <span class="location-tag">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                {{ p.location }}
+              </span>
+            </div>
+
+            <h1 class="profile-name">{{ p.name }}</h1>
+            <p class="profile-headline">{{ p.headline }}</p>
+
+            <div class="quick-meta-row">
+              <div class="rating-badge" (click)="activeTab = 'reviews'">
+                <span class="star-icon">★</span>
+                <strong>{{ averageRating }}</strong>
+                <span class="count">({{ ratingCount }} review{{ ratingCount !== 1 ? 's' : '' }})</span>
+              </div>
+              <span class="sep" *ngIf="p.responseRate">•</span>
+              <span class="meta-item" *ngIf="p.responseRate">⚡ Replies {{ p.responseRate }}</span>
+              <span class="sep" *ngIf="p.establishedYear">•</span>
+              <span class="meta-item" *ngIf="p.establishedYear">🏛️ Est. {{ p.establishedYear }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-cta-group">
+          <button class="btn-whatsapp" (click)="openWhatsApp(p.whatsapp || p.phone)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.072-1.026-.063-.235-.077-.525-.175-.916-.345-1.636-.71-2.7-2.355-2.782-2.466-.082-.111-.667-.887-.667-1.692 0-.805.42-1.2.57-1.355.144-.155.312-.195.42-.195.107 0 .215.002.308.007.1.005.234-.038.366.28.138.332.47 1.15.511 1.235.042.085.07.185.013.298-.057.113-.086.185-.172.285-.086.101-.18.225-.257.302-.086.086-.176.18-.076.353.1.172.445.733.955 1.187.658.585 1.213.766 1.385.852.172.086.272.072.373-.044.101-.116.43-.5.545-.672.114-.172.228-.144.385-.086.157.058 1.002.472 1.173.558.172.086.286.128.329.2.042.072.042.418-.102.823z"/>
+            </svg>
+            <span>WhatsApp {{ p.kind === 'BUSINESS' ? 'Store' : 'Provider' }}</span>
+          </button>
+          
+          <a *ngIf="p.phone" [href]="'tel:' + p.phone" class="btn-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call {{ p.phone }}</span>
+          </a>
+
+          <button class="btn-subtle" (click)="openReviewModal()">
+            <span>✍️ Write Review</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <div class="profile-body">
+    <div class="profile-layout">
+
+      <!-- Left / Main Column -->
+      <main class="profile-main">
+
+        <!-- Navigation Tabs -->
+        <nav class="profile-tabs">
+          <button
+            class="tab-btn"
+            [class.active]="activeTab === 'work'"
+            (click)="activeTab = 'work'"
+          >
+            <span>🖼️ Our Work &amp; Portfolio</span>
+            <span class="badge-count" *ngIf="p.portfolio?.length">{{ p.portfolio.length }}</span>
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="activeTab === 'services'"
+            (click)="activeTab = 'services'"
+          >
+            <span>🛠️ Services Offered</span>
+            <span class="badge-count" *ngIf="p.servicesOffered?.length">{{ p.servicesOffered.length }}</span>
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="activeTab === 'products'"
+            (click)="activeTab = 'products'"
+            *ngIf="p.productsOffered?.length || p.kind === 'BUSINESS'"
+          >
+            <span>📦 Products Catalog</span>
+            <span class="badge-count" *ngIf="p.productsOffered?.length">{{ p.productsOffered.length }}</span>
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="activeTab === 'reviews'"
+            (click)="activeTab = 'reviews'"
+          >
+            <span>⭐ Reviews</span>
+            <span class="badge-count" *ngIf="p.reviews?.length">{{ p.reviews.length }}</span>
+          </button>
+
+          <button
+            class="tab-btn"
+            [class.active]="activeTab === 'about'"
+            (click)="activeTab = 'about'"
+          >
+            <span>ℹ️ About</span>
+          </button>
+        </nav>
+
+        <!-- Tab 1: Work / Portfolio Showcase -->
+        <section class="tab-content" *ngIf="activeTab === 'work'">
+          <div class="section-intro">
+            <div>
+              <h2>Completed Projects &amp; Work Examples</h2>
+              <p>Explore real work completed for community clients by {{ p.name }}.</p>
+            </div>
+
+            <!-- Portfolio Category Filter -->
+            <div class="portfolio-filter-chips" *ngIf="portfolioCategories.length > 2">
+              <button
+                *ngFor="let cat of portfolioCategories"
+                class="chip-btn"
+                [class.active]="portfolioFilter === cat"
+                (click)="portfolioFilter = cat"
+              >
+                {{ cat }}
+              </button>
+            </div>
+          </div>
+
+          <div class="portfolio-grid" *ngIf="filteredPortfolio.length > 0; else noPortfolio">
+            <article class="portfolio-card" *ngFor="let item of filteredPortfolio" (click)="selectedPortfolioItem = item">
+              <div class="portfolio-image-wrapper">
+                <img [src]="item.imageUrl || 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&auto=format&fit=crop&q=80'" [alt]="item.title" />
+                <span class="portfolio-category-pill">{{ item.category }}</span>
+              </div>
+              <div class="portfolio-info">
+                <div class="portfolio-header">
+                  <h3>{{ item.title }}</h3>
+                  <span class="completed-date" *ngIf="item.completedDate">{{ item.completedDate }}</span>
+                </div>
+                <p class="portfolio-desc">{{ item.description }}</p>
+                <div class="portfolio-feedback" *ngIf="item.clientFeedback">
+                  <span class="quote-icon">“</span>
+                  <em>{{ item.clientFeedback }}</em>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <ng-template #noPortfolio>
+            <div class="empty-tab-state">
+              <div class="empty-icon">📁</div>
+              <h3>No portfolio items found</h3>
+              <p>No work samples available in category "{{ portfolioFilter }}".</p>
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Tab 2: Services Offered -->
+        <section class="tab-content" *ngIf="activeTab === 'services'">
+          <div class="section-intro">
+            <div>
+              <h2>Services &amp; Pricing</h2>
+              <p>Transparent service offerings and starting quotes.</p>
+            </div>
+          </div>
+
+          <div class="services-list" *ngIf="p.servicesOffered?.length; else defaultServices">
+            <div class="service-item-card" *ngFor="let service of p.servicesOffered">
+              <div class="service-main-info">
+                <div class="service-tag-row">
+                  <span class="service-cat">{{ service.category }}</span>
+                  <span class="popular-badge" *ngIf="service.isPopular">🔥 Popular</span>
+                </div>
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.description }}</p>
+                <div class="service-perks" *ngIf="service.turnaround">
+                  <span>⏱️ Est. turnaround: <strong>{{ service.turnaround }}</strong></span>
+                </div>
+              </div>
+
+              <div class="service-pricing-action">
+                <div class="price-box">
+                  <span class="label">Starting from</span>
+                  <span class="amount">R {{ service.startingPrice | number:'1.0-0' }}</span>
+                </div>
+                <button class="btn-quote" (click)="openWhatsApp(p.whatsapp || p.phone)">
+                  Request Quote
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #defaultServices>
+            <div class="empty-tab-state">
+              <div class="empty-icon">🛠️</div>
+              <h3>{{ p.services }} Services Available</h3>
+              <p>Contact {{ p.name }} directly for custom quotes and service availability.</p>
+              <button class="btn-whatsapp" (click)="openWhatsApp(p.whatsapp || p.phone)">
+                Contact for Custom Quote
+              </button>
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Tab 3: Products Catalog -->
+        <section class="tab-content" *ngIf="activeTab === 'products'">
+          <div class="section-intro">
+            <div>
+              <h2>Available Products &amp; Goods</h2>
+              <p>Items in stock and available for collection or delivery.</p>
+            </div>
+          </div>
+
+          <div class="products-grid" *ngIf="p.productsOffered?.length; else defaultProducts">
+            <div class="storefront-product-card" *ngFor="let product of p.productsOffered">
+              <div class="product-img-wrapper">
+                <img [src]="product.imageUrl || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&auto=format&fit=crop&q=80'" [alt]="product.title" />
+                <span class="in-stock-pill">{{ product.inStock ? '✓ In Stock' : 'Pre-order' }}</span>
+              </div>
+              <div class="product-info-body">
+                <span class="product-category">{{ product.category }}</span>
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.description }}</p>
+                <div class="product-footer">
+                  <div class="product-price">R {{ product.price | number:'1.2-2' }}</div>
+                  <button class="btn-inquire-product" (click)="openWhatsApp(p.whatsapp || p.phone)">
+                    Inquire
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #defaultProducts>
+            <div class="empty-tab-state">
+              <div class="empty-icon">📦</div>
+              <h3>{{ p.products }} Products in Store</h3>
+              <p>Inquire directly with {{ p.name }} to view the full product catalogue.</p>
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Tab 4: Ratings & Reviews -->
+        <section class="tab-content" *ngIf="activeTab === 'reviews'">
+          <div class="section-intro">
+            <div>
+              <h2>Client Ratings &amp; Reviews</h2>
+              <p>Verified feedback from community buyers and clients.</p>
+            </div>
+            <button class="btn-primary" (click)="openReviewModal()">
+              + Write a Review
+            </button>
+          </div>
+
+          <!-- Rating Overview Breakdown -->
+          <div class="reviews-overview-box">
+            <div class="score-column">
+              <span class="huge-score">{{ averageRating }}</span>
+              <div class="star-display">★★★★★</div>
+              <span class="based-on">Based on {{ ratingCount }} verified reviews</span>
+            </div>
+
+            <div class="bars-column">
+              <div class="rating-bar-row" *ngFor="let star of [5, 4, 3, 2, 1]">
+                <span class="bar-label">{{ star }} ★</span>
+                <div class="progress-track">
+                  <div class="progress-fill" [style.width.%]="getRatingPercentageByStar(star)"></div>
+                </div>
+                <span class="bar-count">{{ getRatingCountByStar(star) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews List -->
+          <div class="reviews-list" *ngIf="p.reviews?.length; else noReviews">
+            <article class="review-item" *ngFor="let review of p.reviews">
+              <div class="review-header">
+                <div class="reviewer-meta">
+                  <div class="reviewer-avatar">{{ review.author.charAt(0) }}</div>
+                  <div>
+                    <h4>{{ review.author }}</h4>
+                    <span class="review-date">{{ review.createdAt | date:'mediumDate' }}</span>
+                  </div>
+                </div>
+
+                <div class="review-stars">
+                  <span class="stars-gold">
+                    {{ '★'.repeat(review.rating) }}
+                  </span>
+                  <span class="verified-buyer-tag">✓ Verified Client</span>
+                </div>
+              </div>
+
+              <p class="review-comment">{{ review.comment }}</p>
+            </article>
+          </div>
+
+          <ng-template #noReviews>
+            <div class="empty-tab-state">
+              <div class="empty-icon">⭐</div>
+              <h3>No reviews yet</h3>
+              <p>Be the first to review {{ p.name }} and share your experience!</p>
+              <button class="btn-primary" (click)="openReviewModal()">Write First Review</button>
+            </div>
+          </ng-template>
+        </section>
+
+        <!-- Tab 5: About & Details -->
+        <section class="tab-content" *ngIf="activeTab === 'about'">
+          <div class="about-card">
+            <h2>About {{ p.name }}</h2>
+            <p class="bio-full">{{ p.bio }}</p>
+
+            <h3 class="subsection-title">Specialties &amp; Trades</h3>
+            <div class="specialties-wrap">
+              <span class="specialty-chip" *ngFor="let spec of p.specialties">
+                ✓ {{ spec }}
+              </span>
+            </div>
+
+            <div class="about-details-grid">
+              <div class="detail-box" *ngIf="p.openingHours">
+                <h4>🕒 Business Hours</h4>
+                <p>{{ p.openingHours }}</p>
+              </div>
+              <div class="detail-box" *ngIf="p.location">
+                <h4>📍 Operating Location</h4>
+                <p>{{ p.location }}</p>
+              </div>
+              <div class="detail-box" *ngIf="p.establishedYear">
+                <h4>🏛️ Established</h4>
+                <p>Operating since {{ p.establishedYear }}</p>
+              </div>
+              <div class="detail-box" *ngIf="p.responseRate">
+                <h4>⚡ Typical Response</h4>
+                <p>{{ p.responseRate }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Right / Sidebar Column -->
+      <aside class="profile-sidebar">
+
+        <!-- Tiered Trust & Verification Box -->
+        <div class="sidebar-box verification-box">
+          <div class="box-header">
+            <h3>🛡️ Trust &amp; Verification</h3>
+            <span class="shield-badge">{{ p.verification?.length || 0 }}/4 Verified</span>
+          </div>
+
+          <p class="verification-lead">
+            {{ p.name }} has passed the following platform verification checks:
+          </p>
+
+          <div class="tier-list">
+            <div class="tier-item" *ngFor="let tier of p.verification">
+              <div class="tier-icon">{{ getVerificationInfo(tier).icon }}</div>
+              <div class="tier-info">
+                <strong>{{ getVerificationInfo(tier).label }}</strong>
+                <small>{{ getVerificationInfo(tier).desc }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact & Business Hours Box -->
+        <div class="sidebar-box contact-box">
+          <h3>Contact &amp; Location</h3>
+          
+          <div class="contact-entry">
+            <span class="icon">📍</span>
+            <div>
+              <small>Location</small>
+              <strong>{{ p.location }}</strong>
+            </div>
+          </div>
+
+          <div class="contact-entry" *ngIf="p.openingHours">
+            <span class="icon">🕒</span>
+            <div>
+              <small>Hours</small>
+              <strong>{{ p.openingHours }}</strong>
+            </div>
+          </div>
+
+          <div class="contact-entry" *ngIf="p.phone">
+            <span class="icon">📞</span>
+            <div>
+              <small>Phone / Call</small>
+              <strong>{{ p.phone }}</strong>
+            </div>
+          </div>
+
+          <div class="contact-entry" *ngIf="p.email">
+            <span class="icon">✉️</span>
+            <div>
+              <small>Email</small>
+              <strong>{{ p.email }}</strong>
+            </div>
+          </div>
+
+          <div class="sidebar-actions">
+            <button class="btn-whatsapp full-w" (click)="openWhatsApp(p.whatsapp || p.phone)">
+              💬 Message on WhatsApp
+            </button>
+          </div>
+        </div>
+
+        <!-- Safety Assurance Card -->
+        <div class="sidebar-box safety-box">
+          <h4>Kasiverse Trust Promise</h4>
+          <p>
+            All verified providers on Kasiverse are identity-checked with active local phone numbers. Never pay unverified upfront deposits.
+          </p>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div class="modal-overlay" *ngIf="showReviewModal" (click)="closeReviewModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Write a Review for {{ p.name }}</h3>
+        <button class="close-btn" (click)="closeReviewModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" *ngIf="!reviewSuccessMessage">
+        <div class="form-group">
+          <label>Your Rating</label>
+          <div class="star-picker">
+            <button
+              type="button"
+              *ngFor="let s of [1, 2, 3, 4, 5]"
+              class="star-picker-btn"
+              [class.active]="reviewRating >= s"
+              (click)="setRating(s)"
+            >
+              ★
+            </button>
+            <span class="star-rating-text">{{ reviewRating }} out of 5 stars</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reviewAuthor">Your Name</label>
+          <input
+            id="reviewAuthor"
+            type="text"
+            placeholder="e.g. Sipho K. or Anonymous"
+            [(ngModel)]="reviewAuthor"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="reviewComment">Your Feedback / Review *</label>
+          <textarea
+            id="reviewComment"
+            rows="4"
+            placeholder="Describe the quality of work, punctuality, and overall communication..."
+            [(ngModel)]="reviewComment"
+          ></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-outline" (click)="closeReviewModal()">Cancel</button>
+          <button
+            class="btn-primary"
+            [disabled]="!reviewComment.trim() || reviewSubmitting"
+            (click)="submitReview()"
+          >
+            {{ reviewSubmitting ? 'Publishing...' : 'Submit Review' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-success" *ngIf="reviewSuccessMessage">
+        <div class="success-icon">✓</div>
+        <h4>Review Submitted!</h4>
+        <p>{{ reviewSuccessMessage }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Portfolio Lightbox Modal -->
+  <div class="modal-overlay" *ngIf="selectedPortfolioItem" (click)="selectedPortfolioItem = undefined">
+    <div class="lightbox-card" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="selectedPortfolioItem = undefined">&times;</button>
+      <div class="lightbox-img-box">
+        <img [src]="selectedPortfolioItem.imageUrl || 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&auto=format&fit=crop&q=80'" [alt]="selectedPortfolioItem.title" />
+      </div>
+      <div class="lightbox-content">
+        <span class="portfolio-category-pill">{{ selectedPortfolioItem.category }}</span>
+        <h2>{{ selectedPortfolioItem.title }}</h2>
+        <p class="date" *ngIf="selectedPortfolioItem.completedDate">Completed: {{ selectedPortfolioItem.completedDate }}</p>
+        <p class="desc">{{ selectedPortfolioItem.description }}</p>
+        <div class="client-quote" *ngIf="selectedPortfolioItem.clientFeedback">
+          <strong>Client Feedback:</strong>
+          <em>“{{ selectedPortfolioItem.clientFeedback }}”</em>
+        </div>
+        <button class="btn-whatsapp" (click)="openWhatsApp(p.whatsapp || p.phone)">
+          Inquire About Similar Work
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+

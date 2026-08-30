@@ -1,0 +1,198 @@
+<div class="directory-page-wrapper">
+
+  <!-- Directory Hero -->
+  <header class="directory-hero">
+    <div class="hero-inner">
+      <div class="hero-badge">TRUSTED KASI ECOSYSTEM</div>
+      <h1>Discover Verified People &amp; Businesses</h1>
+      <p>
+        Explore verified artisans, local professionals, workshops, and neighbourhood storefronts in your community.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="directory-search-bar">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search by provider name, business, skill (e.g. Carpentry, Solar, Catering, Auto), or township..."
+          [(ngModel)]="query"
+        />
+        <button *ngIf="query" class="clear-btn" (click)="query = ''" title="Clear">
+          &times;
+        </button>
+      </div>
+
+      <!-- Segment Toggle -->
+      <div class="segment-toggle">
+        <button
+          class="seg-btn"
+          [class.active]="kind === 'ALL'"
+          (click)="kind = 'ALL'"
+        >
+          <span>All Entities</span>
+          <span class="count">{{ countAll }}</span>
+        </button>
+
+        <button
+          class="seg-btn"
+          [class.active]="kind === 'INDIVIDUAL'"
+          (click)="kind = 'INDIVIDUAL'"
+        >
+          <span>🛠️ Service Providers &amp; Artisans</span>
+          <span class="count">{{ countIndividual }}</span>
+        </button>
+
+        <button
+          class="seg-btn"
+          [class.active]="kind === 'BUSINESS'"
+          (click)="kind = 'BUSINESS'"
+        >
+          <span>🏬 Local Businesses &amp; Storefronts</span>
+          <span class="count">{{ countBusiness }}</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="directory-content">
+
+    <!-- Filter & Sort Toolbar -->
+    <div class="directory-toolbar">
+      <div class="toolbar-left">
+        <span class="results-label">
+          Showing <strong>{{ results.length }}</strong> {{ kind === 'BUSINESS' ? 'businesses' : kind === 'INDIVIDUAL' ? 'service providers' : 'entities' }}
+          <span *ngIf="query"> for "<em>{{ query }}</em>"</span>
+        </span>
+
+        <!-- Verified Only Toggle -->
+        <label class="checkbox-filter">
+          <input type="checkbox" [(ngModel)]="verifiedOnly" />
+          <span>🛡️ Verified only</span>
+        </label>
+      </div>
+
+      <div class="toolbar-right">
+        <!-- Sort Control -->
+        <div class="sort-box">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect" [(ngModel)]="sortBy">
+            <option value="rating">Highest Rated ★</option>
+            <option value="reviews">Most Reviews</option>
+            <option value="name">Alphabetical (A–Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specialty Filter Chips Bar -->
+    <div class="specialties-scroll" *ngIf="allCategories.length > 2">
+      <button
+        *ngFor="let cat of allCategories"
+        class="filter-chip"
+        [class.active]="selectedSpecialty === cat"
+        (click)="selectedSpecialty = cat"
+      >
+        {{ cat }}
+      </button>
+    </div>
+
+    <!-- Provider Cards Grid -->
+    <div class="directory-grid" *ngIf="results.length > 0; else noResults">
+      <article
+        class="profile-card"
+        *ngFor="let profile of results"
+        [routerLink]="['/profile', profile.slug]"
+      >
+        <!-- Cover Banner Header -->
+        <div class="card-cover" [style.background-color]="profile.coverColor">
+          <img *ngIf="profile.coverImage" [src]="profile.coverImage" [alt]="profile.name" class="card-cover-img" />
+          <div class="cover-shade"></div>
+
+          <span class="entity-badge" [class.business]="profile.kind === 'BUSINESS'">
+            {{ profile.kind === 'BUSINESS' ? '🏬 BUSINESS STOREFRONT' : '🛠️ SERVICE PROVIDER' }}
+          </span>
+
+          <div class="card-avatar-box">
+            <img [src]="profile.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'" [alt]="profile.name" />
+          </div>
+        </div>
+
+        <!-- Card Body Content -->
+        <div class="card-body">
+          <div class="location-line">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>{{ profile.location }}</span>
+          </div>
+
+          <h2 class="card-title">{{ profile.name }}</h2>
+          <p class="card-headline">{{ profile.headline }}</p>
+
+          <!-- Specialties Chips -->
+          <div class="specialties-chips">
+            <span class="spec-tag" *ngFor="let spec of profile.specialties | slice:0:3">
+              {{ spec }}
+            </span>
+            <span class="more-tag" *ngIf="profile.specialties.length > 3">
+              +{{ profile.specialties.length - 3 }} more
+            </span>
+          </div>
+
+          <!-- Trust Badges Row -->
+          <div class="verification-badges-row">
+            <span
+              class="v-badge"
+              *ngFor="let tier of profile.verification | slice:0:3"
+              [title]="getVerificationBadgeLabel(tier)"
+            >
+              ✓ {{ getVerificationBadgeLabel(tier) }}
+            </span>
+          </div>
+
+          <!-- Card Footer -->
+          <div class="card-footer">
+            <div class="footer-rating">
+              <span class="star-gold">★</span>
+              <strong>{{ rating(profile) }}</strong>
+              <small>({{ profile.reviews?.length || 0 }})</small>
+            </div>
+
+            <div class="footer-offerings">
+              <span *ngIf="profile.portfolio?.length">{{ profile.portfolio.length }} Works</span>
+              <span class="bullet" *ngIf="profile.portfolio?.length && profile.services">•</span>
+              <span *ngIf="profile.services">{{ profile.services }} Services</span>
+            </div>
+
+            <div class="view-store-link">
+              <span>{{ profile.kind === 'BUSINESS' ? 'Visit Store' : 'View Profile' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- Empty Results State -->
+    <ng-template #noResults>
+      <div class="empty-directory-state">
+        <div class="empty-icon">🔍</div>
+        <h2>No profiles or businesses matched your search</h2>
+        <p>Try adjusting your search query, clearing specialty filters, or resetting toggles.</p>
+        <button class="btn-clear" (click)="clearFilters()">
+          Clear All Filters
+        </button>
+      </div>
+    </ng-template>
+
+  </main>
+</div>
+

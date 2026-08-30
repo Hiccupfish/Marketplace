@@ -1,0 +1,71 @@
+<section class="featured-providers">
+  <div class="featured-providers__header">
+    <div>
+      <span class="featured-providers__eyebrow">COMMUNITY EXPERTS &amp; STOREFRONTS</span>
+      <h2 class="featured-providers__title">Featured Artisans &amp; Local Businesses</h2>
+      <p class="featured-providers__subtitle">
+        Hire vetted individual specialists or explore established township businesses with verified portfolios.
+      </p>
+    </div>
+
+    <a routerLink="/providers" class="featured-providers__view-all">
+      <span>Explore All Directory</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="featured-providers__grid">
+    <article
+      class="provider-card"
+      *ngFor="let profile of featuredProviders"
+      [routerLink]="['/profile', profile.slug]"
+    >
+      <div class="provider-card__cover" [style.background-color]="profile.coverColor">
+        <img *ngIf="profile.coverImage" [src]="profile.coverImage" [alt]="profile.name" class="cover-img" />
+        <div class="cover-overlay"></div>
+        <span class="kind-tag" [class.business]="profile.kind === 'BUSINESS'">
+          {{ profile.kind === 'BUSINESS' ? '🏬 BUSINESS' : '🛠️ PRO' }}
+        </span>
+        <div class="avatar-box">
+          <img [src]="profile.avatar" [alt]="profile.name" />
+        </div>
+      </div>
+
+      <div class="provider-card__body">
+        <div class="loc-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>{{ profile.location }}</span>
+        </div>
+
+        <h3 class="name">{{ profile.name }}</h3>
+        <p class="headline">{{ profile.headline }}</p>
+
+        <div class="chips">
+          <span class="chip" *ngFor="let spec of profile.specialties | slice:0:2">
+            {{ spec }}
+          </span>
+          <span class="v-badge" *ngIf="profile.verification?.length">
+            ✓ Verified
+          </span>
+        </div>
+
+        <footer class="provider-card__footer">
+          <div class="rating">
+            <span class="star">★</span>
+            <strong>{{ rating(profile) }}</strong>
+            <small>({{ profile.reviews?.length || 0 }})</small>
+          </div>
+          <span class="action-text">
+            {{ profile.kind === 'BUSINESS' ? 'View Store' : 'View Profile' }} &rarr;
+          </span>
+        </footer>
+      </div>
+    </article>
+  </div>
+</section>
