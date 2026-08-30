@@ -1,6 +1,9 @@
 @import "../../../../../assets/styles/variables";
 
 .delivery-tracking-page {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
   .page-header {
     margin-bottom: 2rem;
   }
@@ -43,10 +46,10 @@
 
     .delivery-item {
       border: 1px solid $border-on-light;
-      border-radius: 8px;
-      padding: 1.5rem;
-      background-color: white;
-      box-shadow: $shadow-sm;
+      border-radius: 16px;
+      padding: 1.6rem;
+      background-color: $surface-card;
+      box-shadow: $shadow-md;
 
       .item-info {
         margin-bottom: 1rem;

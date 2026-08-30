@@ -9,7 +9,7 @@ $gold:    #c99a3a;
 $green:   #174a35;
 $green-2: #0e3326;
 $red:     #a52b24;
-$orange:  #d66b2d;
+$orange:  #263a69;
 $indigo:  #263a69;
 $white:   #fffdf8;
 $muted:   #6f6b61;
@@ -42,7 +42,7 @@ $text-on-light-muted:  $muted;
 
 // Accent
 $accent-primary:       $gold;
-$eyebrow-color:        $red;       // section labels, step numbers — NOT gold
+$eyebrow-color:        $gold;       // section labels, step numbers — NOT gold
 
 // Backward-compatible hover/soft variants
 $accent-primary-hover:  #b7862f;
@@ -50,18 +50,18 @@ $accent-primary-soft:   $sand;
 
 // Two-stop gradients, not flat colors — match reference file's .vendor and .export classes
 $gradient-vendor: linear-gradient(135deg, #193e2e, #386b51);
-$gradient-export: linear-gradient(135deg, #9c2c24, #d77a36);
+$gradient-export: linear-gradient(135deg, $green, $indigo);
 
 // Product-art tile backgrounds — distinct from category tag chips
 $product-tint-1: #e7c37d;
 $product-tint-2: #9bb6a1;
-$product-tint-3: #d9a28c;
+$product-tint-3: #b6d0bd;
 $product-tint-4: #aab8d6;
 
 // Category tag chips — cycle through 4 tints
-$tag-tint-1: $gold;       // Featured
-$tag-tint-2: $green;      // New
-$tag-tint-3: $red;        // Bestseller
+$tag-tint-1: $green;      // Featured
+$tag-tint-2: $indigo;     // New
+$tag-tint-3: $gold;       // Bestseller
 $tag-tint-4: $indigo;     // Artisan
 
 // Reserve $indigo for future badge/section

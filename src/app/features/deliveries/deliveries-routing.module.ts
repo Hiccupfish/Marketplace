@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DeliveryListComponent } from './delivery-list.component';
 
 const routes: Routes = [
-  // { path: '', component: DeliveryJobListComponent },
-  // { path: ':id', component: DeliveryJobDetailComponent },
+  { path: '', component: DeliveryListComponent },
 ];
 
 @NgModule({

@@ -1,17 +1,22 @@
 @import "../../../../../assets/styles/variables";
 
+:host { display: block; }
+
 .featured-listings {
-  background: $surface-card;
-  padding: 4rem 1.5rem;
+  background: transparent;
+  padding: 0;
 }
 
 .featured-listings__container {
-  max-width: 1080px;
-  margin: 0 auto;
+  max-width: none;
+  // width: 100%;
+  // width: min(1380px, calc(100% - 3rem)); margin: auto;
+  // padding-left: 56px;
+  // padding-right: 56px;
 }
 
 .featured-listings__header {
-  max-width: 720px;
+  max-width: 800px;
   margin-bottom: 2rem;
 }
 
@@ -26,7 +31,7 @@
 .featured-listings__header h2 {
   margin: 0;
   color: $text-on-light;
-  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -.03em;
 }
 
@@ -39,8 +44,8 @@
 
 .featured-listings__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .error-banner {
@@ -93,26 +98,26 @@
 }
 
 .skeleton-grid {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .skeleton-card {
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   background: $surface-card;
   border: 1px solid $border-on-light;
 }
 
 .skeleton-image {
-  height: 180px;
+  height: 155px;
   background: linear-gradient(90deg, $accent-primary-soft 25%, $border-on-light 50%, $accent-primary-soft 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
 .skeleton-body {
-  padding: 1rem;
+  padding: 1rem 1.15rem;
 }
 
 .skeleton-line {
@@ -143,14 +148,16 @@
   100% { background-position: -200% 0; }
 }
 
-@media (max-width: 768px) {
-
-  .featured-listings {
-    padding: 2.5rem 1rem;
+@media (max-width: 992px) {
+  .featured-listings__grid,
+  .skeleton-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .featured-listings__grid {
+@media (max-width: 600px) {
+  .featured-listings__grid,
+  .skeleton-grid {
     grid-template-columns: 1fr;
   }
-
 }

@@ -1,0 +1,5 @@
+# Keep source and generated stylesheet files consistent across platforms.
+*.scss text eol=lf
+*.css text eol=lf
+*.ts text eol=lf
+*.html text eol=lf

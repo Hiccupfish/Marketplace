@@ -9,45 +9,36 @@
 
 /* Content wrapper */
 .home-page__content {
-  max-width: 100%;
-  margin: 0;
-  padding: 1.5rem;
+  // width: min(1380px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 2rem 0 5rem;
 }
 
 /* Section spacing */
 .home-page__section {
-  margin-top: 4.5rem;
-  padding-top: 2.5rem;
+  margin-top: 5rem;
+  padding-top: 4rem;
   border-top: 1px solid $border-on-light;
+  padding-left: 56px;
+  padding-right: 56px;
 
   &:first-child {
-    margin-top: 3rem;
+    margin-top: 0;
     padding-top: 0;
     border-top: none;
   }
 }
 
 /* Section headings */
-.home-page__section h2 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: -.02em;
-  margin-bottom: 1.5rem;
-  color: $text-on-light;
-  border-left: 4px solid $accent-primary;
-  padding-left: .8rem;
-}
-
 @media (max-width: 768px) {
   .home-page__content {
-    padding: 1rem;
+    width: min(100% - 2rem, 1380px);
+    padding: 1rem 0 3rem;
   }
+
 
   .home-page__section {
     margin-top: 3rem;
   }
 
-  .home-page__section h2 {
-    font-size: 1.35rem;
-  }
 }

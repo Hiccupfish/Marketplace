@@ -1,0 +1,16 @@
+<section class="deliveries-page">
+  <header class="deliveries-page__hero">
+    <p>DELIVERY ON KASIVERSE</p>
+    <h1>Move what matters, locally.</h1>
+    <span>Compare trusted delivery options and keep track of every order along the way.</span>
+  </header>
+
+  <div class="deliveries-page__content">
+    <div class="deliveries-page__heading"><div><p>AVAILABLE DELIVERY</p><h2>Find a delivery option near you</h2></div><button type="button">Track a delivery</button></div>
+    <div class="delivery-grid">
+      <article class="delivery-card" *ngFor="let option of deliveryOptions">
+        <span class="delivery-card__icon">↗</span><p>{{ option.area }}</p><h3>{{ option.time }}</h3><span>{{ option.detail }}</span><a href="#">View delivery options <b>→</b></a>
+      </article>
+    </div>
+  </div>
+</section>

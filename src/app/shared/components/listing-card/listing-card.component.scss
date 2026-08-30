@@ -13,24 +13,22 @@
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: $shadow-sm;
   transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
   height: 100%;
   box-sizing: border-box;
 
   &:hover {
-    transform: translateY(-4px);
-    border-color: rgba($green, 0.35);
-    box-shadow: $shadow-md, 0 0 20px rgba($green, 0.15);
+    transform: translateY(-5px);
+    border-color: rgba($gold, 0.65);
+    box-shadow: $shadow-lg;
 
     .card-image-wrapper img {
       transform: scale(1.05);
     }
 
-    .view-link {
-      color: $accent-primary;
-      svg {
-        transform: translateX(4px);
-      }
+    .view-link svg {
+      transform: translateX(4px);
     }
   }
 }
@@ -39,7 +37,7 @@
 .card-image-wrapper {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: 155px;
   overflow: hidden;
   background-color: $sand;
 
@@ -60,22 +58,22 @@
 
 .category-pill {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: $text-on-light;
-  box-shadow: $shadow-sm;
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: $text-on-dark;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .verified-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -95,7 +93,7 @@
 
 /* Card Body */
 .card-content {
-  padding: 1.25rem;
+  padding: 1rem 1.15rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -104,8 +102,8 @@
 .card-header {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 0.6rem;
+  gap: 0.25rem;
+  margin-bottom: 0.45rem;
 }
 
 .card-title {
@@ -113,7 +111,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   color: $text-on-light;
-  line-height: 1.35;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -121,17 +119,17 @@
 }
 
 .card-price {
-  font-size: 1.2rem;
+  font-size: 1.18rem;
   font-weight: 700;
   color: $accent-primary;
   letter-spacing: -0.2px;
 }
 
 .card-description {
-  margin: 0 0 1rem 0;
-  font-size: 0.85rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 0.835rem;
   color: $text-on-light-muted;
-  line-height: 1.45;
+  line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -143,9 +141,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.75rem;
+  padding-top: 0.6rem;
   border-top: 1px solid $border-on-light;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: $text-on-light-muted;
 }
 
@@ -175,7 +173,7 @@
 }
 
 .card-action-bar {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   display: flex;
   justify-content: flex-end;
 }
@@ -203,7 +201,7 @@
   .card-image-wrapper {
     width: 220px;
     height: 100%;
-    min-height: 160px;
+    min-height: 155px;
     flex-shrink: 0;
   }
 
@@ -216,7 +214,7 @@
 
     .card-image-wrapper {
       width: 100%;
-      height: 180px;
+      height: 160px;
     }
   }
 }

@@ -4,16 +4,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  min-height: 76px;
+  padding: 14px clamp(20px, 4vw, 56px);
   background: $surface-page;
   border-bottom: 1px solid $border-on-light;
   gap: 20px;
 }
 
 .navbar__brand {
-  font-size: 20px;
-  font-weight: 700;
-  color: $accent-primary;
+  font-size: 23px;
+  font-weight: 800;
+  color: rgb(30, 94, 62);
   cursor: pointer;
 }
 
@@ -26,7 +27,7 @@
 .navbar__search input {
   width: 100%;
   max-width: 400px;
-  padding: 8px 12px;
+  padding: 11px 14px;
   border: 1px solid $border-on-light;
   border-radius: 8px;
   outline: none;
@@ -36,13 +37,14 @@
 
 .navbar__links {
   display: flex;
-  gap: 15px;
+  gap: 22px;
 }
 
 .navbar__links a {
   text-decoration: none;
-  color: $text-on-light-muted;
-  font-weight: 500;
+  color: rgb(30, 94, 62);
+  font-size: .96rem;
+  font-weight: 650;
 }
 
 .navbar__links a:hover {
@@ -56,7 +58,7 @@
 }
 
 .navbar__auth button {
-  padding: 6px 12px;
+  padding: 9px 15px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -64,13 +66,19 @@
 
 .navbar__auth button:first-child {
   background: transparent;
-  border: 1px solid $accent-primary;
-  color: $accent-primary;
+  border: 1px solid rgb(30, 94, 62);
+  color: rgb(30, 94, 62);
+  font-weight: 800;
+
+    &:hover {
+    background: $accent-primary-hover;
+  }
 }
 
 .navbar__auth button:last-child {
-  background: $accent-primary;
-  color: $text-on-light;
+  background: rgb(30, 94, 62);
+  color: white;
+  font-weight: 800;
 
   &:hover {
     background: $accent-primary-hover;

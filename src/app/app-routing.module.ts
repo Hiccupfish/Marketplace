@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './features/home/pages/home/home.component';
 
 export const appRoutes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule)
+    pathMatch: 'full',
+    redirectTo: 'home'
+  },
+  {
+    path: 'home',
+    component: HomeComponent
   },
   {
     path: 'products',
@@ -52,7 +58,7 @@ export const appRoutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: ''
+    redirectTo: 'home'
   }
 ];
 

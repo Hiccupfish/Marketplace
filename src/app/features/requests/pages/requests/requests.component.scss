@@ -22,6 +22,10 @@
   justify-content: space-between;
   margin-bottom: 2rem;
   gap: 1rem;
+  padding: clamp(1.4rem, 3vw, 2.3rem);
+  border-radius: 20px;
+  background: linear-gradient(120deg, $green-2, $green);
+  color: $text-on-dark;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -33,14 +37,12 @@
     font-size: clamp(1.8rem, 4vw, 2.5rem);
     font-weight: 800;
     margin: 0 0 0.5rem;
-    background: linear-gradient(135deg, $text-on-light 0%, $text-on-light-muted 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: $text-on-dark;
   }
 
   p {
     margin: 0;
-      color: $text-on-light-muted;
+      color: #d9e0d9;
     font-size: 1.05rem;
     max-width: 600px;
   }
@@ -51,8 +53,8 @@
   align-items: center;
   gap: 8px;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, $accent-primary 0%, $indigo 100%);
-  color: $text-on-light;
+  background: $gold;
+  color: $ink;
   text-decoration: none;
   border-radius: 10px;
   font-weight: 600;

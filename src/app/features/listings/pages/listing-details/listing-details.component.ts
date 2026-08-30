@@ -118,12 +118,12 @@ export class ListingDetailsComponent implements OnInit {
 
   get categoryColor(): string {
     const cat = this.listing?.category?.toLowerCase() || '';
-    if (cat.includes('electronics')) return '#0d6efd';
-    if (cat.includes('vehicle')) return '#fd7e14';
-    if (cat.includes('property')) return '#20c997';
-    if (cat.includes('fashion')) return '#d63384';
-    if (cat.includes('home')) return '#6f42c1';
-    return '#6c757d';
+    if (cat.includes('electronics')) return '#174a35';
+    if (cat.includes('vehicle')) return '#1e5e3e';
+    if (cat.includes('property')) return '#134e38';
+    if (cat.includes('fashion')) return '#246949';
+    if (cat.includes('home')) return '#1a563b';
+    return '#174a35';
   }
 
   get fallbackImage(): string {

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DeliveriesRoutingModule } from './deliveries-routing.module';
+import { DeliveryListComponent } from './delivery-list.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [DeliveryListComponent],
   imports: [
     CommonModule,
     DeliveriesRoutingModule
