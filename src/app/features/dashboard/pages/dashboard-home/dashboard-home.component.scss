@@ -153,3 +153,127 @@
   color: $accent-primary;
   white-space: nowrap;
 }
+
+.getting-started {
+  margin-top: 2.5rem;
+
+  &__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: $text-ink;
+  }
+
+  &__subtitle {
+    font-size: 0.95rem;
+    color: $text-muted;
+    margin: 0 0 1.25rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: $surface-card;
+    border: 1px solid $border-on-light;
+    border-radius: 14px;
+    box-shadow: $shadow-sm;
+    color: $text-ink;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-2px);
+    }
+  }
+
+  &__icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  &__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    strong {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-muted;
+      line-height: 1.4;
+    }
+  }
+}
+
+.dashboard-home__section-body {
+  padding-top: 0.25rem;
+}
+
+.dashboard-home__section-empty {
+  margin: 0;
+  font-size: 0.9rem;
+  color: $text-muted;
+  line-height: 1.5;
+}
+
+.dashboard-home__discover {
+  margin-top: 2.5rem;
+
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  &-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: $surface-card;
+    border: 1px solid $border-on-light;
+    border-radius: 14px;
+    box-shadow: $shadow-sm;
+    color: $text-ink;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-2px);
+    }
+  }
+
+  &-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: $text-muted;
+      line-height: 1.4;
+    }
+  }
+}

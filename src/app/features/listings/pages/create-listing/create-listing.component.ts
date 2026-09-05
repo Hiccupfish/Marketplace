@@ -100,6 +100,11 @@ export class CreateListingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const snapshotType = this.route.snapshot.queryParamMap.get('type');
+    if (snapshotType === 'service') {
+      this.listingType = 'service';
+    }
+
     this.route.queryParams.subscribe(params => {
       const type = params['type'];
       if (type === 'service') {
@@ -343,6 +348,8 @@ export class CreateListingComponent implements OnInit {
         this.loading = false;
         if (err.status === 401) {
           this.error = 'Please log in or register before posting a service. Your form details are saved.';
+        } else if (err.status === 403) {
+          this.error = 'You must have provider capabilities to post a service. Update your profile in My Profile > Provider Settings.';
         } else {
           this.error = err.error?.message || 'Unable to create service. Please check the fields and try again.';
         }

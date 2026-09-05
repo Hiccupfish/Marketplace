@@ -338,6 +338,89 @@
         </ng-template>
       </section>
 
+      <!-- Business Profile -->
+      <section class="section-card" *ngIf="activeSection === 'business'">
+        <div class="card-header flex-between">
+          <div>
+            <h2>My Business</h2>
+            <p>Manage your business profile information.</p>
+          </div>
+          <button class="btn-primary" (click)="showBusinessForm = !showBusinessForm">
+            {{ showBusinessForm ? 'Close' : (businessProfile.id ? 'Edit Business' : 'Add Business') }}
+          </button>
+        </div>
+
+        <div class="add-item-box" *ngIf="showBusinessForm">
+          <h3>{{ businessProfile.id ? 'Edit Business Profile' : 'Register Your Business' }}</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="bizName">Business Name *</label>
+              <input id="bizName" type="text" [(ngModel)]="businessProfile.businessName" placeholder="e.g. ABC Electronics" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bizCategory">Category</label>
+              <input id="bizCategory" type="text" [(ngModel)]="businessProfile.category" placeholder="e.g. Electronics" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bizDesc">Description</label>
+            <textarea id="bizDesc" rows="3" [(ngModel)]="businessProfile.description" placeholder="Tell customers about your business..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="bizContact">Contact Number</label>
+              <input id="bizContact" type="text" [(ngModel)]="businessProfile.contactNumber" placeholder="+27 82 000 0000" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bizEmail">Business Email</label>
+              <input id="bizEmail" type="email" [(ngModel)]="businessProfile.email" placeholder="info@business.co.za" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bizAddress">Physical Address</label>
+            <input id="bizAddress" type="text" [(ngModel)]="businessProfile.physicalAddress" placeholder="e.g. 123 Main Street, Johannesburg" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="bizCity">City</label>
+              <input id="bizCity" type="text" [(ngModel)]="businessProfile.city" placeholder="e.g. Johannesburg" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bizProvince">Province</label>
+              <input id="bizProvince" type="text" [(ngModel)]="businessProfile.province" placeholder="e.g. Gauteng" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bizHours">Operating Hours</label>
+            <input id="bizHours" type="text" [(ngModel)]="businessProfile.operatingHours" placeholder="e.g. Mon-Fri 08:00-17:00" />
+          </div>
+          <div class="box-actions">
+            <button class="btn-outline" (click)="showBusinessForm = false">Cancel</button>
+            <button class="btn-primary" [disabled]="!businessProfile.businessName.trim() || isSaving" (click)="saveBusinessProfile()">
+              {{ isSaving ? 'Saving...' : (businessProfile.id ? 'Update Business' : 'Register Business') }}
+            </button>
+          </div>
+        </div>
+
+        <div class="business-summary" *ngIf="!showBusinessForm && businessProfile.businessName">
+          <div class="business-info-card">
+            <h3>{{ businessProfile.businessName }}</h3>
+            <p *ngIf="businessProfile.category">{{ businessProfile.category }}</p>
+            <p *ngIf="businessProfile.description">{{ businessProfile.description }}</p>
+            <div class="business-meta">
+              <span *ngIf="businessProfile.contactNumber">📞 {{ businessProfile.contactNumber }}</span>
+              <span *ngIf="businessProfile.email">✉️ {{ businessProfile.email }}</span>
+              <span *ngIf="businessProfile.physicalAddress">📍 {{ businessProfile.physicalAddress }}</span>
+              <span *ngIf="businessProfile.operatingHours">🕐 {{ businessProfile.operatingHours }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="empty-box" *ngIf="!showBusinessForm && !businessProfile.businessName">
+          <p>You do not have a business profile yet. Register your business to gain a commercial presence on the marketplace.</p>
+        </div>
+      </section>
+
       <!-- My Requests (Buyer) -->
       <section class="section-card" *ngIf="activeSection === 'requests'">
         <div class="card-header">

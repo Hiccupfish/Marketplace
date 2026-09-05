@@ -537,7 +537,6 @@ router.delete('/:id/offers/:offerId', authenticateToken, async (req: AuthRequest
 
     await prisma.requestOffer.delete({ where: { id: offerId } });
 
-    // Update request status and proposal count
     await prisma.request.update({
       where: { id: requestId },
       data: {
@@ -549,6 +548,250 @@ router.delete('/:id/offers/:offerId', authenticateToken, async (req: AuthRequest
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Server error withdrawing proposal' });
+  }
+});
+
+// ==========================
+// NEGOTIATIONS
+// ==========================
+
+// GET /api/requests/:id/negotiations - Get negotiations for a request
+router.get('/:id/negotiations', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const { id: requestId } = req.params;
+  const { offerId } = req.query;
+
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const request = await prisma.request.findUnique({
+      where: { id: requestId },
+      include: {
+        requester: { select: { id: true, name: true } },
+        offers: { where: offerId ? { id: String(offerId) } : undefined }
+      }
+    });
+
+    if (!request) return res.status(404).json({ message: 'Request not found' });
+
+    const filters: any = { requestId };
+    if (offerId) filters.offerId = String(offerId);
+
+    const negotiations = await prisma.negotiationMessage.findMany({
+      where: filters,
+      include: {
+        sender: { select: { id: true, name: true, profilePicture: true } },
+        requestOffer: { select: { id: true, status: true } }
+      },
+      orderBy: { createdAt: 'asc' }
+    });
+
+    res.json(negotiations);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting negotiations' });
+  }
+});
+
+// POST /api/requests/:id/negotiations - Send a negotiation message
+router.post('/:id/negotiations', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const senderId = req.user?.id;
+  const { id: requestId } = req.params;
+  const { offerId, message, messageType, offerPrice, offerDeadline, attachmentUrl } = req.body;
+
+  if (!senderId) return res.status(401).json({ message: 'Unauthenticated' });
+  if (!message || !message.trim()) {
+    return res.status(400).json({ message: 'Message is required' });
+  }
+
+  try {
+    const request = await prisma.request.findUnique({ where: { id: requestId } });
+    if (!request) return res.status(404).json({ message: 'Request not found' });
+
+    let targetOfferId = offerId;
+    if (!targetOfferId && request.status === 'ACCEPTED') {
+      const acceptedOffer = await prisma.requestOffer.findFirst({
+        where: { requestId, status: 'ACCEPTED' }
+      });
+      targetOfferId = acceptedOffer?.id;
+    }
+
+    const negotiation = await prisma.negotiationMessage.create({
+      data: {
+        requestId,
+        offerId: targetOfferId,
+        senderId,
+        message: message.trim(),
+        messageType: messageType || 'TEXT',
+        offerPrice: offerPrice ? parseFloat(offerPrice) : undefined,
+        offerDeadline: offerDeadline ? new Date(offerDeadline) : undefined,
+        attachmentUrl
+      },
+      include: {
+        sender: { select: { id: true, name: true, profilePicture: true } }
+      }
+    });
+
+    await prisma.notification.create({
+      data: {
+        userId: request.requesterId === senderId
+          ? (await prisma.requestOffer.findFirst({ where: { requestId, status: { not: 'WITHDRAWN' } } }))?.providerId || ''
+          : request.requesterId,
+        requestId,
+        type: 'MESSAGE_RECEIVED',
+        title: 'New Message',
+        message: `You have a new message on request "${request.title}".`,
+        relatedId: negotiation.id
+      }
+    });
+
+    res.status(201).json(negotiation);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error sending negotiation message' });
+  }
+});
+
+// ==========================
+// NOTIFICATIONS
+// ==========================
+
+// GET /api/requests/notifications - Get current user's notifications
+router.get('/notifications', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const notifications = await prisma.notification.findMany({
+      where: { userId },
+      include: {
+        request: { select: { id: true, title: true, status: true } }
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    });
+
+    const unreadCount = notifications.filter(n => !n.isRead).length;
+
+    res.json({ notifications, unreadCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting notifications' });
+  }
+});
+
+// PATCH /api/requests/notifications/:id/read - Mark notification as read
+router.patch('/notifications/:id/read', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const { id } = req.params;
+
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const notification = await prisma.notification.findUnique({ where: { id } });
+    if (!notification) return res.status(404).json({ message: 'Notification not found' });
+    if (notification.userId !== userId) return res.status(403).json({ message: 'Forbidden' });
+
+    const updated = await prisma.notification.update({
+      where: { id },
+      data: { isRead: true }
+    });
+
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error updating notification' });
+  }
+});
+
+// POST /api/requests/notifications/mark-all-read - Mark all notifications as read
+router.post('/notifications/mark-all-read', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    await prisma.notification.updateMany({
+      where: { userId, isRead: false },
+      data: { isRead: true }
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error updating notifications' });
+  }
+});
+
+// ==========================
+// PORTFOLIO
+// ==========================
+
+// GET /api/requests/portfolio - Get current user's portfolio items
+router.get('/portfolio', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const items = await prisma.portfolioItem.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json(items);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error getting portfolio' });
+  }
+});
+
+// POST /api/requests/portfolio - Add portfolio item
+router.post('/portfolio', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  const { title, description, imageUrl, videoUrl, category, completedAt } = req.body;
+
+  if (!title || !title.trim()) {
+    return res.status(400).json({ message: 'Title is required' });
+  }
+
+  try {
+    const item = await prisma.portfolioItem.create({
+      data: {
+        userId,
+        title: title.trim(),
+        description: description?.trim(),
+        imageUrl: imageUrl?.trim(),
+        videoUrl: videoUrl?.trim(),
+        category: category?.trim(),
+        completedAt: completedAt ? new Date(completedAt) : undefined
+      }
+    });
+
+    res.status(201).json(item);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error creating portfolio item' });
+  }
+});
+
+// DELETE /api/requests/portfolio/:id - Delete portfolio item
+router.delete('/portfolio/:id', authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user?.id;
+  const { id } = req.params;
+
+  if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  try {
+    const item = await prisma.portfolioItem.findUnique({ where: { id } });
+    if (!item) return res.status(404).json({ message: 'Portfolio item not found' });
+    if (item.userId !== userId) return res.status(403).json({ message: 'Forbidden: You do not own this item' });
+
+    await prisma.portfolioItem.delete({ where: { id } });
+    res.status(204).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error deleting portfolio item' });
   }
 });
 

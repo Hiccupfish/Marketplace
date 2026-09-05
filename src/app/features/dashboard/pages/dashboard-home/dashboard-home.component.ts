@@ -6,8 +6,8 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { RequestService } from '../../../../shared/services/request.service';
 import { DeliveryService } from '../../../../shared/services/delivery.service';
 import { MarketplaceProfileService } from '../../../../shared/services/marketplace-profile.service';
+import { UserService } from '../../../../shared/services/user.service';
 import { UserContext, UserRole } from '../../../../core/models/user.model';
-import { VerificationTier } from '../../../../shared/models/marketplace-profile.model';
 import { environment } from '../../../../../environments/environment';
 
 interface QuickAction {
@@ -25,8 +25,8 @@ interface DashboardSection {
   icon: string;
   count: number | null;
   loading: boolean;
-  roles: UserRole[];
   cta: string;
+  emptyMessage: string;
 }
 
 @Component({
@@ -39,25 +39,28 @@ export class DashboardHomeComponent implements OnInit {
   userContext: UserContext | null = null;
   accountType: 'INDIVIDUAL' | 'BUSINESS' | null = null;
 
+  hasBusiness = false;
+  initialLoading = true;
+
   quickActions: QuickAction[] = [
-    { label: 'Browse Products', route: '/products', icon: '🛍️', roles: ['BUYER'] },
-    { label: 'Browse Services', route: '/services', icon: '🛠️', roles: ['BUYER'] },
-    { label: 'Browse Providers', route: '/providers', icon: '🏢', roles: ['BUYER', 'PRODUCT_PROVIDER', 'SERVICE_PROVIDER'] },
-    { label: 'Post a Request', route: '/requests/create', icon: '📝', roles: ['BUYER', 'PRODUCT_PROVIDER', 'SERVICE_PROVIDER'] },
-    { label: 'Add Product', route: '/listings/create', icon: '➕', roles: ['PRODUCT_PROVIDER'] },
+    { label: 'Browse Products', route: '/products', icon: '🛍️', roles: [] },
+    { label: 'Browse Services', route: '/services', icon: '🛠️', roles: [] },
+    { label: 'Browse Providers', route: '/providers', icon: '🏢', roles: [] },
+    { label: 'Post a Request', route: '/requests/create', icon: '📝', roles: [] },
+    { label: 'Add Product', route: '/listings/create', icon: '➕', roles: [] },
+    { label: 'Post a Service', route: '/listings/create?type=service', icon: '🛠️', roles: [] },
+    { label: 'Add Business', route: '/dashboard/profile', icon: '🏬', roles: [] },
     { label: 'My Products', route: '/my-products', icon: '📦', roles: ['PRODUCT_PROVIDER'] },
-    { label: 'Add Service', route: '/listings/create', icon: '➕', roles: ['SERVICE_PROVIDER'] },
-    { label: 'My Services', route: '/my-services', icon: '🛠️', roles: ['SERVICE_PROVIDER'] },
+    { label: 'My Services', route: '/my-services', icon: '📦', roles: ['SERVICE_PROVIDER'] },
     { label: 'My Proposals', route: '/requests/my/proposals', icon: '💬', roles: ['PRODUCT_PROVIDER', 'SERVICE_PROVIDER'] },
     { label: 'My Deliveries', route: '/dashboard/deliveries', icon: '🚚', roles: ['PRODUCT_PROVIDER', 'SERVICE_PROVIDER', 'BUYER'] },
-    { label: 'My Business', route: '/dashboard/profile', icon: '🏬', roles: [] }
   ];
 
   get actions(): QuickAction[] {
-    if (!this.userContext) return [];
+    if (!this.userContext) return this.quickActions.slice(0, 6);
     const userRoles = this.auth.currentUser?.roles || [];
     return this.quickActions.filter(action => {
-      if (action.roles.length === 0) return this.isBusiness;
+      if (action.roles.length === 0) return true;
       return action.roles.some(role => userRoles.includes(role));
     });
   }
@@ -105,6 +108,12 @@ export class DashboardHomeComponent implements OnInit {
     return this.accountType === 'BUSINESS';
   }
 
+  get showGettingStarted(): boolean {
+    if (this.initialLoading) return false;
+    const hasActivity = this.sections.some(s => s.count && s.count > 0);
+    return !hasActivity && !this.hasBusiness;
+  }
+
   sections: DashboardSection[] = [];
 
   constructor(
@@ -112,7 +121,8 @@ export class DashboardHomeComponent implements OnInit {
     private readonly http: HttpClient,
     private readonly requestService: RequestService,
     private readonly deliveryService: DeliveryService,
-    private readonly profileService: MarketplaceProfileService
+    private readonly profileService: MarketplaceProfileService,
+    private readonly userService: UserService
   ) {
     const user = this.auth.currentUser;
     this.userName = user?.name || 'User';
@@ -125,10 +135,8 @@ export class DashboardHomeComponent implements OnInit {
   }
 
   private buildSections(): void {
-    const sections: DashboardSection[] = [];
-
-    if (this.isProductProvider) {
-      sections.push({
+    const baseSections: DashboardSection[] = [
+      {
         id: 'products',
         title: 'My Products',
         description: 'Manage your product listings, track offers, and control availability.',
@@ -136,13 +144,10 @@ export class DashboardHomeComponent implements OnInit {
         icon: '📦',
         count: null,
         loading: true,
-        roles: ['PRODUCT_PROVIDER'],
-        cta: 'View My Products'
-      });
-    }
-
-    if (this.isServiceProvider) {
-      sections.push({
+        cta: 'Add Product',
+        emptyMessage: "You haven't listed any products yet."
+      },
+      {
         id: 'services',
         title: 'My Services',
         description: 'Manage your service offerings and track customer quotes.',
@@ -150,53 +155,10 @@ export class DashboardHomeComponent implements OnInit {
         icon: '🛠️',
         count: null,
         loading: true,
-        roles: ['SERVICE_PROVIDER'],
-        cta: 'View My Services'
-      });
-    }
-
-    if (this.isBuyer) {
-      sections.push({
-        id: 'requests',
-        title: 'My Requests',
-        description: 'Track your posted requests and received proposals.',
-        route: '/requests/my',
-        icon: '📝',
-        count: null,
-        loading: true,
-        roles: ['BUYER'],
-        cta: 'View My Requests'
-      });
-    }
-
-    if (this.isProductProvider || this.isServiceProvider) {
-      sections.push({
-        id: 'proposals',
-        title: 'My Proposals',
-        description: 'View proposals you have submitted on requests.',
-        route: '/requests/my/proposals',
-        icon: '💬',
-        count: null,
-        loading: true,
-        roles: ['PRODUCT_PROVIDER', 'SERVICE_PROVIDER'],
-        cta: 'View My Proposals'
-      });
-    }
-
-    sections.push({
-      id: 'deliveries',
-      title: 'My Deliveries',
-      description: 'Track the status of items you are buying or selling.',
-      route: '/dashboard/deliveries',
-      icon: '🚚',
-      count: null,
-      loading: true,
-      roles: ['PRODUCT_PROVIDER', 'SERVICE_PROVIDER', 'BUYER'],
-      cta: 'View Deliveries'
-    });
-
-    if (this.isBusiness) {
-      sections.push({
+        cta: 'Post a Service',
+        emptyMessage: "You aren't offering any services yet."
+      },
+      {
         id: 'business',
         title: 'My Business',
         description: 'Manage your business profile, products, services, and portfolio.',
@@ -204,64 +166,80 @@ export class DashboardHomeComponent implements OnInit {
         icon: '🏬',
         count: null,
         loading: false,
-        roles: [],
-        cta: 'Manage Business'
-      });
-    }
+        cta: 'Add Business',
+        emptyMessage: "You don't have a business profile yet."
+      },
+      {
+        id: 'requests',
+        title: 'My Requests',
+        description: 'Track your posted requests and received proposals.',
+        route: '/requests/my',
+        icon: '📝',
+        count: null,
+        loading: true,
+        cta: 'Create Request',
+        emptyMessage: "You haven't created any requests yet."
+      },
+      {
+        id: 'proposals',
+        title: 'My Proposals',
+        description: 'View proposals you have submitted on requests.',
+        route: '/requests/my/proposals',
+        icon: '💬',
+        count: null,
+        loading: true,
+        cta: 'Browse Requests',
+        emptyMessage: "You haven't submitted any proposals yet."
+      },
+      {
+        id: 'deliveries',
+        title: 'My Deliveries',
+        description: 'Track the status of items you are buying or selling.',
+        route: '/dashboard/deliveries',
+        icon: '🚚',
+        count: null,
+        loading: true,
+        cta: 'View Deliveries',
+        emptyMessage: "You don't have any deliveries yet."
+      }
+    ];
 
-    sections.push({
-      id: 'verification',
-      title: 'Verification',
-      description: 'View and manage your verification status.',
-      route: '/dashboard/profile',
-      icon: '🛡️',
-      count: null,
-      loading: false,
-      roles: [],
-      cta: 'View Verification'
+    this.sections = baseSections;
+
+    this.userService.getBusinessProfile().pipe(
+      catchError(() => of(null))
+    ).subscribe(profile => {
+      this.hasBusiness = !!profile;
+      const businessSection = this.sections.find(s => s.id === 'business');
+      if (businessSection) {
+        businessSection.cta = this.hasBusiness ? 'Manage Business' : 'Add Business';
+        businessSection.emptyMessage = this.hasBusiness
+          ? 'Manage your business profile and settings.'
+          : "You don't have a business profile yet.";
+        businessSection.count = this.hasBusiness ? 1 : 0;
+        businessSection.loading = false;
+      }
     });
 
-    sections.push({
-      id: 'profile',
-      title: 'My Profile',
-      description: 'Update your personal information and account settings.',
-      route: '/dashboard/profile',
-      icon: '👤',
-      count: null,
-      loading: false,
-      roles: [],
-      cta: 'Edit Profile'
-    });
+    const product$ = this.http.get<any[]>(`${environment.apiUrl}/products/my-products`).pipe(
+      map(data => Array.isArray(data) ? data.length : 0),
+      catchError(() => of(null))
+    );
 
-    this.sections = sections;
+    const service$ = this.http.get<any>(`${environment.apiUrl}/services/my-services`).pipe(
+      map(data => Array.isArray(data) ? data.length : (data?.data?.length || 0)),
+      catchError(() => of(null))
+    );
 
-    const product$ = this.isProductProvider
-      ? this.http.get<any[]>(`${environment.apiUrl}/products/my-products`).pipe(
-          map(data => data.length),
-          catchError(() => of(null))
-        )
-      : of(null);
+    const request$ = this.requestService.getMyRequests().pipe(
+      map(data => Array.isArray(data) ? data.length : 0),
+      catchError(() => of(null))
+    );
 
-    const service$ = this.isServiceProvider
-      ? this.http.get<any>(`${environment.apiUrl}/services/my-services`).pipe(
-          map(data => Array.isArray(data) ? data.length : (data?.data?.length || 0)),
-          catchError(() => of(null))
-        )
-      : of(null);
-
-    const request$ = this.isBuyer
-      ? this.requestService.getMyRequests().pipe(
-          map(data => data.length),
-          catchError(() => of(null))
-        )
-      : of(null);
-
-    const proposal$ = (this.isProductProvider || this.isServiceProvider)
-      ? this.requestService.getMyOffers().pipe(
-          map(data => data.length),
-          catchError(() => of(null))
-        )
-      : of(null);
+    const proposal$ = this.requestService.getMyOffers().pipe(
+      map(data => Array.isArray(data) ? data.length : 0),
+      catchError(() => of(null))
+    );
 
     const delivery$ = forkJoin({
       buyer: this.deliveryService.getDeliveriesAsBuyer().pipe(catchError(() => of([]))),
@@ -279,18 +257,28 @@ export class DashboardHomeComponent implements OnInit {
       delivery: delivery$
     }).subscribe({
       next: (results) => {
-        this.sections = sections.map(section => {
-          let count = null;
-          if (section.id === 'products') count = results.product;
-          else if (section.id === 'services') count = results.service;
-          else if (section.id === 'requests') count = results.request;
-          else if (section.id === 'proposals') count = results.proposal;
-          else if (section.id === 'deliveries') count = results.delivery;
-          return { ...section, count, loading: false };
+        this.sections = this.sections.map(section => {
+          let count = results[section.id as keyof typeof results] ?? null;
+
+          if (section.id === 'products') {
+            section.cta = count && count > 0 ? 'View My Products' : 'Add Product';
+          } else if (section.id === 'services') {
+            section.cta = count && count > 0 ? 'View My Services' : 'Post a Service';
+          } else if (section.id === 'requests') {
+            section.cta = count && count > 0 ? 'View My Requests' : 'Create Request';
+          } else if (section.id === 'proposals') {
+            section.cta = count && count > 0 ? 'View My Proposals' : 'Browse Requests';
+          } else if (section.id === 'deliveries') {
+            section.cta = 'View Deliveries';
+          }
+
+          return { ...section, count: count ?? 0, loading: false };
         });
+        this.initialLoading = false;
       },
       error: () => {
-        this.sections = sections.map(section => ({ ...section, loading: false }));
+        this.sections = this.sections.map(section => ({ ...section, loading: false, count: section.count ?? 0 }));
+        this.initialLoading = false;
       }
     });
   }

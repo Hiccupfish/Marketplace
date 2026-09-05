@@ -10,8 +10,9 @@ import {
   VerificationTier
 } from '../../../../shared/models/marketplace-profile.model';
 import { MarketplaceProfileService } from '../../../../shared/services/marketplace-profile.service';
+import { UserService, BusinessProfile } from '../../../../shared/services/user.service';
 
-type ProfileSection = 'general' | 'provider-settings' | 'portfolio' | 'services' | 'products' | 'verification' | 'requests' | 'proposals' | 'orders' | 'cta';
+type ProfileSection = 'general' | 'provider-settings' | 'portfolio' | 'services' | 'products' | 'verification' | 'requests' | 'proposals' | 'orders' | 'cta' | 'business';
 
 interface ProfileNavItem {
   id: ProfileSection;
@@ -67,16 +68,34 @@ export class ProfileSettingsComponent implements OnInit {
 
   verificationSuccess = '';
 
+  businessProfile: BusinessProfile = {
+    businessName: '',
+    description: '',
+    category: '',
+    contactNumber: '',
+    email: '',
+    physicalAddress: '',
+    city: '',
+    province: '',
+    website: '',
+    operatingHours: '',
+    socialLinks: ''
+  };
+  showBusinessForm = false;
+  businessLoading = false;
+
   navItems: ProfileNavItem[] = [];
 
   constructor(
     private readonly profileService: MarketplaceProfileService,
-    public readonly auth: AuthService
+    public readonly auth: AuthService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.buildNav();
     this.loadProfile();
+    this.loadBusinessProfile();
   }
 
   get userName(): string {
@@ -95,6 +114,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.navItems = [
       { id: 'general', label: 'Personal Information', icon: '👤', show: true },
       { id: 'provider-settings', label: 'Provider Settings', icon: '🚀', show: true },
+      { id: 'business', label: 'My Business', icon: '🏬', show: isBusiness },
       { id: 'portfolio', label: 'My Portfolio', icon: '🖼️', show: isProvider },
       { id: 'services', label: 'My Services', icon: '🛠️', show: isServiceProvider },
       { id: 'products', label: 'My Products', icon: '📦', show: isProductProvider },
@@ -116,6 +136,17 @@ export class ProfileSettingsComponent implements OnInit {
     if (this.profile) {
       this.specialtiesInput = (this.profile.specialties || []).join(', ');
     }
+  }
+
+  loadBusinessProfile(): void {
+    this.userService.getBusinessProfile().subscribe({
+      next: (profile) => {
+        if (profile) {
+          this.businessProfile = { ...this.businessProfile, ...profile };
+        }
+      },
+      error: () => {}
+    });
   }
 
   saveGeneralProfile(): void {
@@ -250,9 +281,9 @@ export class ProfileSettingsComponent implements OnInit {
     setTimeout(() => (this.verificationSuccess = ''), 4000);
   }
 
-  demoRejectTier(tier: VerificationTier): void {
+  demoRejectTier(tier: VerificationTier, reason: string = 'Incomplete documentation'): void {
     if (!this.profile) return;
-    this.profileService.demoAdminRejectVerification(this.profile.id, tier, 'Document unreadable / expired');
+    this.profileService.demoAdminRejectVerification(this.profile.id, tier, reason);
     this.loadProfile();
     this.verificationSuccess = `[Demo] ${tier} verification has been rejected.`;
     setTimeout(() => (this.verificationSuccess = ''), 4000);
@@ -265,6 +296,32 @@ export class ProfileSettingsComponent implements OnInit {
     setTimeout(() => (this.saveSuccessMessage = ''), 4000);
   }
 
+  saveBusinessProfile(): void {
+    this.isSaving = true;
+    this.saveSuccessMessage = '';
+    this.saveErrorMessage = '';
+
+    const request = this.businessProfile.id
+      ? this.userService.updateBusinessProfile(this.businessProfile)
+      : this.userService.createBusinessProfile(this.businessProfile);
+
+    request.subscribe({
+      next: (profile) => {
+        this.businessProfile = { ...this.businessProfile, ...profile };
+        this.isSaving = false;
+        this.saveSuccessMessage = 'Business profile saved successfully!';
+        this.showBusinessForm = false;
+        this.auth.updateAccountType('BUSINESS').subscribe();
+        this.buildNav();
+        setTimeout(() => (this.saveSuccessMessage = ''), 4000);
+      },
+      error: () => {
+        this.isSaving = false;
+        this.saveErrorMessage = 'Could not save business profile. Please try again.';
+      }
+    });
+  }
+
   upgradeAccountType(newAccountType: 'INDIVIDUAL' | 'BUSINESS'): void {
     this.isSaving = true;
     this.saveSuccessMessage = '';
@@ -273,7 +330,12 @@ export class ProfileSettingsComponent implements OnInit {
     this.auth.updateAccountType(newAccountType).subscribe({
       next: () => {
         this.isSaving = false;
-        this.saveSuccessMessage = `Your account has been upgraded to ${newAccountType}!`;
+        if (newAccountType === 'BUSINESS') {
+          this.showBusinessForm = true;
+          this.saveSuccessMessage = 'Complete your business profile to get started.';
+        } else {
+          this.saveSuccessMessage = `Your account has been updated to ${newAccountType}!`;
+        }
         setTimeout(() => (this.saveSuccessMessage = ''), 4000);
         this.buildNav();
       },

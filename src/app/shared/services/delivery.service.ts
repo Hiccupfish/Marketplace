@@ -8,7 +8,7 @@ import { Delivery } from '../models/delivery.model';
   providedIn: 'root'
 })
 export class DeliveryService {
-  private apiUrl = `${environment.apiUrl}/delivery`;
+  private apiUrl = `${environment.apiUrl}/deliveries`;
 
   constructor(private http: HttpClient) { }
 

@@ -15,6 +15,55 @@
     </a>
   </div>
 
+  <section class="getting-started" *ngIf="showGettingStarted">
+    <h2 class="getting-started__title">Get Started</h2>
+    <p class="getting-started__subtitle">Here are a few ways to get started on Marketplace.</p>
+    <div class="getting-started__grid">
+      <a routerLink="/listings/create" class="getting-started__card">
+        <span class="getting-started__icon">📦</span>
+        <div class="getting-started__card-body">
+          <strong>Sell Something</strong>
+          <p>List a product you no longer need.</p>
+        </div>
+      </a>
+      <a routerLink="/listings/create?type=service" class="getting-started__card">
+        <span class="getting-started__icon">🛠️</span>
+        <div class="getting-started__card-body">
+          <strong>Offer a Service</strong>
+          <p>Provide your skills to the community.</p>
+        </div>
+      </a>
+      <a routerLink="/dashboard/profile" class="getting-started__card">
+        <span class="getting-started__icon">🏬</span>
+        <div class="getting-started__card-body">
+          <strong>Add a Business</strong>
+          <p>Create a business profile and showcase your offerings.</p>
+        </div>
+      </a>
+      <a routerLink="/requests/create" class="getting-started__card">
+        <span class="getting-started__icon">📝</span>
+        <div class="getting-started__card-body">
+          <strong>Create a Request</strong>
+          <p>Tell the community what you're looking for.</p>
+        </div>
+      </a>
+      <a routerLink="/products" class="getting-started__card">
+        <span class="getting-started__icon">🛍️</span>
+        <div class="getting-started__card-body">
+          <strong>Buy Something</strong>
+          <p>Browse products from people and businesses.</p>
+        </div>
+      </a>
+      <a routerLink="/providers" class="getting-started__card">
+        <span class="getting-started__icon">🏢</span>
+        <div class="getting-started__card-body">
+          <strong>Find a Provider</strong>
+          <p>Discover local businesses and service providers.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <div class="dashboard-home__sections" *ngIf="sections.length">
     <h2 class="dashboard-home__section-title">Your Marketplace</h2>
     <div class="dashboard-home__sections-grid">
@@ -30,15 +79,57 @@
             <p class="dashboard-home__section-desc">{{ section.description }}</p>
           </div>
         </div>
-        <div class="dashboard-home__section-footer">
-          <span class="dashboard-home__section-count" *ngIf="!section.loading && section.count !== null">
+
+        <div class="dashboard-home__section-body">
+          <p class="dashboard-home__section-empty" *ngIf="!section.loading && (section.count === null || section.count === 0)">
+            {{ section.emptyMessage }}
+          </p>
+        </div>
+
+        <div class="dashboard-home__section-footer" *ngIf="section.loading">
+          <span class="dashboard-home__section-count dashboard-home__section-count--loading">...</span>
+        </div>
+        <div class="dashboard-home__section-footer" *ngIf="!section.loading && section.count !== null && section.count > 0">
+          <span class="dashboard-home__section-count">
             {{ section.count }} {{ section.id === 'deliveries' ? 'total' : section.id === 'products' || section.id === 'services' ? 'listings' : section.id === 'requests' ? 'requests' : section.id === 'proposals' ? 'proposals' : '' }}
           </span>
-          <span class="dashboard-home__section-count" *ngIf="!section.loading && section.count === null">—</span>
-          <span class="dashboard-home__section-count dashboard-home__section-count--loading" *ngIf="section.loading">...</span>
+          <span class="dashboard-home__section-cta">{{ section.cta }}</span>
+        </div>
+        <div class="dashboard-home__section-footer" *ngIf="!section.loading && section.count !== null && section.count === 0">
+          <span class="dashboard-home__section-count">—</span>
           <span class="dashboard-home__section-cta">{{ section.cta }}</span>
         </div>
       </a>
     </div>
   </div>
+
+  <section class="dashboard-home__discover" *ngIf="!showGettingStarted">
+    <h2 class="dashboard-home__section-title">Discover</h2>
+    <div class="dashboard-home__discover-grid">
+      <a routerLink="/providers" class="dashboard-home__discover-card">
+        <span class="dashboard-home__section-icon">🏢</span>
+        <div class="dashboard-home__discover-card-body">
+          <h3>Businesses & Providers</h3>
+          <p>Find local businesses and professionals offering products and services.</p>
+        </div>
+        <span class="dashboard-home__section-cta">Explore</span>
+      </a>
+      <a routerLink="/products" class="dashboard-home__discover-card">
+        <span class="dashboard-home__section-icon">🛍️</span>
+        <div class="dashboard-home__discover-card-body">
+          <h3>Products</h3>
+          <p>Browse products from casual sellers, providers, and businesses.</p>
+        </div>
+        <span class="dashboard-home__section-cta">Browse</span>
+      </a>
+      <a routerLink="/services" class="dashboard-home__discover-card">
+        <span class="dashboard-home__section-icon">🛠️</span>
+        <div class="dashboard-home__discover-card-body">
+          <h3>Services</h3>
+          <p>Find service providers for plumbing, electrical, catering, and more.</p>
+        </div>
+        <span class="dashboard-home__section-cta">Browse</span>
+      </a>
+    </div>
+  </section>
 </div>
