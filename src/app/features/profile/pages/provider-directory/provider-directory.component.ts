@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MarketplaceProfileService } from '../../../../shared/services/marketplace-profile.service';
 import { MarketplaceProfile, ProfileKind, VerificationTier } from '../../../../shared/models/marketplace-profile.model';
+import { AuthService } from '../../../../core/services/auth.service';
+
+type ProviderTypeFilter = 'ALL' | 'PRODUCTS' | 'SERVICES' | 'BOTH';
 
 @Component({
   selector: 'app-provider-directory',
@@ -13,10 +16,14 @@ export class ProviderDirectoryComponent implements OnInit {
   selectedSpecialty = 'ALL';
   verifiedOnly = false;
   sortBy: 'rating' | 'reviews' | 'name' = 'rating';
+  providerType: ProviderTypeFilter = 'ALL';
 
   profilesList: MarketplaceProfile[] = [];
 
-  constructor(private readonly profileService: MarketplaceProfileService) {}
+  constructor(
+    private readonly profileService: MarketplaceProfileService,
+    public readonly auth: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.profileService.profiles$.subscribe(profiles => {
@@ -44,6 +51,25 @@ export class ProviderDirectoryComponent implements OnInit {
     return this.profilesList.filter(p => p.kind === 'BUSINESS').length;
   }
 
+  get countProductProviders(): number {
+    return this.profilesList.filter(p => (p.products || 0) > 0).length;
+  }
+
+  get countServiceProviders(): number {
+    return this.profilesList.filter(p => (p.services || 0) > 0).length;
+  }
+
+  get countBoth(): number {
+    return this.profilesList.filter(p => (p.products || 0) > 0 && (p.services || 0) > 0).length;
+  }
+
+  get showBecomeProvider(): boolean {
+    const user = this.auth.currentUser;
+    if (!user) return true;
+    const hasProviderContext = user.roles.some(r => r === 'PRODUCT_PROVIDER' || r === 'SERVICE_PROVIDER');
+    return !hasProviderContext;
+  }
+
   get results(): MarketplaceProfile[] {
     const text = this.query.trim().toLowerCase();
 
@@ -62,6 +88,13 @@ export class ProviderDirectoryComponent implements OnInit {
       if (this.selectedSpecialty !== 'ALL' && !p.specialties.some(s => s.toLowerCase() === this.selectedSpecialty.toLowerCase())) {
         return false;
       }
+
+      // Provider type filter (what they provide)
+      const hasProducts = (p.products || 0) > 0;
+      const hasServices = (p.services || 0) > 0;
+      if (this.providerType === 'PRODUCTS' && !hasProducts) return false;
+      if (this.providerType === 'SERVICES' && !hasServices) return false;
+      if (this.providerType === 'BOTH' && (!hasProducts || !hasServices)) return false;
 
       // Search text (name, headline, location, bio, specialties)
       if (text) {
@@ -120,6 +153,7 @@ export class ProviderDirectoryComponent implements OnInit {
     this.selectedSpecialty = 'ALL';
     this.verifiedOnly = false;
     this.sortBy = 'rating';
+    this.providerType = 'ALL';
   }
 }
 

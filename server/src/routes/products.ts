@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
+import { requireSeller } from '../middleware/role-guards';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -14,7 +15,7 @@ router.get('/my-products', authenticateToken, async (req: AuthRequest, res: Resp
     const products = await prisma.product.findMany({
       where: { sellerId: userId },
       include: {
-        seller: { select: { id: true, name: true, profilePicture: true, location: true } },
+        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true, sellerProfile: { select: { sellerType: true } } } },
         category: true,
         offers: { include: { buyer: { select: { id: true, name: true, profilePicture: true } } }, orderBy: { createdAt: 'desc' } },
       },
@@ -48,7 +49,7 @@ router.get('/', async (req: Request, res: Response) => {
     const products = await prisma.product.findMany({
       where: filters,
       include: {
-        seller: { select: { id: true, name: true, profilePicture: true, location: true } },
+        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true, sellerProfile: { select: { sellerType: true } } } },
         category: true,
       },
       orderBy: { createdAt: 'desc' },
@@ -67,7 +68,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
-        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true, _count: { select: { reviewsReceived: true } } } },
+        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true, _count: { select: { reviewsReceived: true } }, sellerProfile: { select: { sellerType: true } } } },
         category: true,
       },
     });
@@ -79,8 +80,8 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/products - Create a new product (authenticated)
-router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
+// POST /api/products - Create a new product (authenticated sellers only)
+router.post('/', authenticateToken, requireSeller, async (req: AuthRequest, res: Response) => {
   const sellerId = req.user?.id;
   if (!sellerId) return res.status(401).json({ message: 'Unauthenticated' });
 
@@ -154,7 +155,7 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
       },
       include: {
         category: true,
-        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true } }
+        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true, sellerProfile: { select: { sellerType: true } } } }
       }
     });
     res.status(201).json(product);
@@ -252,13 +253,42 @@ router.get('/:id/offers', authenticateToken, async (req: AuthRequest, res: Respo
 
         const offers = await prisma.productOffer.findMany({
             where: { productId },
-            include: { buyer: { select: { id: true, name: true, profilePicture: true } } },
+            include: { buyer: { select: { id: true, name: true, email: true, phoneNumber: true, profilePicture: true } } },
             orderBy: { createdAt: 'desc' },
         });
         res.json(offers);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error getting offers' });
+    }
+});
+
+// PATCH /api/products/:id/offers/:offerId/status - Accept/Reject offer (owner only)
+router.patch('/:id/offers/:offerId/status', authenticateToken, async (req: AuthRequest, res: Response) => {
+    const userId = req.user?.id;
+    const { id: productId, offerId } = req.params;
+    const { status } = req.body;
+
+    try {
+        const product = await prisma.product.findUnique({ where: { id: productId } });
+        if (!product) return res.status(404).json({ message: 'Product not found' });
+        if (product.sellerId !== userId) return res.status(403).json({ message: 'Forbidden: You do not own this product' });
+
+        const offer = await prisma.productOffer.findUnique({ where: { id: offerId } });
+        if (!offer || offer.productId !== productId) {
+            return res.status(404).json({ message: 'Offer not found for this product' });
+        }
+
+        const updatedOffer = await prisma.productOffer.update({
+            where: { id: offerId },
+            data: { status: status || 'VIEWED' },
+            include: { buyer: { select: { id: true, name: true, profilePicture: true } } }
+        });
+
+        res.json(updatedOffer);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error updating offer status' });
     }
 });
 

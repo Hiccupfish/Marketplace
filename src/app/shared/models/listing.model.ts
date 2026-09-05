@@ -10,6 +10,7 @@ export interface Listing {
   images?: string[];
   rating?: number;
   isVerified?: boolean;
+  sellerType?: 'CASUAL' | 'INDEPENDENT_PROVIDER' | 'BUSINESS';
   createdAt: string;
   updatedAt: string;
 }

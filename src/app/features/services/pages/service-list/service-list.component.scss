@@ -44,14 +44,22 @@
   padding: 3rem 1.5rem 4rem;
   color: $text-on-light;
 }
-.services-page header {
+.services-page header.services-page__header {
   max-width: none;
   margin-bottom: 2rem;
   padding: clamp(1.6rem, 3vw, 2.5rem);
   border-radius: 20px;
   background: linear-gradient(120deg, $green-2, $green);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
-.services-page header h1 {
+.services-page header.services-page__header h1 {
   margin: .35rem 0 0;
   font-size: clamp(2rem, 5vw, 3rem);
   color: $text-on-dark;
@@ -61,6 +69,32 @@
   color: #f0d99d;
   font-size: .78rem;
   letter-spacing: .12em;
+}
+
+.create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.5rem;
+  background: $gold;
+  color: $ink;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px $accent-primary-soft;
+  white-space: nowrap;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px $accent-primary-soft;
+  }
 }
 .services-grid {
   gap: 1.25rem;
@@ -116,7 +150,46 @@
   margin-top: auto;
   padding-top: 1rem;
   color: $text-on-light-muted;
-  font-size: .84rem;
+  font-size: 0.84rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.service-card__provider {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $text-on-light;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  align-self: flex-start;
+
+  &:hover {
+    color: $green;
+  }
+
+  .provider-badge {
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    &.provider-badge--business {
+      background: rgba($orange, 0.12);
+      color: $orange;
+    }
+
+    &.provider-badge--individual {
+      background: rgba($green, 0.08);
+      color: $green;
+    }
+  }
+
+  .provider-name {
+    color: $text-on-light;
+  }
 }
 .state {
   padding: 1.25rem;

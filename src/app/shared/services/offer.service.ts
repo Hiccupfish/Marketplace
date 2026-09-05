@@ -29,19 +29,23 @@ export interface OfferResponse {
 
 @Injectable({ providedIn: 'root' })
 export class OfferService {
-  private readonly apiUrl = `${environment.apiUrl}/offers`;
-
   constructor(private readonly http: HttpClient) {}
 
-  createOffer(offer: Offer): Observable<OfferResponse> {
-    return this.http.post<OfferResponse>(this.apiUrl, offer);
+  createOffer(productId: number | string, offer: { buyerName: string; buyerEmail: string; buyerPhone?: string; amountZar: number; message?: string }): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/products/${productId}/offers`, {
+      price: offer.amountZar,
+      buyerName: offer.buyerName,
+      buyerEmail: offer.buyerEmail,
+      buyerPhone: offer.buyerPhone,
+      message: offer.message
+    });
   }
 
-  getOffersForListing(listingId: number | string): Observable<{ listing: Listing; offers: Offer[] }> {
-    return this.http.get<{ listing: Listing; offers: Offer[] }>(`${this.apiUrl}/listing/${listingId}`);
+  getOffersForProduct(productId: number | string): Observable<{ offers: any[] }> {
+    return this.http.get<{ offers: any[] }>(`${environment.apiUrl}/products/${productId}/offers`);
   }
 
-  updateOfferStatus(offerId: number, status: 'ACCEPTED' | 'REJECTED'): Observable<Offer> {
-    return this.http.patch<Offer>(`${this.apiUrl}/${offerId}/status`, { status });
+  updateOfferStatus(productId: number | string, offerId: number | string, status: 'ACCEPTED' | 'REJECTED'): Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/products/${productId}/offers/${offerId}/status`, { status });
   }
 }

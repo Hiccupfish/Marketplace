@@ -4,9 +4,9 @@
   <header class="directory-hero">
     <div class="hero-inner">
       <div class="hero-badge">TRUSTED KASI ECOSYSTEM</div>
-      <h1>Discover Verified People &amp; Businesses</h1>
+      <h1>Businesses &amp; Providers</h1>
       <p>
-        Explore verified artisans, local professionals, workshops, and neighbourhood storefronts in your community.
+        Explore verified businesses, independent providers, product sellers, and service professionals in your community.
       </p>
 
       <!-- Search Bar -->
@@ -26,6 +26,12 @@
         </button>
       </div>
 
+      <!-- Become a Provider CTA -->
+      <div class="become-provider-cta" *ngIf="showBecomeProvider">
+        <span>Not listed yet?</span>
+        <a routerLink="/dashboard/profile" class="btn-become-provider">Become a Provider</a>
+      </div>
+
       <!-- Segment Toggle -->
       <div class="segment-toggle">
         <button
@@ -33,17 +39,8 @@
           [class.active]="kind === 'ALL'"
           (click)="kind = 'ALL'"
         >
-          <span>All Entities</span>
+          <span>All</span>
           <span class="count">{{ countAll }}</span>
-        </button>
-
-        <button
-          class="seg-btn"
-          [class.active]="kind === 'INDIVIDUAL'"
-          (click)="kind = 'INDIVIDUAL'"
-        >
-          <span>🛠️ Service Providers &amp; Artisans</span>
-          <span class="count">{{ countIndividual }}</span>
         </button>
 
         <button
@@ -51,8 +48,17 @@
           [class.active]="kind === 'BUSINESS'"
           (click)="kind = 'BUSINESS'"
         >
-          <span>🏬 Local Businesses &amp; Storefronts</span>
+          <span>Businesses</span>
           <span class="count">{{ countBusiness }}</span>
+        </button>
+
+        <button
+          class="seg-btn"
+          [class.active]="kind === 'INDIVIDUAL'"
+          (click)="kind = 'INDIVIDUAL'"
+        >
+          <span>Independent Providers</span>
+          <span class="count">{{ countIndividual }}</span>
         </button>
       </div>
     </div>
@@ -64,7 +70,7 @@
     <div class="directory-toolbar">
       <div class="toolbar-left">
         <span class="results-label">
-          Showing <strong>{{ results.length }}</strong> {{ kind === 'BUSINESS' ? 'businesses' : kind === 'INDIVIDUAL' ? 'service providers' : 'entities' }}
+          Showing <strong>{{ results.length }}</strong> {{ kind === 'BUSINESS' ? 'businesses' : kind === 'INDIVIDUAL' ? 'providers' : 'entities' }}
           <span *ngIf="query"> for "<em>{{ query }}</em>"</span>
         </span>
 
@@ -86,6 +92,38 @@
           </select>
         </div>
       </div>
+    </div>
+
+    <!-- Provider Type Filter Chips -->
+    <div class="provider-type-chips">
+      <button
+        class="filter-chip"
+        [class.active]="providerType === 'ALL'"
+        (click)="providerType = 'ALL'"
+      >
+        All Offerings
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="providerType === 'PRODUCTS'"
+        (click)="providerType = 'PRODUCTS'"
+      >
+        🛍️ Products
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="providerType === 'SERVICES'"
+        (click)="providerType = 'SERVICES'"
+      >
+        🛠️ Services
+      </button>
+      <button
+        class="filter-chip"
+        [class.active]="providerType === 'BOTH'"
+        (click)="providerType = 'BOTH'"
+      >
+        📦 Products &amp; Services
+      </button>
     </div>
 
     <!-- Specialty Filter Chips Bar -->
@@ -113,7 +151,7 @@
           <div class="cover-shade"></div>
 
           <span class="entity-badge" [class.business]="profile.kind === 'BUSINESS'">
-            {{ profile.kind === 'BUSINESS' ? '🏬 BUSINESS STOREFRONT' : '🛠️ SERVICE PROVIDER' }}
+            {{ profile.kind === 'BUSINESS' ? '🏬 BUSINESS' : '🛠️ PROVIDER' }}
           </span>
 
           <div class="card-avatar-box">
@@ -142,6 +180,12 @@
             <span class="more-tag" *ngIf="profile.specialties.length > 3">
               +{{ profile.specialties.length - 3 }} more
             </span>
+          </div>
+
+          <!-- Offerings Badge -->
+          <div class="offerings-badges-row">
+            <span class="offering-badge" *ngIf="profile.products > 0">🛍️ {{ profile.products }} Product{{ profile.products > 1 ? 's' : '' }}</span>
+            <span class="offering-badge" *ngIf="profile.services > 0">🛠️ {{ profile.services }} Service{{ profile.services > 1 ? 's' : '' }}</span>
           </div>
 
           <!-- Trust Badges Row -->

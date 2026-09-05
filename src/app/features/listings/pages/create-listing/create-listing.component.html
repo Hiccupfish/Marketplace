@@ -10,8 +10,11 @@
         <span class="badge-dot"></span>
         <span>KASIVERSE MARKETPLACE</span>
       </div>
-      <h1 class="page-title">Create a New Listing</h1>
-      <p class="page-subtitle">
+      <h1 class="page-title">{{ listingType === 'service' ? 'Post a Service' : 'Create a New Listing' }}</h1>
+      <p class="page-subtitle" *ngIf="listingType === 'service'">
+        Offer your skills and services to customers across South Africa.
+      </p>
+      <p class="page-subtitle" *ngIf="listingType === 'product'">
         Reach thousands of buyers in your community and across South Africa. Fast, safe, and easy to sell.
       </p>
 
@@ -241,8 +244,8 @@
             </div>
           </div>
 
-          <!-- SECTION 3: Price & Location -->
-          <div class="form-card-section">
+          <!-- SECTION 3: Price & Location (Products) -->
+          <div class="form-card-section" *ngIf="listingType === 'product'">
             <div class="section-header">
               <span class="step-badge">3</span>
               <div>
@@ -306,6 +309,59 @@
                 >
                   {{ loc }}
                 </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: Service Area & Pricing (Services) -->
+          <div class="form-card-section" *ngIf="listingType === 'service'">
+            <div class="section-header">
+              <span class="step-badge">3</span>
+              <div>
+                <h2>Service Area & Pricing</h2>
+                <p>Where do you provide this service and what is your starting price?</p>
+              </div>
+            </div>
+
+            <div class="form-row-2col">
+              <!-- Starting Price -->
+              <div class="form-group">
+                <label for="startingPrice">Starting Price (ZAR) <span class="required-star">*</span></label>
+                <div class="currency-input-wrapper">
+                  <span class="currency-symbol">R</span>
+                  <input
+                    id="startingPrice"
+                    name="startingPrice"
+                    type="number"
+                    min="0"
+                    step="1"
+                    [(ngModel)]="listing.startingPrice"
+                    required
+                    class="form-control-input currency-input"
+                    placeholder="e.g. 350"
+                  />
+                </div>
+                <span class="hint-text">Your minimum charge for this service.</span>
+              </div>
+
+              <!-- Service Area -->
+              <div class="form-group">
+                <label for="serviceArea">Service Area <span class="required-star">*</span></label>
+                <div class="location-input-wrapper">
+                  <svg class="loc-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <input
+                    id="serviceArea"
+                    name="serviceArea"
+                    type="text"
+                    [(ngModel)]="listing.serviceArea"
+                    required
+                    class="form-control-input location-input"
+                    placeholder="e.g. Johannesburg, Soweto, Sandton"
+                  />
+                </div>
               </div>
             </div>
           </div>

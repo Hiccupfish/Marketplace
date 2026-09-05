@@ -71,4 +71,17 @@ export class AuthService {
       roles: Array.from(new Set([...this._currentUser.roles, context]))
     };
   }
+
+  updateAccountType(accountType: 'INDIVIDUAL' | 'BUSINESS'): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/users/me`, { accountType }).pipe(
+      tap((updatedUser: any) => {
+        if (this._currentUser) {
+          this._currentUser = {
+            ...this._currentUser,
+            accountType: updatedUser.accountType || accountType,
+          };
+        }
+      })
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
+import { requireProvider } from '../middleware/role-guards';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -13,7 +14,21 @@ router.get('/my-services', authenticateToken, async (req: AuthRequest, res: Resp
   try {
     const services = await prisma.service.findMany({
       where: { providerId: userId },
-      include: { provider: { select: { id: true, name: true, profilePicture: true, location: true } }, category: true, quotes: { include: { customer: { select: { id: true, name: true, profilePicture: true } } }, orderBy: { createdAt: 'desc' } } },
+      include: {
+        provider: {
+          select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            location: true,
+            businessProfile: { select: { id: true } },
+            providerProfile: { select: { id: true } },
+            sellerProfile: { select: { sellerType: true } },
+          }
+        },
+        category: true,
+        quotes: { include: { customer: { select: { id: true, name: true, profilePicture: true } } }, orderBy: { createdAt: 'desc' } }
+      },
       orderBy: { createdAt: 'desc' },
     });
     res.json(services);
@@ -39,7 +54,20 @@ router.get('/', async (req: Request, res: Response) => {
   try {
     const services = await prisma.service.findMany({
       where: filters,
-      include: { provider: { select: { id: true, name: true, profilePicture: true, location: true } }, category: true },
+      include: {
+        provider: {
+          select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            location: true,
+            businessProfile: { select: { id: true } },
+            providerProfile: { select: { id: true } },
+            sellerProfile: { select: { sellerType: true } },
+          }
+        },
+        category: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
     res.json(services);
@@ -53,7 +81,23 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const service = await prisma.service.findUnique({ where: { id }, include: { provider: { select: { id: true, name: true, profilePicture: true, location: true } }, category: true } });
+    const service = await prisma.service.findUnique({
+      where: { id },
+      include: {
+        provider: {
+          select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            location: true,
+            businessProfile: { select: { id: true } },
+            providerProfile: { select: { id: true } },
+            sellerProfile: { select: { sellerType: true } },
+          }
+        },
+        category: true
+      }
+    });
     if (!service) return res.status(404).json({ message: 'Service not found' });
     res.json(service);
   } catch (err) {
@@ -62,8 +106,8 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// POST /api/services - create a new service (authenticated)
-router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
+// POST /api/services - create a new service (authenticated providers only)
+router.post('/', authenticateToken, requireProvider, async (req: AuthRequest, res: Response) => {
   const providerId = req.user?.id;
   if (!providerId) return res.status(401).json({ message: 'Unauthenticated' });
 

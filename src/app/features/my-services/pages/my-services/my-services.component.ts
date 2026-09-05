@@ -57,11 +57,11 @@ export class MyServicesComponent implements OnInit {
   }
 
   createService(): void {
-    this.router.navigate(['/services/create']);
+    this.router.navigate(['/listings/create'], { queryParams: { type: 'service' } });
   }
 
   editService(id: string): void {
-    this.router.navigate(['/services/edit', id]);
+    this.router.navigate(['/listings', id]);
   }
 
   deleteService(id: string): void {

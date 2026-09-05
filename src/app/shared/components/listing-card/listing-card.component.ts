@@ -41,4 +41,24 @@ export class ListingCardComponent {
     }
     return 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=60';
   }
+
+  get sellerTypeLabel(): string {
+    const type = this.listing?.sellerType;
+    switch (type) {
+      case 'BUSINESS': return 'Business';
+      case 'INDEPENDENT_PROVIDER': return 'Independent Provider';
+      case 'CASUAL':
+      default: return 'Casual Seller';
+    }
+  }
+
+  get sellerTypeClass(): string {
+    const type = this.listing?.sellerType;
+    switch (type) {
+      case 'BUSINESS': return 'seller-type--business';
+      case 'INDEPENDENT_PROVIDER': return 'seller-type--provider';
+      case 'CASUAL':
+      default: return 'seller-type--casual';
+    }
+  }
 }

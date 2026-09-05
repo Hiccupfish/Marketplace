@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
+import { requireDriver } from '../middleware/role-guards';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -56,7 +57,7 @@ router.get('/:jobId', authenticateToken, async (req: AuthRequest, res: Response)
 });
 
 // POST /api/deliveries/:jobId/offers - Submit an offer for a delivery job (for drivers)
-router.post('/:jobId/offers', authenticateToken, async (req: AuthRequest, res: Response) => {
+router.post('/:jobId/offers', authenticateToken, requireDriver, async (req: AuthRequest, res: Response) => {
     const driverId = req.user?.id;
     if (!driverId) return res.status(401).json({ message: 'Unauthenticated' });
 

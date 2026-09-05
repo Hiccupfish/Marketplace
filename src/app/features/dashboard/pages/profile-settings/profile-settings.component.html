@@ -26,6 +26,64 @@
     <!-- Main Content -->
     <main class="profile-hub__content">
 
+      <!-- Provider Settings -->
+      <section class="section-card" *ngIf="activeSection === 'provider-settings'">
+        <div class="card-header">
+          <h2>Provider Settings</h2>
+          <p>Manage your marketplace roles and capabilities.</p>
+        </div>
+
+        <div class="provider-capabilities">
+          <div class="capability-card" [class.capability-active]="auth.hasContext('PRODUCT_PROVIDER')">
+            <div class="capability-icon">📦</div>
+            <div class="capability-info">
+              <h3>Product Provider</h3>
+              <p>List physical products for sale on the marketplace.</p>
+            </div>
+            <button
+              class="btn-primary"
+              *ngIf="!auth.hasContext('PRODUCT_PROVIDER')"
+              (click)="upgradeContext('PRODUCT_PROVIDER')"
+            >
+              Become a Product Provider
+            </button>
+            <span class="capability-status" *ngIf="auth.hasContext('PRODUCT_PROVIDER')">✓ Active</span>
+          </div>
+
+          <div class="capability-card" [class.capability-active]="auth.hasContext('SERVICE_PROVIDER')">
+            <div class="capability-icon">🛠️</div>
+            <div class="capability-info">
+              <h3>Service Provider</h3>
+              <p>Offer services like plumbing, electrical, catering, and more.</p>
+            </div>
+            <button
+              class="btn-primary"
+              *ngIf="!auth.hasContext('SERVICE_PROVIDER')"
+              (click)="upgradeContext('SERVICE_PROVIDER')"
+            >
+              Become a Service Provider
+            </button>
+            <span class="capability-status" *ngIf="auth.hasContext('SERVICE_PROVIDER')">✓ Active</span>
+          </div>
+
+          <div class="capability-card" [class.capability-active]="auth.currentUser?.accountType === 'BUSINESS'">
+            <div class="capability-icon">🏬</div>
+            <div class="capability-info">
+              <h3>Business</h3>
+              <p>Register or upgrade to a business account for commercial presence.</p>
+            </div>
+            <button
+              class="btn-primary"
+              *ngIf="auth.currentUser?.accountType !== 'BUSINESS'"
+              (click)="upgradeAccountType('BUSINESS')"
+            >
+              {{ auth.currentUser?.accountType === 'INDIVIDUAL' ? 'Upgrade to Business' : 'Register a Business' }}
+            </button>
+            <span class="capability-status" *ngIf="auth.currentUser?.accountType === 'BUSINESS'">✓ Active</span>
+          </div>
+        </div>
+      </section>
+
       <!-- Personal Information -->
       <section class="section-card" *ngIf="activeSection === 'general'">
         <div class="card-header">

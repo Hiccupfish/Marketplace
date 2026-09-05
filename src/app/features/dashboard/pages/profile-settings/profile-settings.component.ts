@@ -11,7 +11,7 @@ import {
 } from '../../../../shared/models/marketplace-profile.model';
 import { MarketplaceProfileService } from '../../../../shared/services/marketplace-profile.service';
 
-type ProfileSection = 'general' | 'portfolio' | 'services' | 'products' | 'verification' | 'requests' | 'proposals' | 'orders' | 'cta';
+type ProfileSection = 'general' | 'provider-settings' | 'portfolio' | 'services' | 'products' | 'verification' | 'requests' | 'proposals' | 'orders' | 'cta';
 
 interface ProfileNavItem {
   id: ProfileSection;
@@ -85,13 +85,16 @@ export class ProfileSettingsComponent implements OnInit {
 
   private buildNav(): void {
     const ctx = this.auth.currentUser?.context;
-    const isProvider = ctx === 'PRODUCT_PROVIDER' || ctx === 'SERVICE_PROVIDER';
-    const isProductProvider = ctx === 'PRODUCT_PROVIDER';
-    const isServiceProvider = ctx === 'SERVICE_PROVIDER';
-    const isBuyer = ctx === 'BUYER';
+    const roles = this.auth.currentUser?.roles || [];
+    const isProvider = roles.some(r => r === 'PRODUCT_PROVIDER' || r === 'SERVICE_PROVIDER');
+    const isProductProvider = roles.includes('PRODUCT_PROVIDER');
+    const isServiceProvider = roles.includes('SERVICE_PROVIDER');
+    const isBuyer = roles.includes('BUYER');
+    const isBusiness = this.auth.currentUser?.accountType === 'BUSINESS';
 
     this.navItems = [
       { id: 'general', label: 'Personal Information', icon: '👤', show: true },
+      { id: 'provider-settings', label: 'Provider Settings', icon: '🚀', show: true },
       { id: 'portfolio', label: 'My Portfolio', icon: '🖼️', show: isProvider },
       { id: 'services', label: 'My Services', icon: '🛠️', show: isServiceProvider },
       { id: 'products', label: 'My Products', icon: '📦', show: isProductProvider },
@@ -99,7 +102,7 @@ export class ProfileSettingsComponent implements OnInit {
       { id: 'proposals', label: 'My Proposals', icon: '💬', show: isServiceProvider },
       { id: 'orders', label: 'My Orders & Enquiries', icon: '📦', show: isBuyer },
       { id: 'verification', label: 'Verification', icon: '🛡️', show: true },
-      { id: 'cta', label: 'Grow Your Business', icon: '🚀', show: !isProvider }
+      { id: 'cta', label: 'Grow Your Business', icon: '📈', show: !isProvider && !isBusiness }
     ];
   }
 
@@ -260,5 +263,24 @@ export class ProfileSettingsComponent implements OnInit {
     this.buildNav();
     this.saveSuccessMessage = `Your account now has ${newContext.replace('_', ' ')} capabilities!`;
     setTimeout(() => (this.saveSuccessMessage = ''), 4000);
+  }
+
+  upgradeAccountType(newAccountType: 'INDIVIDUAL' | 'BUSINESS'): void {
+    this.isSaving = true;
+    this.saveSuccessMessage = '';
+    this.saveErrorMessage = '';
+
+    this.auth.updateAccountType(newAccountType).subscribe({
+      next: () => {
+        this.isSaving = false;
+        this.saveSuccessMessage = `Your account has been upgraded to ${newAccountType}!`;
+        setTimeout(() => (this.saveSuccessMessage = ''), 4000);
+        this.buildNav();
+      },
+      error: () => {
+        this.isSaving = false;
+        this.saveErrorMessage = 'Could not update account type. Please try again.';
+      }
+    });
   }
 }

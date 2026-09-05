@@ -18,6 +18,7 @@ model User {
   isVerified       Boolean @default(false)
   isAdmin          Boolean @default(false)
   accountType      String  @default("INDIVIDUAL")
+  providerCapabilities String? // JSON string: ["PRODUCTS"], ["SERVICES"], or ["PRODUCTS","SERVICES"]
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -52,6 +53,7 @@ model SellerProfile {
   id      String @id @default(cuid())
   user    User   @relation(fields: [userId], references: [id])
   userId  String @unique
+  sellerType String @default("CASUAL") // "CASUAL" | "INDEPENDENT_PROVIDER" | "BUSINESS"
 }
 
 model BusinessProfile {

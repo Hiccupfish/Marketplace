@@ -116,7 +116,7 @@ router.put('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
     const userId = req.user?.id;
     if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
 
-    const { name, phoneNumber, location, profilePicture } = req.body;
+    const { name, phoneNumber, location, profilePicture, accountType } = req.body;
 
     try {
         const updatedUser = await prisma.user.update({
@@ -126,6 +126,7 @@ router.put('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
                 phoneNumber,
                 location,
                 profilePicture,
+                accountType,
             },
             select: {
                 id: true,
@@ -134,6 +135,7 @@ router.put('/me', authenticateToken, async (req: AuthRequest, res: Response) => 
                 phoneNumber: true,
                 location: true,
                 profilePicture: true,
+                accountType: true,
             }
         });
         res.json(updatedUser);

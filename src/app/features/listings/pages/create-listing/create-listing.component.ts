@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ListingService } from '../../../../shared/services/listing.service';
 import { CategoryService } from '../../../../shared/services/category.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -12,6 +13,8 @@ interface ListingFormModel {
   category: string;
   categoryId: string;
   city: string;
+  serviceArea: string;
+  startingPrice: number | null;
 }
 
 @Component({
@@ -26,8 +29,12 @@ export class CreateListingComponent implements OnInit {
     priceZar: null,
     category: '',
     categoryId: '',
-    city: 'Johannesburg'
+    city: 'Johannesburg',
+    serviceArea: '',
+    startingPrice: null
   };
+
+  listingType: 'product' | 'service' = 'product';
 
   images: string[] = [];
   imageUrlInput = '';
@@ -88,10 +95,19 @@ export class CreateListingComponent implements OnInit {
     private readonly listingService: ListingService,
     private readonly categoryService: CategoryService,
     public readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const type = params['type'];
+      if (type === 'service') {
+        this.listingType = 'service';
+      } else {
+        this.listingType = 'product';
+      }
+    });
     this.loadCategories();
   }
 
@@ -229,8 +245,8 @@ export class CreateListingComponent implements OnInit {
       return;
     }
 
-    if (this.listing.priceZar == null || isNaN(Number(this.listing.priceZar)) || Number(this.listing.priceZar) < 0) {
-      this.error = 'Please enter a valid price in ZAR.';
+    if (!this.listing.description || !this.listing.description.trim()) {
+      this.error = 'Please enter a description.';
       return;
     }
 
@@ -239,16 +255,31 @@ export class CreateListingComponent implements OnInit {
       return;
     }
 
-    if (!this.listing.city || !this.listing.city.trim()) {
-      this.error = 'Please specify your location or city.';
+    this.loading = true;
+
+    if (this.listingType === 'service') {
+      this.submitService();
+    } else {
+      this.submitProduct();
+    }
+  }
+
+  private submitProduct(): void {
+    if (this.listing.priceZar == null || isNaN(Number(this.listing.priceZar)) || Number(this.listing.priceZar) < 0) {
+      this.error = 'Please enter a valid price in ZAR.';
+      this.loading = false;
       return;
     }
 
-    this.loading = true;
+    if (!this.listing.city || !this.listing.city.trim()) {
+      this.error = 'Please specify your location or city.';
+      this.loading = false;
+      return;
+    }
 
     const payload = {
       title: this.listing.title.trim(),
-      description: this.listing.description ? this.listing.description.trim() : '',
+      description: this.listing.description.trim(),
       price: Number(this.listing.priceZar),
       priceZar: Number(this.listing.priceZar),
       category: this.listing.category.trim(),
@@ -262,7 +293,7 @@ export class CreateListingComponent implements OnInit {
     this.listingService.createListing(payload).subscribe({
       next: (created) => {
         this.loading = false;
-        this.successMessage = 'Listing created successfully! Redirecting...';
+        this.successMessage = 'Product listed successfully! Redirecting...';
         setTimeout(() => {
           this.router.navigate(['/listings', created.id]);
         }, 800);
@@ -273,6 +304,47 @@ export class CreateListingComponent implements OnInit {
           this.error = 'Please log in or register before publishing a listing. Your form details are saved.';
         } else {
           this.error = err.error?.message || 'Unable to create listing. Please check the fields and try again.';
+        }
+      }
+    });
+  }
+
+  private submitService(): void {
+    if (this.listing.startingPrice == null || isNaN(Number(this.listing.startingPrice)) || Number(this.listing.startingPrice) < 0) {
+      this.error = 'Please enter a valid starting price in ZAR.';
+      this.loading = false;
+      return;
+    }
+
+    if (!this.listing.serviceArea || !this.listing.serviceArea.trim()) {
+      this.error = 'Please specify your service area.';
+      this.loading = false;
+      return;
+    }
+
+    const payload = {
+      title: this.listing.title.trim(),
+      description: this.listing.description.trim(),
+      categoryId: this.listing.categoryId || this.listing.category.trim(),
+      serviceArea: this.listing.serviceArea.trim(),
+      startingPrice: Number(this.listing.startingPrice),
+      availability: 'AVAILABLE'
+    };
+
+    this.listingService.createService(payload).subscribe({
+      next: (created) => {
+        this.loading = false;
+        this.successMessage = 'Service posted successfully! Redirecting...';
+        setTimeout(() => {
+          this.router.navigate(['/services', created.id]);
+        }, 800);
+      },
+      error: (err) => {
+        this.loading = false;
+        if (err.status === 401) {
+          this.error = 'Please log in or register before posting a service. Your form details are saved.';
+        } else {
+          this.error = err.error?.message || 'Unable to create service. Please check the fields and try again.';
         }
       }
     });

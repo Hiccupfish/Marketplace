@@ -1,7 +1,16 @@
 <section class="services-page">
-  <header>
-    <p class="eyebrow">Services on Kasiverse</p>
-    <h1>Local Services</h1>
+  <header class="services-page__header">
+    <div>
+      <p class="eyebrow">Services on Kasiverse</p>
+      <h1>Local Services</h1>
+    </div>
+    <a routerLink="/listings/create?type=service" class="create-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      Post a Service
+    </a>
   </header>
 
   <div *ngIf="isLoading" class="state">Loading services...</div>
@@ -17,7 +26,15 @@
       </div>
       <h2>{{ s.title }}</h2>
       <p>{{ s.description }}</p>
-      <div class="service-card__meta">📍 {{ s.serviceArea || s.provider?.location }}</div>
+      <div class="service-card__meta">
+        <span>📍 {{ s.serviceArea || s.provider?.location }}</span>
+        <span class="service-card__provider" [routerLink]="['/profile', s.provider?.id]" (click)="$event.stopPropagation()">
+          <span class="provider-badge" [class.provider-badge--business]="s.provider?.businessProfile" [class.provider-badge--individual]="!s.provider?.businessProfile">
+            {{ s.provider?.businessProfile ? '🏬 Business' : (s.provider?.providerProfile || s.provider?.sellerProfile ? '🛠️ Provider' : '👤 Individual') }}
+          </span>
+          <span class="provider-name">{{ s.provider?.name }}</span>
+        </span>
+      </div>
     </a>
   </div>
 </section>

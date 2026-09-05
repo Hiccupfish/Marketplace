@@ -14,4 +14,31 @@
       <span class="dashboard-home__action-label">{{ action.label }}</span>
     </a>
   </div>
+
+  <div class="dashboard-home__sections" *ngIf="sections.length">
+    <h2 class="dashboard-home__section-title">Your Marketplace</h2>
+    <div class="dashboard-home__sections-grid">
+      <a
+        *ngFor="let section of sections"
+        [routerLink]="section.route"
+        class="dashboard-home__section-card"
+      >
+        <div class="dashboard-home__section-header">
+          <span class="dashboard-home__section-icon">{{ section.icon }}</span>
+          <div class="dashboard-home__section-title-group">
+            <h3 class="dashboard-home__section-name">{{ section.title }}</h3>
+            <p class="dashboard-home__section-desc">{{ section.description }}</p>
+          </div>
+        </div>
+        <div class="dashboard-home__section-footer">
+          <span class="dashboard-home__section-count" *ngIf="!section.loading && section.count !== null">
+            {{ section.count }} {{ section.id === 'deliveries' ? 'total' : section.id === 'products' || section.id === 'services' ? 'listings' : section.id === 'requests' ? 'requests' : section.id === 'proposals' ? 'proposals' : '' }}
+          </span>
+          <span class="dashboard-home__section-count" *ngIf="!section.loading && section.count === null">—</span>
+          <span class="dashboard-home__section-count dashboard-home__section-count--loading" *ngIf="section.loading">...</span>
+          <span class="dashboard-home__section-cta">{{ section.cta }}</span>
+        </div>
+      </a>
+    </div>
+  </div>
 </div>

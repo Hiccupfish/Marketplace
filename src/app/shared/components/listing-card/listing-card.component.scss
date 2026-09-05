@@ -91,6 +91,34 @@
   }
 }
 
+.seller-type-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+
+  &.seller-type--business {
+    background: rgba($orange, 0.9);
+    color: $white;
+  }
+
+  &.seller-type--provider {
+    background: rgba($green, 0.85);
+    color: $white;
+  }
+
+  &.seller-type--casual {
+    background: rgba($text-on-light-muted, 0.85);
+    color: $white;
+  }
+}
+
 /* Card Body */
 .card-content {
   padding: 1rem 1.15rem;

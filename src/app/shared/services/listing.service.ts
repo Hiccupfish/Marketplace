@@ -70,6 +70,29 @@ export class ListingService {
     );
   }
 
+  createService(payload: {
+    title: string;
+    description: string;
+    categoryId: string;
+    serviceArea: string;
+    startingPrice: number;
+    availability?: string;
+    images?: string[];
+  }): Observable<any> {
+    const body = {
+      title: payload.title.trim(),
+      description: payload.description.trim(),
+      categoryId: payload.categoryId,
+      serviceArea: payload.serviceArea.trim(),
+      startingPrice: Number(payload.startingPrice),
+      availability: payload.availability || 'AVAILABLE',
+      images: payload.images && payload.images.length > 0 ? payload.images : undefined,
+      imageUrl: payload.images && payload.images.length > 0 ? payload.images[0] : undefined
+    };
+
+    return this.http.post<any>(`${environment.apiUrl}/services`, body);
+  }
+
   deleteListing(id: number | string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
@@ -99,6 +122,8 @@ export class ListingService {
       imageUrl = images[0];
     }
 
+    const sellerType = product.seller?.sellerProfile?.sellerType as Listing['sellerType'];
+
     return {
       id: product.id,
       title: product.title,
@@ -110,6 +135,7 @@ export class ListingService {
       imageUrl,
       images,
       isVerified: product.seller?.isVerified,
+      sellerType,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt
     };
@@ -125,7 +151,14 @@ interface ProductResponse {
   images?: string[] | string | null;
   categoryId?: string;
   category?: { id?: string; name: string };
-  seller?: { id?: string; name?: string | null; location?: string | null; profilePicture?: string | null; isVerified?: boolean };
+  seller?: {
+    id?: string;
+    name?: string | null;
+    location?: string | null;
+    profilePicture?: string | null;
+    isVerified?: boolean;
+    sellerProfile?: { sellerType?: string } | null;
+  };
   createdAt: string;
   updatedAt: string;
 }

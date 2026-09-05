@@ -157,6 +157,39 @@
   }
 }
 
+/* BECOME A PROVIDER CTA */
+.become-provider-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #d9e0d9;
+  font-size: 0.92rem;
+  font-weight: 600;
+
+  .btn-become-provider {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: $gold;
+    color: $ink;
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $green;
+      color: $white;
+    }
+  }
+}
+
 /* ==========================================================================
    DIRECTORY CONTENT & TOOLBAR
    ========================================================================== */
@@ -268,6 +301,41 @@
       color: $white;
       border-color: $green;
       box-shadow: $shadow-sm;
+    }
+  }
+}
+
+/* PROVIDER TYPE FILTER CHIPS */
+.provider-type-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
+
+  .filter-chip {
+    padding: 0.5rem 1.1rem;
+    border-radius: 10px;
+    border: 1px solid $border-on-light;
+    background: $surface-card;
+    color: $text-on-light-muted;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $gold;
+      color: $ink;
+    }
+
+    &.active {
+      background: $gold;
+      color: $ink;
+      border-color: $gold;
+      box-shadow: $shadow-sm;
+      font-weight: 700;
     }
   }
 }
@@ -437,6 +505,23 @@
         background: rgba($green, 0.08);
         padding: 2px 6px;
         border-radius: 4px;
+      }
+    }
+
+    .offerings-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+
+      .offering-badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: $text-on-light;
+        background: rgba($green, 0.08);
+        border: 1px solid rgba($green, 0.2);
+        padding: 2px 8px;
+        border-radius: 6px;
       }
     }
 

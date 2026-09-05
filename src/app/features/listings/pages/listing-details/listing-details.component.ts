@@ -91,8 +91,7 @@ export class ListingDetailsComponent implements OnInit {
     }
 
     this.submittingOffer = true;
-    this.offerService.createOffer({
-      listingId: this.listing.id,
+    this.offerService.createOffer(this.listing.id, {
       buyerName: this.offerBuyerName.trim(),
       buyerEmail: this.offerBuyerEmail.trim(),
       buyerPhone: this.offerBuyerPhone.trim(),
@@ -101,8 +100,7 @@ export class ListingDetailsComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         this.submittingOffer = false;
-        this.notificationDetails = res.notifications;
-        this.offerSuccessMessage = `Offer of R ${this.offerAmount?.toLocaleString()} submitted successfully! Automated Email and WhatsApp notifications have been sent to the seller.`;
+        this.offerSuccessMessage = `Offer of R ${this.offerAmount?.toLocaleString()} submitted successfully!`;
       },
       error: (err) => {
         this.submittingOffer = false;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OfferService, Offer } from '../../../../shared/services/offer.service';
+import { OfferService } from '../../../../shared/services/offer.service';
 import { Listing } from '../../../../shared/models/listing.model';
 
 @Component({
@@ -10,10 +10,10 @@ import { Listing } from '../../../../shared/models/listing.model';
 })
 export class ListingOffersComponent implements OnInit {
   listing: Listing | null = null;
-  offers: Offer[] = [];
+  offers: any[] = [];
   loading = true;
   error = '';
-  updatingOfferId: number | null = null;
+  updatingOfferId: number | string | null = null;
   statusMessage = '';
 
   constructor(
@@ -37,10 +37,9 @@ export class ListingOffersComponent implements OnInit {
   loadOffers(listingId: string): void {
     this.loading = true;
     this.error = '';
-    this.offerService.getOffersForListing(listingId).subscribe({
+    this.offerService.getOffersForProduct(listingId).subscribe({
       next: (res) => {
-        this.listing = res.listing;
-        this.offers = res.offers;
+        this.offers = res.offers || [];
         this.loading = false;
       },
       error: (err) => {
@@ -50,16 +49,16 @@ export class ListingOffersComponent implements OnInit {
     });
   }
 
-  updateStatus(offer: Offer, newStatus: 'ACCEPTED' | 'REJECTED'): void {
-    if (!offer.id) return;
+  updateStatus(offer: any, newStatus: 'ACCEPTED' | 'REJECTED'): void {
+    if (!offer.id || !this.listing?.id) return;
     this.updatingOfferId = offer.id;
     this.statusMessage = '';
 
-    this.offerService.updateOfferStatus(offer.id, newStatus).subscribe({
+    this.offerService.updateOfferStatus(this.listing.id, offer.id, newStatus).subscribe({
       next: (updated) => {
         Object.assign(offer, updated);
         this.updatingOfferId = null;
-        this.statusMessage = `Offer from ${offer.buyerName} has been ${newStatus.toLowerCase()}.`;
+        this.statusMessage = `Offer from ${offer.buyer?.name || offer.buyerName || 'buyer'} has been ${newStatus.toLowerCase()}.`;
         setTimeout(() => (this.statusMessage = ''), 4000);
       },
       error: (err) => {
@@ -77,9 +76,11 @@ export class ListingOffersComponent implements OnInit {
     return { text: `R ${Math.abs(diff).toLocaleString()} below asking price`, isAbove: false };
   }
 
-  getWhatsAppLink(phone: string, offer: Offer): string {
+  getWhatsAppLink(phone: string, offer: any): string {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
-    const msg = encodeURIComponent(`Hi ${offer.buyerName}, regarding your offer of R ${offer.amountZar.toLocaleString()} for "${this.listing?.title}"...`);
+    const buyerName = offer.buyer?.name || 'buyer';
+    const offerPrice = offer.price || offer.amountZar || 0;
+    const msg = encodeURIComponent(`Hi ${buyerName}, regarding your offer of R ${Number(offerPrice).toLocaleString()} for "${this.listing?.title}"...`);
     return `https://wa.me/${cleanPhone}?text=${msg}`;
   }
 
