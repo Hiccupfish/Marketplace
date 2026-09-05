@@ -101,12 +101,12 @@
   }
 }
 
-.section-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0 0 1.25rem;
-  color: #fff;
-}
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+    color: $text-on-light;
+  }
 
 .type-selector {
   display: flex;
@@ -400,7 +400,7 @@
   h2 {
     font-size: 1.75rem;
     margin: 0 0 0.75rem;
-    color: #fff;
+    color: $text-on-light;
   }
 
   p {

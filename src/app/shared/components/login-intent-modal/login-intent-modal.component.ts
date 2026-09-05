@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { LoginIntent } from '../../../core/services/auth.service';
+
+export type LoginIntent = 'BUY' | 'SELL_PRODUCTS' | 'OFFER_SERVICES' | 'BUSINESS' | null;
 
 @Component({
   selector: 'app-login-intent-modal',

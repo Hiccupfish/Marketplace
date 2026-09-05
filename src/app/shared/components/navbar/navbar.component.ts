@@ -11,13 +11,12 @@ export class NavbarComponent {
   brand = 'Kasiverse';
   searchQuery = '';
   get isLoggedIn(): boolean { return this.auth.isAuthenticated(); }
-  userName = 'User';
+  get userName(): string { return this.auth.currentUser?.name || 'User'; }
 
-  constructor(private readonly router: Router, private readonly auth: AuthService) {}
+  constructor(private readonly router: Router, public readonly auth: AuthService) {}
 
   onSearch(): void {
     const query = this.searchQuery.trim();
-
     this.router.navigate(['/listings'], {
       queryParams: query ? { q: query } : undefined
     });

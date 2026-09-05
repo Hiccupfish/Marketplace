@@ -26,6 +26,7 @@ export class SellerProfileComponent implements OnInit {
   reviewComment = '';
   reviewSubmitting = false;
   reviewSuccessMessage = '';
+  reviewErrorMessage = '';
 
   // Copy feedback
   linkCopied = false;
@@ -49,6 +50,11 @@ export class SellerProfileComponent implements OnInit {
       // Default to first profile if not found
       this.profile = this.profileService.getCurrentUserProfile();
     }
+  }
+
+  get isSelfProfile(): boolean {
+    const currentUser = this.profileService.getCurrentUserProfile();
+    return !!(this.profile && currentUser && this.profile.id === currentUser.id);
   }
 
   get averageRating(): string {
@@ -87,29 +93,27 @@ export class SellerProfileComponent implements OnInit {
     switch (tier) {
       case 'PHONE':
         return {
-          label: 'Phone & WhatsApp Verified',
+          label: 'Phone Verified',
           icon: '📱',
-          desc: 'Direct phone number and WhatsApp confirmed for active communication.'
+          desc: 'Direct mobile number and WhatsApp contact confirmed.'
         };
       case 'ID':
         return {
-          label: 'ID / Identity Verified',
+          label: 'Identity Verified',
           icon: '🪪',
-          desc: 'National ID document / business owner identity vetted and recorded.'
+          desc: 'National ID / FICA identity verified and on file.'
         };
-      case 'CERTIFIED':
+      case 'BUSINESS':
         return {
-          label: this.profile?.kind === 'BUSINESS' ? 'CIPC Registered Business' : 'Certified Trade Artisan',
+          label: 'Business Verified',
+          icon: '🏬',
+          desc: 'CIPC enterprise registration and official trading status verified.'
+        };
+      case 'PRO':
+        return {
+          label: 'Verified Professional',
           icon: '🏅',
-          desc: this.profile?.kind === 'BUSINESS'
-            ? 'Official company registration / trade proof verified.'
-            : 'Department of Labour wireman, trade test, or formal qualification verified.'
-        };
-      case 'COMMUNITY_VOUCHED':
-        return {
-          label: 'Community Vouched',
-          icon: '🤝',
-          desc: 'Endorsed by verified local township clients with confirmed completed jobs.'
+          desc: 'Trade test qualification, license, or certified credentials verified.'
         };
       default:
         return { label: tier, icon: '✓', desc: 'Verified status.' };
@@ -117,10 +121,15 @@ export class SellerProfileComponent implements OnInit {
   }
 
   openReviewModal(): void {
+    if (this.isSelfProfile) {
+      alert('You cannot review your own profile or business.');
+      return;
+    }
     this.reviewAuthor = '';
     this.reviewRating = 5;
     this.reviewComment = '';
     this.reviewSuccessMessage = '';
+    this.reviewErrorMessage = '';
     this.showReviewModal = true;
   }
 
@@ -134,6 +143,12 @@ export class SellerProfileComponent implements OnInit {
 
   submitReview(): void {
     if (!this.profile || !this.reviewComment.trim()) return;
+
+    if (this.isSelfProfile) {
+      this.reviewErrorMessage = 'You cannot submit a review for your own profile.';
+      return;
+    }
+
     this.reviewSubmitting = true;
 
     setTimeout(() => {
@@ -145,7 +160,7 @@ export class SellerProfileComponent implements OnInit {
 
       this.loadProfile(this.profile!.slug);
       this.reviewSubmitting = false;
-      this.reviewSuccessMessage = 'Thank you! Your review has been published.';
+      this.reviewSuccessMessage = 'Thank you! Your review has been submitted and published.';
 
       setTimeout(() => {
         this.closeReviewModal();
@@ -167,3 +182,4 @@ export class SellerProfileComponent implements OnInit {
     setTimeout(() => (this.linkCopied = false), 2500);
   }
 }
+

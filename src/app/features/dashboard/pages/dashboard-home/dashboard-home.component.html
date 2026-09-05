@@ -1,1 +1,17 @@
-<p>Dashboard home works.</p>
+<div class="dashboard-home">
+  <div class="dashboard-home__header">
+    <h1 class="dashboard-home__title">{{ welcomeTitle }}</h1>
+    <p class="dashboard-home__subtitle">Hi {{ userName }}. {{ welcomeSubtitle }}</p>
+  </div>
+
+  <div class="dashboard-home__actions">
+    <a
+      *ngFor="let action of actions"
+      [routerLink]="action.route"
+      class="dashboard-home__action-card"
+    >
+      <span class="dashboard-home__action-icon">{{ action.icon }}</span>
+      <span class="dashboard-home__action-label">{{ action.label }}</span>
+    </a>
+  </div>
+</div>

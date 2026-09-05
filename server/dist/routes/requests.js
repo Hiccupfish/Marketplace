@@ -97,16 +97,14 @@ router.get('/', async (req, res) => {
     const filters = {};
     if (search) {
         filters.OR = [
-            { title: { contains: String(search) } },
-            { description: { contains: String(search) } },
+            { title: { contains: String(search), mode: 'insensitive' } },
+            { description: { contains: String(search), mode: 'insensitive' } },
         ];
     }
     if (category)
         filters.categoryId = String(category);
-if (location)
-    filters.location = {
-        contains: String(location)
-    };
+    if (location)
+        filters.location = { contains: String(location), mode: 'insensitive' };
     if (status)
         filters.status = String(status);
     if (marketplaceType)

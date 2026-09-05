@@ -107,9 +107,9 @@ export class ProviderDirectoryComponent implements OnInit {
   getVerificationBadgeLabel(tier: VerificationTier): string {
     switch (tier) {
       case 'PHONE': return 'Phone Verified';
-      case 'ID': return 'ID Verified';
-      case 'CERTIFIED': return 'Certified';
-      case 'COMMUNITY_VOUCHED': return 'Vouched';
+      case 'ID': return 'Identity Verified';
+      case 'BUSINESS': return 'Business Verified';
+      case 'PRO': return 'Verified Professional';
       default: return tier;
     }
   }

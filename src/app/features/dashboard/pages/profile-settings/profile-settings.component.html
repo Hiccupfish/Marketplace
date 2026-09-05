@@ -1,294 +1,125 @@
-<div class="management-page-wrapper" *ngIf="profile">
-
-  <!-- Page Header -->
-  <header class="management-header">
-    <div class="header-content">
-      <div class="header-titles">
-        <span class="eyebrow">SELLER &amp; BUSINESS STUDIO</span>
-        <h1>Profile &amp; Storefront Manager</h1>
-        <p>Manage your public identity, business details, portfolio showcase, and verified offerings.</p>
-      </div>
-
-      <div class="header-actions">
-        <a [routerLink]="['/profile', profile.slug]" target="_blank" class="btn-preview">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <span>View Live Storefront / Profile</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Alert Notifications -->
-    <div class="alert alert-success" *ngIf="saveSuccessMessage">
-      <span>✓ {{ saveSuccessMessage }}</span>
-      <button class="alert-close" (click)="saveSuccessMessage = ''">&times;</button>
-    </div>
-    <div class="alert alert-error" *ngIf="saveErrorMessage">
-      <span>⚠️ {{ saveErrorMessage }}</span>
-      <button class="alert-close" (click)="saveErrorMessage = ''">&times;</button>
-    </div>
-    <div class="alert alert-success" *ngIf="verificationSuccess">
-      <span>🛡️ {{ verificationSuccess }}</span>
-      <button class="alert-close" (click)="verificationSuccess = ''">&times;</button>
+<div class="profile-hub" *ngIf="profile">
+  <header class="profile-hub__header">
+    <div>
+      <span class="eyebrow">MY PROFILE</span>
+      <h1>Welcome, {{ userName }}</h1>
+      <p>Manage your marketplace presence, listings, and account settings.</p>
     </div>
   </header>
 
-  <div class="management-layout">
-
-    <!-- Sub-Nav Sidebar -->
-    <aside class="management-nav">
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeSection === 'general'"
-        (click)="activeSection = 'general'"
-      >
-        <span class="icon">👤</span>
-        <div class="label-box">
-          <strong>Profile &amp; Business Info</strong>
-          <small>Type, bio, contact &amp; hours</small>
-        </div>
-      </button>
-
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeSection === 'portfolio'"
-        (click)="activeSection = 'portfolio'"
-      >
-        <span class="icon">🖼️</span>
-        <div class="label-box">
-          <strong>Our Work &amp; Portfolio</strong>
-          <small>{{ profile.portfolio?.length || 0 }} projects showcased</small>
-        </div>
-      </button>
-
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeSection === 'services'"
-        (click)="activeSection = 'services'"
-      >
-        <span class="icon">🛠️</span>
-        <div class="label-box">
-          <strong>Services Offered</strong>
-          <small>{{ profile.servicesOffered?.length || profile.services || 0 }} services listed</small>
-        </div>
-      </button>
-
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeSection === 'products'"
-        (click)="activeSection = 'products'"
-      >
-        <span class="icon">📦</span>
-        <div class="label-box">
-          <strong>Products Catalog</strong>
-          <small>{{ profile.productsOffered?.length || profile.products || 0 }} items listed</small>
-        </div>
-      </button>
-
-      <button
-        class="nav-tab-btn"
-        [class.active]="activeSection === 'verification'"
-        (click)="activeSection = 'verification'"
-      >
-        <span class="icon">🛡️</span>
-        <div class="label-box">
-          <strong>Trust &amp; Verification</strong>
-          <small>{{ profile.verification?.length || 0 }}/4 tiers active</small>
-        </div>
-      </button>
+  <div class="profile-hub__layout">
+    <!-- Sidebar Navigation -->
+    <aside class="profile-hub__sidebar">
+      <nav class="profile-nav">
+        <button
+          *ngFor="let item of activeNavItems"
+          class="profile-nav__item"
+          [class.active]="activeSection === item.id"
+          (click)="activeSection = item.id"
+        >
+          <span class="profile-nav__icon">{{ item.icon }}</span>
+          <span class="profile-nav__label">{{ item.label }}</span>
+        </button>
+      </nav>
     </aside>
 
-    <!-- Main Content Panel -->
-    <main class="management-main">
+    <!-- Main Content -->
+    <main class="profile-hub__content">
 
-      <!-- SECTION 1: GENERAL PROFILE & BUSINESS INFO -->
+      <!-- Personal Information -->
       <section class="section-card" *ngIf="activeSection === 'general'">
         <div class="card-header">
-          <h2>Identity &amp; Profile Setup</h2>
-          <p>Configure how you appear to clients across the Kasiverse Marketplace.</p>
+          <h2>Personal Information</h2>
+          <p>Your account details and contact information.</p>
         </div>
 
         <form (ngSubmit)="saveGeneralProfile()">
-
-          <!-- Entity Kind Toggle -->
-          <div class="form-group">
-            <label class="form-label">Marketplace Entity Type *</label>
-            <div class="kind-selector-grid">
-              <label class="kind-card-radio" [class.selected]="profile.kind === 'INDIVIDUAL'">
-                <input
-                  type="radio"
-                  name="entityKind"
-                  value="INDIVIDUAL"
-                  [(ngModel)]="profile.kind"
-                />
-                <div class="kind-card-content">
-                  <span class="kind-icon">🛠️</span>
-                  <strong>Individual Service Provider</strong>
-                  <p>For independent artisans, mechanics, carpenters, electricians, tailors &amp; freelancers.</p>
-                </div>
-              </label>
-
-              <label class="kind-card-radio" [class.selected]="profile.kind === 'BUSINESS'">
-                <input
-                  type="radio"
-                  name="entityKind"
-                  value="BUSINESS"
-                  [(ngModel)]="profile.kind"
-                />
-                <div class="kind-card-content">
-                  <span class="kind-icon">🏬</span>
-                  <strong>Registered Business / Storefront</strong>
-                  <p>For companies, workshops, caterers, auto shops, bakeries &amp; retail storefronts.</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="profName">{{ profile.kind === 'BUSINESS' ? 'Business Trading Name *' : 'Your Full Name *' }}</label>
+              <label class="form-label" for="profName">Full Name *</label>
               <input id="profName" type="text" name="name" [(ngModel)]="profile.name" required />
             </div>
-
             <div class="form-group">
-              <label class="form-label" for="profSlug">Profile URL Slug *</label>
-              <div class="input-prefix-box">
-                <span>/profile/</span>
-                <input id="profSlug" type="text" name="slug" [(ngModel)]="profile.slug" required />
-              </div>
+              <label class="form-label" for="profEmail">Email</label>
+              <input id="profEmail" type="email" name="email" [(ngModel)]="profile.email" readonly />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="profLocation">Location</label>
+              <input id="profLocation" type="text" name="location" [(ngModel)]="profile.location" placeholder="e.g. Soweto, Johannesburg" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profPhone">Phone</label>
+              <input id="profPhone" type="text" name="phone" [(ngModel)]="profile.phone" placeholder="+27 82 000 0000" />
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="profHeadline">Professional Headline *</label>
-            <input id="profHeadline" type="text" name="headline" placeholder="e.g. Master Carpenter & Custom Woodwork Specialist" [(ngModel)]="profile.headline" required />
+            <label class="form-label" for="profHeadline">Headline</label>
+            <input id="profHeadline" type="text" name="headline" [(ngModel)]="profile.headline" placeholder="e.g. Master Carpenter" />
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="profBio">Detailed Bio &amp; About You</label>
-            <textarea id="profBio" name="bio" rows="4" placeholder="Describe your experience, values, and quality assurance..." [(ngModel)]="profile.bio"></textarea>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="profLocation">Township / City Location *</label>
-              <input id="profLocation" type="text" name="location" placeholder="e.g. Soweto, Johannesburg" [(ngModel)]="profile.location" required />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="profPhone">Primary Phone Number</label>
-              <input id="profPhone" type="text" name="phone" placeholder="+27 82 000 0000" [(ngModel)]="profile.phone" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="profWhatsApp">WhatsApp Business Number</label>
-              <input id="profWhatsApp" type="text" name="whatsapp" placeholder="+27 82 000 0000" [(ngModel)]="profile.whatsapp" />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="profEmail">Contact Email</label>
-              <input id="profEmail" type="email" name="email" placeholder="orders@yourbusiness.co.za" [(ngModel)]="profile.email" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="profHours">Opening Hours / Availability</label>
-              <input id="profHours" type="text" name="openingHours" placeholder="e.g. Mon–Sat · 08:00 – 17:30" [(ngModel)]="profile.openingHours" />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="profEst">Established Year</label>
-              <input id="profEst" type="number" name="establishedYear" placeholder="2016" [(ngModel)]="profile.establishedYear" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="profSpecialties">Specialties / Skills (Comma-separated)</label>
-            <input id="profSpecialties" type="text" name="specialties" placeholder="Custom Furniture, Kitchen Units, TV Media Walls, Timber Repairs" [(ngModel)]="specialtiesInput" />
-            <small class="helper-text">Add your main trade skills separated by commas so clients can find you.</small>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="profAvatar">Avatar / Logo Image URL</label>
-              <input id="profAvatar" type="url" name="avatar" [(ngModel)]="profile.avatar" />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="profCover">Cover Banner Image URL</label>
-              <input id="profCover" type="url" name="coverImage" [(ngModel)]="profile.coverImage" />
-            </div>
+            <label class="form-label" for="profBio">Bio</label>
+            <textarea id="profBio" name="bio" rows="4" [(ngModel)]="profile.bio" placeholder="Tell clients about yourself..."></textarea>
           </div>
 
           <div class="form-actions">
             <button type="submit" class="btn-primary" [disabled]="isSaving">
-              {{ isSaving ? 'Saving...' : '💾 Save Profile Details' }}
+              {{ isSaving ? 'Saving...' : 'Save Changes' }}
             </button>
           </div>
         </form>
       </section>
 
-      <!-- SECTION 2: PORTFOLIO SHOWCASE -->
+      <!-- Portfolio -->
       <section class="section-card" *ngIf="activeSection === 'portfolio'">
         <div class="card-header flex-between">
           <div>
-            <h2>Work &amp; Portfolio Showcase</h2>
-            <p>Upload examples of completed client projects to build credibility.</p>
+            <h2>Portfolio</h2>
+            <p>Showcase your completed work.</p>
           </div>
           <button class="btn-primary" (click)="showAddWorkForm = !showAddWorkForm">
-            {{ showAddWorkForm ? '✕ Close Form' : '+ Add Completed Project' }}
+            {{ showAddWorkForm ? 'Close' : '+ Add Project' }}
           </button>
         </div>
 
-        <!-- Add Work Form -->
         <div class="add-item-box" *ngIf="showAddWorkForm">
-          <h3>Add New Portfolio Project</h3>
+          <h3>Add Portfolio Project</h3>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="workTitle">Project Title *</label>
-              <input id="workTitle" type="text" placeholder="e.g. 5kW Hybrid Solar Installation" [(ngModel)]="newWork.title" />
+              <label class="form-label" for="workTitle">Title *</label>
+              <input id="workTitle" type="text" [(ngModel)]="newWork.title" placeholder="Project title" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="workCat">Trade Category *</label>
-              <input id="workCat" type="text" placeholder="e.g. Solar, Furniture, Kitchens" [(ngModel)]="newWork.category" />
+              <label class="form-label" for="workCat">Category *</label>
+              <input id="workCat" type="text" [(ngModel)]="newWork.category" placeholder="e.g. Solar, Furniture" />
             </div>
           </div>
-
           <div class="form-group">
-            <label class="form-label" for="workDesc">Description *</label>
-            <textarea id="workDesc" rows="3" placeholder="Describe the materials used, specifications, and outcome..." [(ngModel)]="newWork.description"></textarea>
+            <label class="form-label" for="workDesc">Description</label>
+            <textarea id="workDesc" rows="3" [(ngModel)]="newWork.description" placeholder="Describe the project..."></textarea>
           </div>
-
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="workImg">Project Photo URL</label>
-              <input id="workImg" type="url" placeholder="https://..." [(ngModel)]="newWork.imageUrl" />
+              <label class="form-label" for="workImg">Photo URL</label>
+              <input id="workImg" type="url" [(ngModel)]="newWork.imageUrl" placeholder="https://..." />
             </div>
             <div class="form-group">
-              <label class="form-label" for="workDate">Completed Date</label>
-              <input id="workDate" type="text" placeholder="e.g. August 2026" [(ngModel)]="newWork.completedDate" />
+              <label class="form-label" for="workDate">Date</label>
+              <input id="workDate" type="text" [(ngModel)]="newWork.completedDate" placeholder="e.g. August 2026" />
             </div>
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="workFeedback">Client Quote / Testimonial (Optional)</label>
-            <input id="workFeedback" type="text" placeholder="e.g. Finished on time and very neat!" [(ngModel)]="newWork.clientFeedback" />
-          </div>
-
           <div class="box-actions">
             <button class="btn-outline" (click)="showAddWorkForm = false">Cancel</button>
             <button class="btn-primary" [disabled]="!newWork.title.trim() || !newWork.category.trim()" (click)="addPortfolioItem()">
-              Upload to Portfolio
+              Add Project
             </button>
           </div>
         </div>
 
-        <!-- Portfolio Items List -->
         <div class="items-grid" *ngIf="profile.portfolio?.length; else noWorks">
           <div class="manage-card" *ngFor="let work of profile.portfolio">
             <div class="manage-card-media">
@@ -301,69 +132,56 @@
               <small *ngIf="work.completedDate">🗓️ {{ work.completedDate }}</small>
             </div>
             <div class="manage-card-actions">
-              <button class="btn-delete" (click)="deletePortfolioItem(work.id)" title="Delete project">
-                🗑️ Delete
-              </button>
+              <button class="btn-delete" (click)="deletePortfolioItem(work.id)">🗑️ Delete</button>
             </div>
           </div>
         </div>
 
         <ng-template #noWorks>
           <div class="empty-box">
-            <p>No portfolio projects added yet. Click "+ Add Completed Project" to showcase your work!</p>
+            <p>No portfolio projects yet. Add your first project to showcase your work!</p>
           </div>
         </ng-template>
       </section>
 
-      <!-- SECTION 3: SERVICES OFFERED -->
+      <!-- Services -->
       <section class="section-card" *ngIf="activeSection === 'services'">
         <div class="card-header flex-between">
           <div>
-            <h2>Services &amp; Pricing Packages</h2>
-            <p>List standard services, pricing estimates, and turnaround times.</p>
+            <h2>My Services</h2>
+            <p>Manage your service offerings and pricing.</p>
           </div>
           <button class="btn-primary" (click)="showAddServiceForm = !showAddServiceForm">
-            {{ showAddServiceForm ? '✕ Close Form' : '+ Add Service' }}
+            {{ showAddServiceForm ? 'Close' : '+ Add Service' }}
           </button>
         </div>
 
-        <!-- Add Service Form -->
         <div class="add-item-box" *ngIf="showAddServiceForm">
-          <h3>Add New Service Offering</h3>
+          <h3>Add Service</h3>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="srvTitle">Service Title *</label>
-              <input id="srvTitle" type="text" placeholder="e.g. Electrical Compliance Certificate (CoC)" [(ngModel)]="newService.title" />
+              <label class="form-label" for="srvTitle">Title *</label>
+              <input id="srvTitle" type="text" [(ngModel)]="newService.title" placeholder="e.g. Electrical Compliance" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="srvCat">Service Category *</label>
-              <input id="srvCat" type="text" placeholder="e.g. Compliance, Repairs, Installation" [(ngModel)]="newService.category" />
+              <label class="form-label" for="srvCat">Category *</label>
+              <input id="srvCat" type="text" [(ngModel)]="newService.category" placeholder="e.g. Compliance" />
             </div>
           </div>
-
           <div class="form-group">
             <label class="form-label" for="srvDesc">Description</label>
-            <textarea id="srvDesc" rows="2" placeholder="What does this service include?" [(ngModel)]="newService.description"></textarea>
+            <textarea id="srvDesc" rows="2" [(ngModel)]="newService.description" placeholder="What does this service include?"></textarea>
           </div>
-
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="srvPrice">Starting Price (ZAR) *</label>
-              <input id="srvPrice" type="number" placeholder="450" [(ngModel)]="newService.startingPrice" />
+              <label class="form-label" for="srvPrice">Price (ZAR) *</label>
+              <input id="srvPrice" type="number" [(ngModel)]="newService.startingPrice" placeholder="450" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="srvTurn">Turnaround / Duration</label>
-              <input id="srvTurn" type="text" placeholder="e.g. 24 hours, Same day" [(ngModel)]="newService.turnaround" />
+              <label class="form-label" for="srvTurn">Turnaround</label>
+              <input id="srvTurn" type="text" [(ngModel)]="newService.turnaround" placeholder="e.g. 24 hours" />
             </div>
           </div>
-
-          <div class="form-group">
-            <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="newService.isPopular" />
-              <span>Mark as Popular / Most Requested Service</span>
-            </label>
-          </div>
-
           <div class="box-actions">
             <button class="btn-outline" (click)="showAddServiceForm = false">Cancel</button>
             <button class="btn-primary" [disabled]="!newService.title.trim() || newService.startingPrice <= 0" (click)="addService()">
@@ -372,8 +190,7 @@
           </div>
         </div>
 
-        <!-- Services List -->
-        <div class="services-manage-list" *ngIf="profile.servicesOffered?.length; else noServicesList">
+        <div class="services-manage-list" *ngIf="profile.servicesOffered?.length; else noServices">
           <div class="manage-service-row" *ngFor="let srv of profile.servicesOffered">
             <div class="srv-info">
               <div class="srv-tag-line">
@@ -391,55 +208,51 @@
           </div>
         </div>
 
-        <ng-template #noServicesList>
+        <ng-template #noServices>
           <div class="empty-box">
-            <p>No specific services listed yet. Add your standard services to attract direct bookings!</p>
+            <p>No services listed yet. Add your first service to start receiving enquiries!</p>
           </div>
         </ng-template>
       </section>
 
-      <!-- SECTION 4: PRODUCTS CATALOG -->
+      <!-- Products -->
       <section class="section-card" *ngIf="activeSection === 'products'">
         <div class="card-header flex-between">
           <div>
-            <h2>Storefront Products &amp; Goods</h2>
-            <p>Sell ready-made crafts, food jars, merchandise, and supplies directly.</p>
+            <h2>My Products</h2>
+            <p>Manage your product catalogue and pricing.</p>
           </div>
           <button class="btn-primary" (click)="showAddProductForm = !showAddProductForm">
-            {{ showAddProductForm ? '✕ Close Form' : '+ Add Product' }}
+            {{ showAddProductForm ? 'Close' : '+ Add Product' }}
           </button>
         </div>
 
-        <!-- Add Product Form -->
         <div class="add-item-box" *ngIf="showAddProductForm">
-          <h3>Add Product to Storefront</h3>
+          <h3>Add Product</h3>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="prodTitle">Product Title *</label>
-              <input id="prodTitle" type="text" placeholder="e.g. Solid Kiaat Coffee Table" [(ngModel)]="newProduct.title" />
+              <label class="form-label" for="prodTitle">Title *</label>
+              <input id="prodTitle" type="text" [(ngModel)]="newProduct.title" placeholder="e.g. Solid Kiaat Coffee Table" />
             </div>
             <div class="form-group">
               <label class="form-label" for="prodCat">Category *</label>
-              <input id="prodCat" type="text" placeholder="e.g. Furniture, Food, Decor" [(ngModel)]="newProduct.category" />
+              <input id="prodCat" type="text" [(ngModel)]="newProduct.category" placeholder="e.g. Furniture" />
             </div>
           </div>
-
           <div class="form-group">
             <label class="form-label" for="prodDesc">Description</label>
-            <textarea id="prodDesc" rows="2" placeholder="Product details, dimensions, ingredients, or materials..." [(ngModel)]="newProduct.description"></textarea>
+            <textarea id="prodDesc" rows="2" [(ngModel)]="newProduct.description" placeholder="Product details..."></textarea>
           </div>
-
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="prodPrice">Price (ZAR) *</label>
-              <input id="prodPrice" type="number" placeholder="1250" [(ngModel)]="newProduct.price" />
+              <input id="prodPrice" type="number" [(ngModel)]="newProduct.price" placeholder="1250" />
             </div>
             <div class="form-group">
-              <label class="form-label" for="prodImg">Product Photo URL</label>
-              <input id="prodImg" type="url" placeholder="https://..." [(ngModel)]="newProduct.imageUrl" />
+              <label class="form-label" for="prodImg">Photo URL</label>
+              <input id="prodImg" type="url" [(ngModel)]="newProduct.imageUrl" placeholder="https://..." />
             </div>
           </div>
-
           <div class="box-actions">
             <button class="btn-outline" (click)="showAddProductForm = false">Cancel</button>
             <button class="btn-primary" [disabled]="!newProduct.title.trim() || newProduct.price <= 0" (click)="addProduct()">
@@ -448,8 +261,7 @@
           </div>
         </div>
 
-        <!-- Products List -->
-        <div class="products-manage-grid" *ngIf="profile.productsOffered?.length; else noProductsList">
+        <div class="products-manage-grid" *ngIf="profile.productsOffered?.length; else noProducts">
           <div class="manage-product-card" *ngFor="let prod of profile.productsOffered">
             <img [src]="prod.imageUrl || 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&auto=format&fit=crop&q=80'" [alt]="prod.title" />
             <div class="prod-body">
@@ -461,78 +273,173 @@
           </div>
         </div>
 
-        <ng-template #noProductsList>
+        <ng-template #noProducts>
           <div class="empty-box">
-            <p>No products added to your store yet. Click "+ Add Product" to start building your catalogue.</p>
+            <p>No products in your store yet. Add your first product!</p>
           </div>
         </ng-template>
       </section>
 
-      <!-- SECTION 5: TRUST & VERIFICATION CENTER -->
+      <!-- My Requests (Buyer) -->
+      <section class="section-card" *ngIf="activeSection === 'requests'">
+        <div class="card-header">
+          <h2>My Requests</h2>
+          <p>Track and manage your buyer requests.</p>
+        </div>
+        <div class="empty-box">
+          <p>Your requests will appear here. Browse the marketplace to find products and services, or create a request.</p>
+          <a routerLink="/requests/create" class="btn-primary">Create a Request</a>
+        </div>
+      </section>
+
+      <!-- My Proposals (Service Provider) -->
+      <section class="section-card" *ngIf="activeSection === 'proposals'">
+        <div class="card-header">
+          <h2>My Proposals</h2>
+          <p>Track proposals you've submitted to buyer requests.</p>
+        </div>
+        <div class="empty-box">
+          <p>Your proposals will appear here. Browse requests to find opportunities.</p>
+          <a routerLink="/requests" class="btn-primary">Browse Requests</a>
+        </div>
+      </section>
+
+      <!-- My Orders & Enquiries (Buyer) -->
+      <section class="section-card" *ngIf="activeSection === 'orders'">
+        <div class="card-header">
+          <h2>My Orders & Enquiries</h2>
+          <p>Track your purchases and enquiries.</p>
+        </div>
+        <div class="empty-box">
+          <p>Your orders and enquiries will appear here.</p>
+          <a routerLink="/listings" class="btn-primary">Browse Products & Services</a>
+        </div>
+      </section>
+
+      <!-- Verification -->
       <section class="section-card" *ngIf="activeSection === 'verification'">
         <div class="card-header">
-          <h2>🛡️ Trust &amp; Tiered Verification</h2>
-          <p>Verified providers receive up to 4x more customer inquiries on Kasiverse.</p>
+          <h2>Verification</h2>
+          <p>Build trust with verified badges.</p>
         </div>
 
         <div class="verification-tiers-grid">
-
-          <!-- Tier 1: Phone -->
-          <div class="verification-card" [class.verified]="hasTier('PHONE')">
+          <div class="verification-card" [class.verified]="isTierApproved('PHONE')" [class.pending]="isTierPending('PHONE')">
             <div class="tier-top">
               <span class="tier-icon">📱</span>
-              <span class="status-badge">{{ hasTier('PHONE') ? '✓ VERIFIED' : 'PENDING' }}</span>
+              <span class="status-badge" [class.badge-approved]="isTierApproved('PHONE')" [class.badge-pending]="isTierPending('PHONE')">
+                {{ isTierApproved('PHONE') ? '✓ Verified' : isTierPending('PHONE') ? '⏳ Under Review' : 'Unverified' }}
+              </span>
             </div>
-            <h3>Phone &amp; WhatsApp Verification</h3>
-            <p>Confirms your direct South African mobile number is active and reachable.</p>
-            <button class="btn-apply" *ngIf="!hasTier('PHONE')" (click)="applyForVerification('PHONE')">
-              Verify Phone Number
-            </button>
+            <h3>Phone & WhatsApp</h3>
+            <p>Verify your mobile number.</p>
+            <div class="tier-action-box">
+              <button class="btn-apply" *ngIf="!isTierApproved('PHONE') && !isTierPending('PHONE')" (click)="applyForVerification('PHONE', 'Phone & WhatsApp')">
+                Verify Phone
+              </button>
+              <div class="pending-notice" *ngIf="isTierPending('PHONE')">⏳ Submitted — pending review.</div>
+              <div class="verified-notice" *ngIf="isTierApproved('PHONE')">✓ Active</div>
+            </div>
           </div>
 
-          <!-- Tier 2: ID -->
-          <div class="verification-card" [class.verified]="hasTier('ID')">
+          <div class="verification-card" [class.verified]="isTierApproved('ID')" [class.pending]="isTierPending('ID')">
             <div class="tier-top">
               <span class="tier-icon">🪪</span>
-              <span class="status-badge">{{ hasTier('ID') ? '✓ VERIFIED' : 'ACTION REQUIRED' }}</span>
+              <span class="status-badge" [class.badge-approved]="isTierApproved('ID')" [class.badge-pending]="isTierPending('ID')">
+                {{ isTierApproved('ID') ? '✓ Verified' : isTierPending('ID') ? '⏳ Under Review' : 'Action Required' }}
+              </span>
             </div>
-            <h3>National ID / FICA Identity</h3>
-            <p>Identity verification confirming the real identity of the business owner or artisan.</p>
-            <button class="btn-apply" *ngIf="!hasTier('ID')" (click)="applyForVerification('ID')">
-              Submit ID Document
-            </button>
+            <h3>Identity Verified</h3>
+            <p>National ID / FICA verification.</p>
+            <div class="tier-action-box">
+              <button class="btn-apply" *ngIf="!isTierApproved('ID') && !isTierPending('ID')" (click)="applyForVerification('ID', 'National ID / FICA')">
+                Submit ID
+              </button>
+              <div class="pending-notice" *ngIf="isTierPending('ID')">⏳ Submitted — pending review.</div>
+              <div class="verified-notice" *ngIf="isTierApproved('ID')">✓ Active</div>
+            </div>
           </div>
 
-          <!-- Tier 3: Certified -->
-          <div class="verification-card" [class.verified]="hasTier('CERTIFIED')">
+          <div class="verification-card" [class.verified]="isTierApproved('BUSINESS')" [class.pending]="isTierPending('BUSINESS')">
+            <div class="tier-top">
+              <span class="tier-icon">🏬</span>
+              <span class="status-badge" [class.badge-approved]="isTierApproved('BUSINESS')" [class.badge-pending]="isTierPending('BUSINESS')">
+                {{ isTierApproved('BUSINESS') ? '✓ Verified' : isTierPending('BUSINESS') ? '⏳ Under Review' : 'Optional' }}
+              </span>
+            </div>
+            <h3>Business Verified</h3>
+            <p>CIPC registered business verification.</p>
+            <div class="tier-action-box">
+              <button class="btn-apply" *ngIf="!isTierApproved('BUSINESS') && !isTierPending('BUSINESS')" (click)="applyForVerification('BUSINESS', 'CIPC Business Registration')">
+                Submit Business Docs
+              </button>
+              <div class="pending-notice" *ngIf="isTierPending('BUSINESS')">⏳ Submitted — pending review.</div>
+              <div class="verified-notice" *ngIf="isTierApproved('BUSINESS')">✓ Active</div>
+            </div>
+          </div>
+
+          <div class="verification-card" [class.verified]="isTierApproved('PRO')" [class.pending]="isTierPending('PRO')">
             <div class="tier-top">
               <span class="tier-icon">🏅</span>
-              <span class="status-badge">{{ hasTier('CERTIFIED') ? '✓ VERIFIED' : 'OPTIONAL' }}</span>
+              <span class="status-badge" [class.badge-approved]="isTierApproved('PRO')" [class.badge-pending]="isTierPending('PRO')">
+                {{ isTierApproved('PRO') ? '✓ Verified' : isTierPending('PRO') ? '⏳ Under Review' : 'Optional' }}
+              </span>
             </div>
-            <h3>Trade Qualification / CIPC Registration</h3>
-            <p>Upload your Wireman's license, Trade Test certificate, or CIPC business certificate.</p>
-            <button class="btn-apply" *ngIf="!hasTier('CERTIFIED')" (click)="applyForVerification('CERTIFIED')">
-              Upload Trade Certificate
-            </button>
+            <h3>Verified Professional</h3>
+            <p>Trade test / license accreditation.</p>
+            <div class="tier-action-box">
+              <button class="btn-apply" *ngIf="!isTierApproved('PRO') && !isTierPending('PRO')" (click)="applyForVerification('PRO', 'Trade Qualification')">
+                Submit Certificate
+              </button>
+              <div class="pending-notice" *ngIf="isTierPending('PRO')">⏳ Submitted — pending review.</div>
+              <div class="verified-notice" *ngIf="isTierApproved('PRO')">✓ Active</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="section-card cta-section" *ngIf="activeSection === 'cta'">
+        <div class="card-header">
+          <h2>Grow Your Business</h2>
+          <p>Start selling and reach more customers on the marketplace.</p>
+        </div>
+
+        <div class="cta-grid">
+          <div class="cta-card" *ngIf="!auth.hasContext('PRODUCT_PROVIDER')">
+            <div class="cta-icon">📦</div>
+            <h3>Sell Products</h3>
+            <p>List physical products for sale. Manage inventory, pricing, and orders.</p>
+            <button class="btn-primary" (click)="upgradeContext('PRODUCT_PROVIDER')">Start Selling Products</button>
           </div>
 
-          <!-- Tier 4: Community Vouched -->
-          <div class="verification-card" [class.verified]="hasTier('COMMUNITY_VOUCHED')">
-            <div class="tier-top">
-              <span class="tier-icon">🤝</span>
-              <span class="status-badge">{{ hasTier('COMMUNITY_VOUCHED') ? '✓ VERIFIED' : 'IN PROGRESS' }}</span>
-            </div>
-            <h3>Community Vouched</h3>
-            <p>Earned when 3 or more local township clients complete jobs and submit verified reviews.</p>
-            <button class="btn-apply" *ngIf="!hasTier('COMMUNITY_VOUCHED')" (click)="applyForVerification('COMMUNITY_VOUCHED')">
-              Request Community Vouch
-            </button>
+          <div class="cta-card" *ngIf="!auth.hasContext('SERVICE_PROVIDER')">
+            <div class="cta-icon">🛠️</div>
+            <h3>Offer Services</h3>
+            <p>Offer services to local customers. Set pricing, manage bookings, and build your reputation.</p>
+            <button class="btn-primary" (click)="upgradeContext('SERVICE_PROVIDER')">Offer Your Services</button>
           </div>
-
         </div>
       </section>
 
     </main>
-
   </div>
 </div>
+
+<ng-template #noWorks>
+  <div class="empty-box">
+    <p>No portfolio projects added yet.</p>
+  </div>
+</ng-template>
+
+<ng-template #noServices>
+  <div class="empty-box">
+    <p>No services listed yet.</p>
+  </div>
+</ng-template>
+
+<ng-template #noProducts>
+  <div class="empty-box">
+    <p>No products in your store yet.</p>
+  </div>
+</ng-template>

@@ -1,7 +1,25 @@
 import { Review } from './review.model';
 
 export type ProfileKind = 'INDIVIDUAL' | 'BUSINESS';
-export type VerificationTier = 'PHONE' | 'ID' | 'CERTIFIED' | 'COMMUNITY_VOUCHED';
+
+/**
+ * Standardized Verification Tiers:
+ * - PHONE: Direct mobile / WhatsApp number confirmed
+ * - ID: National ID / FICA verification
+ * - BUSINESS: CIPC registered business entity / enterprise
+ * - PRO: Trade test certificate / licensed professional credentials
+ */
+export type VerificationTier = 'PHONE' | 'ID' | 'BUSINESS' | 'PRO';
+
+export type VerificationStatus = 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export interface TierVerificationRecord {
+  tier: VerificationTier;
+  status: VerificationStatus;
+  submittedAt?: string;
+  reviewedAt?: string;
+  notes?: string;
+}
 
 export interface PortfolioItem {
   id: string;
@@ -48,7 +66,8 @@ export interface MarketplaceProfile {
   coverImage?: string;
   coverColor: string;
   specialties: string[];
-  verification: VerificationTier[];
+  verification: VerificationTier[]; // Approved tiers displayed publicly
+  verificationRecords?: TierVerificationRecord[]; // Internal submission lifecycle
   openingHours?: string;
   establishedYear?: number;
   responseRate?: string;
@@ -59,3 +78,4 @@ export interface MarketplaceProfile {
   productsOffered?: ProfileProductItem[];
   reviews: Review[];
 }
+

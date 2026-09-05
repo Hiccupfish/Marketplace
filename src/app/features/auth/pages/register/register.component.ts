@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { UserContext } from '../../../../core/models/user.model';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ export class RegisterComponent {
   confirmPassword = '';
   phone = '';
   city = '';
+  context: UserContext = 'BUYER';
   error = '';
   loading = false;
   showPassword = false;
@@ -65,7 +67,7 @@ export class RegisterComponent {
   submit(): void {
     this.error = '';
 
-    if (!this.name.trim() || !this.email.trim() || !this.password) {
+    if (!this.name.trim() || !this.email.trim() || !this.password || !this.context) {
       this.error = 'Please fill in all required fields.';
       return;
     }
@@ -91,9 +93,18 @@ export class RegisterComponent {
       email: this.email.trim(),
       password: this.password,
       phone: this.phone.trim(),
-      city: this.city.trim()
+      city: this.city.trim(),
+      context: this.context
     }).subscribe({
-      next: () => this.router.navigate(['/listings/create']),
+      next: () => {
+        const redirectMap: Record<UserContext, string> = {
+          'PRODUCT_PROVIDER': '/my-products',
+          'SERVICE_PROVIDER': '/my-services',
+          'BUYER': '/listings'
+        };
+        const redirect = redirectMap[this.context] || '/listings';
+        this.router.navigate([redirect]);
+      },
       error: (error) => {
         this.error = error.error?.message || 'Unable to register. Please try again.';
         this.loading = false;

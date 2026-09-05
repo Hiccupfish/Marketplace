@@ -5,6 +5,39 @@ const client_1 = require("@prisma/client");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
+// GET /api/users/profile - Get the currently authenticated user's profile with role info
+router.get('/profile', auth_1.authenticateToken, async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId)
+        return res.status(401).json({ message: 'Unauthenticated' });
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                phoneNumber: true,
+                location: true,
+                profilePicture: true,
+                isVerified: true,
+                isAdmin: true,
+                accountType: true,
+                sellerProfile: true,
+                providerProfile: true,
+                businessProfile: true,
+                createdAt: true,
+            }
+        });
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+        res.json(user);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error getting user profile' });
+    }
+});
 // GET /api/users/me - Get the currently authenticated user's profile
 router.get('/me', auth_1.authenticateToken, async (req, res) => {
     const userId = req.user?.id;

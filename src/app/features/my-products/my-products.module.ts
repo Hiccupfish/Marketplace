@@ -5,12 +5,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { MyProductsComponent } from './pages/my-products/my-products.component';
 import { SharedModule } from '../../shared/shared.module';
 import { AuthGuard } from '../../core/guards/auth.guard';
+import { RoleGuard } from '../../core/guards/role.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: MyProductsComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: { roles: ['PRODUCT_PROVIDER'] }
   }
 ];
 

@@ -36,12 +36,12 @@ router.get('/', async (req: Request, res: Response) => {
 
   if (search) {
     filters.OR = [
-      { title: { contains: String(search), mode: 'insensitive' } },
-      { description: { contains: String(search), mode: 'insensitive' } },
+      { title: { contains: String(search) } },
+      { description: { contains: String(search) } },
     ];
   }
   if (category) filters.category = { name: String(category) };
-  if (location) filters.location = { contains: String(location), mode: 'insensitive' };
+  if (location) filters.location = { contains: String(location) };
   if (sellerId) filters.sellerId = String(sellerId);
 
   try {
@@ -84,29 +84,86 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
   const sellerId = req.user?.id;
   if (!sellerId) return res.status(401).json({ message: 'Unauthenticated' });
 
-  const { title, description, price, categoryId, location, images } = req.body;
-  if (!title || !price || !categoryId) {
-    return res.status(400).json({ message: 'Missing required fields: title, price, categoryId' });
+  const { title, description, price, priceZar, categoryId, category, location, city, images, imageUrl } = req.body;
+
+  const rawPrice = price != null ? price : priceZar;
+  if (!title || rawPrice == null) {
+    return res.status(400).json({ message: 'Missing required fields: title, price (or priceZar)' });
+  }
+
+  const catVal = categoryId || category;
+  if (!catVal) {
+    return res.status(400).json({ message: 'Missing required field: category (or categoryId)' });
+  }
+
+  const parsedPrice = parseFloat(String(rawPrice));
+  if (isNaN(parsedPrice) || parsedPrice < 0) {
+    return res.status(400).json({ message: 'Price must be a valid positive number' });
   }
 
   try {
+    // Resolve category by ID or by Name
+    let resolvedCategoryId: string;
+    const existingCat = await prisma.category.findFirst({
+      where: {
+        OR: [
+          { id: String(catVal) },
+          { name: String(catVal) }
+        ]
+      }
+    });
+
+    if (existingCat) {
+      resolvedCategoryId = existingCat.id;
+    } else {
+      // Auto-create category if it does not exist
+      const newCat = await prisma.category.create({
+        data: { name: String(catVal), icon: 'other' }
+      });
+      resolvedCategoryId = newCat.id;
+    }
+
+    // Process images array or single image URL
+    let formattedImages: string | undefined = undefined;
+    if (images) {
+      if (Array.isArray(images)) {
+        formattedImages = JSON.stringify(images.filter(img => typeof img === 'string' && img.trim().length > 0));
+      } else if (typeof images === 'string' && images.trim()) {
+        try {
+          const parsed = JSON.parse(images);
+          formattedImages = Array.isArray(parsed) ? JSON.stringify(parsed) : JSON.stringify([images.trim()]);
+        } catch {
+          formattedImages = JSON.stringify([images.trim()]);
+        }
+      }
+    } else if (imageUrl && typeof imageUrl === 'string' && imageUrl.trim()) {
+      formattedImages = JSON.stringify([imageUrl.trim()]);
+    }
+
+    const resolvedLocation = location || city || 'Location not specified';
+
     const product = await prisma.product.create({
       data: {
-        title,
-        description,
-        price: parseFloat(price),
-        location,
-        images: images ? JSON.stringify(images) : undefined,
+        title: title.trim(),
+        description: description ? description.trim() : '',
+        price: parsedPrice,
+        location: resolvedLocation,
+        images: formattedImages,
         seller: { connect: { id: sellerId } },
-        category: { connect: { id: categoryId } },
+        category: { connect: { id: resolvedCategoryId } },
       },
+      include: {
+        category: true,
+        seller: { select: { id: true, name: true, profilePicture: true, location: true, isVerified: true } }
+      }
     });
     res.status(201).json(product);
   } catch (err) {
-    console.error(err);
+    console.error('Error creating product:', err);
     res.status(500).json({ message: 'Server error creating product' });
   }
 });
+
 
 // PUT /api/products/:id - Update a product (owner only)
 router.put('/:id', authenticateToken, async (req: AuthRequest, res: Response) => {

@@ -243,6 +243,34 @@
           <span *ngIf="passwordsMismatch" class="error-hint">Passwords do not match</span>
         </div>
 
+        <!-- Context Selection -->
+        <div class="input-group">
+          <label>I want to <span class="required-star">*</span></label>
+          <div class="context-options">
+            <label class="context-option" [class.selected]="context === 'BUYER'">
+              <input type="radio" name="context" value="BUYER" [(ngModel)]="context" required />
+              <span class="context-label">
+                <span class="context-icon">🛒</span>
+                <span class="context-text">Buy Products & Services</span>
+              </span>
+            </label>
+            <label class="context-option" [class.selected]="context === 'PRODUCT_PROVIDER'">
+              <input type="radio" name="context" value="PRODUCT_PROVIDER" [(ngModel)]="context" required />
+              <span class="context-label">
+                <span class="context-icon">📦</span>
+                <span class="context-text">Sell Products</span>
+              </span>
+            </label>
+            <label class="context-option" [class.selected]="context === 'SERVICE_PROVIDER'">
+              <input type="radio" name="context" value="SERVICE_PROVIDER" [(ngModel)]="context" required />
+              <span class="context-label">
+                <span class="context-icon">🛠️</span>
+                <span class="context-text">Offer Services</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
         <!-- Terms Agreement Checkbox -->
         <div class="terms-group">
           <label class="custom-checkbox">

@@ -14,8 +14,8 @@
     />
   </div>
 
-  <!-- Links -->
-  <div class="navbar__links">
+  <!-- Public Navigation -->
+  <div class="navbar__links" *ngIf="!isLoggedIn">
     <a routerLink="/home">Home</a>
     <a routerLink="/providers">Providers &amp; Businesses</a>
     <a routerLink="/products">Products</a>
@@ -24,20 +24,30 @@
     <a routerLink="/deliveries">Deliveries</a>
   </div>
 
+  <!-- Simplified Navigation for Logged-In Users -->
+  <div class="navbar__links" *ngIf="isLoggedIn">
+    <a routerLink="/home">Home</a>
+    <a routerLink="/products">Products</a>
+    <a routerLink="/services">Services</a>
+    <a routerLink="/requests">Requests</a>
+    <a routerLink="/deliveries">Deliveries</a>
+    <a routerLink="/dashboard" class="navbar__profile-link">My Profile</a>
+  </div>
+
   <!-- Auth -->
   <div class="navbar__auth">
-    <button *ngIf="!isLoggedIn" routerLink="/auth/login">
+    <button *ngIf="!isLoggedIn" routerLink="/auth/login" class="btn btn--ghost">
       Login
     </button>
 
-    <button *ngIf="!isLoggedIn" routerLink="/auth/register">
+    <button *ngIf="!isLoggedIn" routerLink="/auth/register" class="btn btn--primary">
       Register
     </button>
 
     <div *ngIf="isLoggedIn" class="navbar__profile">
-      <a routerLink="/dashboard/profile-settings" class="dashboard-link">Seller Studio</a>
-      <span>{{ userName }}</span>
-      <button type="button" (click)="logout()">Logout</button>
+      <a routerLink="/dashboard" class="dashboard-link">My Profile</a>
+      <span class="navbar__user-name">{{ userName }}</span>
+      <button type="button" (click)="logout()" class="btn btn--ghost">Logout</button>
     </div>
   </div>
 </nav>

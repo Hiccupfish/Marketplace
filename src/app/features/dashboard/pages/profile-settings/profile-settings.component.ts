@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../../core/services/auth.service';
+import { UserContext } from '../../../../core/models/user.model';
 import {
   MarketplaceProfile,
   PortfolioItem,
@@ -9,22 +11,30 @@ import {
 } from '../../../../shared/models/marketplace-profile.model';
 import { MarketplaceProfileService } from '../../../../shared/services/marketplace-profile.service';
 
+type ProfileSection = 'general' | 'portfolio' | 'services' | 'products' | 'verification' | 'requests' | 'proposals' | 'orders' | 'cta';
+
+interface ProfileNavItem {
+  id: ProfileSection;
+  label: string;
+  icon: string;
+  show: boolean;
+  requiresContext?: UserContext[];
+}
+
 @Component({
   selector: 'app-profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss'],
+  styleUrls: ['./profile-settings.component.scss']
 })
 export class ProfileSettingsComponent implements OnInit {
   profile: MarketplaceProfile | null = null;
-  activeSection: 'general' | 'portfolio' | 'services' | 'products' | 'verification' = 'general';
+  activeSection: ProfileSection = 'general';
 
-  // Form State
   specialtiesInput = '';
   saveSuccessMessage = '';
   saveErrorMessage = '';
   isSaving = false;
 
-  // New Portfolio Item Form
   newWork = {
     title: '',
     category: '',
@@ -35,7 +45,6 @@ export class ProfileSettingsComponent implements OnInit {
   };
   showAddWorkForm = false;
 
-  // New Service Form
   newService = {
     title: '',
     category: '',
@@ -46,7 +55,6 @@ export class ProfileSettingsComponent implements OnInit {
   };
   showAddServiceForm = false;
 
-  // New Product Form
   newProduct = {
     title: '',
     category: '',
@@ -57,18 +65,50 @@ export class ProfileSettingsComponent implements OnInit {
   };
   showAddProductForm = false;
 
-  // Verification request status
   verificationSuccess = '';
 
-  constructor(private readonly profileService: MarketplaceProfileService) {}
+  navItems: ProfileNavItem[] = [];
+
+  constructor(
+    private readonly profileService: MarketplaceProfileService,
+    public readonly auth: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.buildNav();
     this.loadProfile();
+  }
+
+  get userName(): string {
+    return this.auth.currentUser?.name || 'User';
+  }
+
+  private buildNav(): void {
+    const ctx = this.auth.currentUser?.context;
+    const isProvider = ctx === 'PRODUCT_PROVIDER' || ctx === 'SERVICE_PROVIDER';
+    const isProductProvider = ctx === 'PRODUCT_PROVIDER';
+    const isServiceProvider = ctx === 'SERVICE_PROVIDER';
+    const isBuyer = ctx === 'BUYER';
+
+    this.navItems = [
+      { id: 'general', label: 'Personal Information', icon: '👤', show: true },
+      { id: 'portfolio', label: 'My Portfolio', icon: '🖼️', show: isProvider },
+      { id: 'services', label: 'My Services', icon: '🛠️', show: isServiceProvider },
+      { id: 'products', label: 'My Products', icon: '📦', show: isProductProvider },
+      { id: 'requests', label: 'My Requests', icon: '📝', show: isBuyer },
+      { id: 'proposals', label: 'My Proposals', icon: '💬', show: isServiceProvider },
+      { id: 'orders', label: 'My Orders & Enquiries', icon: '📦', show: isBuyer },
+      { id: 'verification', label: 'Verification', icon: '🛡️', show: true },
+      { id: 'cta', label: 'Grow Your Business', icon: '🚀', show: !isProvider }
+    ];
+  }
+
+  get activeNavItems(): ProfileNavItem[] {
+    return this.navItems.filter(item => item.show);
   }
 
   loadProfile(): void {
     const current = this.profileService.getCurrentUserProfile();
-    // Clone object for form editing
     this.profile = JSON.parse(JSON.stringify(current));
     if (this.profile) {
       this.specialtiesInput = (this.profile.specialties || []).join(', ');
@@ -81,7 +121,6 @@ export class ProfileSettingsComponent implements OnInit {
     this.saveSuccessMessage = '';
     this.saveErrorMessage = '';
 
-    // Parse specialties
     this.profile.specialties = this.specialtiesInput
       .split(',')
       .map(s => s.trim())
@@ -91,7 +130,7 @@ export class ProfileSettingsComponent implements OnInit {
       try {
         this.profileService.saveProfile(this.profile!);
         this.isSaving = false;
-        this.saveSuccessMessage = 'Your profile & storefront details have been saved successfully!';
+        this.saveSuccessMessage = 'Your profile has been updated successfully!';
         setTimeout(() => (this.saveSuccessMessage = ''), 3500);
       } catch (err: any) {
         this.isSaving = false;
@@ -100,7 +139,6 @@ export class ProfileSettingsComponent implements OnInit {
     }, 300);
   }
 
-  // PORTFOLIO MANAGEMENT
   addPortfolioItem(): void {
     if (!this.profile || !this.newWork.title.trim() || !this.newWork.category.trim()) return;
 
@@ -116,7 +154,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.profile.portfolio = [created, ...(this.profile.portfolio || [])];
     this.newWork = { title: '', category: '', description: '', imageUrl: '', completedDate: '', clientFeedback: '' };
     this.showAddWorkForm = false;
-    this.saveSuccessMessage = 'New portfolio project added to your showcase!';
+    this.saveSuccessMessage = 'New portfolio project added!';
     setTimeout(() => (this.saveSuccessMessage = ''), 3000);
   }
 
@@ -126,7 +164,6 @@ export class ProfileSettingsComponent implements OnInit {
     this.profile.portfolio = this.profile.portfolio.filter(item => item.id !== itemId);
   }
 
-  // SERVICES MANAGEMENT
   addService(): void {
     if (!this.profile || !this.newService.title.trim() || this.newService.startingPrice <= 0) return;
 
@@ -154,7 +191,6 @@ export class ProfileSettingsComponent implements OnInit {
     this.profile.services = Math.max(0, (this.profile.services || 1) - 1);
   }
 
-  // PRODUCTS MANAGEMENT
   addProduct(): void {
     if (!this.profile || !this.newProduct.title.trim() || this.newProduct.price <= 0) return;
 
@@ -171,7 +207,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.profile.products = (this.profile.products || 0) + 1;
     this.newProduct = { title: '', category: '', description: '', price: 0, imageUrl: '', inStock: true };
     this.showAddProductForm = false;
-    this.saveSuccessMessage = 'Product added to your storefront!';
+    this.saveSuccessMessage = 'Product added to your store!';
     setTimeout(() => (this.saveSuccessMessage = ''), 3000);
   }
 
@@ -182,16 +218,47 @@ export class ProfileSettingsComponent implements OnInit {
     this.profile.products = Math.max(0, (this.profile.products || 1) - 1);
   }
 
-  // VERIFICATION
-  hasTier(tier: VerificationTier): boolean {
-    return this.profile?.verification?.includes(tier) || false;
+  getTierStatus(tier: VerificationTier): string {
+    if (!this.profile) return 'UNVERIFIED';
+    return this.profileService.getVerificationStatus(this.profile.id, tier);
   }
 
-  applyForVerification(tier: VerificationTier): void {
+  isTierApproved(tier: VerificationTier): boolean {
+    return this.getTierStatus(tier) === 'APPROVED';
+  }
+
+  isTierPending(tier: VerificationTier): boolean {
+    return this.getTierStatus(tier) === 'PENDING';
+  }
+
+  applyForVerification(tier: VerificationTier, label: string): void {
     if (!this.profile) return;
     this.profileService.requestVerification(this.profile.id, tier);
-    this.profile.verification = [...this.profile.verification, tier];
-    this.verificationSuccess = `Verification submitted and verified for ${tier}!`;
-    setTimeout(() => (this.verificationSuccess = ''), 3500);
+    this.loadProfile();
+    this.verificationSuccess = `Documents for "${label}" submitted for review.`;
+    setTimeout(() => (this.verificationSuccess = ''), 4000);
   }
-}
+
+  demoApproveTier(tier: VerificationTier): void {
+    if (!this.profile) return;
+    this.profileService.demoAdminApproveVerification(this.profile.id, tier);
+    this.loadProfile();
+    this.verificationSuccess = `[Demo] ${tier} badge has been approved.`;
+    setTimeout(() => (this.verificationSuccess = ''), 4000);
+  }
+
+  demoRejectTier(tier: VerificationTier): void {
+    if (!this.profile) return;
+    this.profileService.demoAdminRejectVerification(this.profile.id, tier, 'Document unreadable / expired');
+    this.loadProfile();
+    this.verificationSuccess = `[Demo] ${tier} verification has been rejected.`;
+    setTimeout(() => (this.verificationSuccess = ''), 4000);
+  }
+
+  upgradeContext(newContext: UserContext): void {
+    this.auth.upgradeContext(newContext);
+    this.buildNav();
+    this.saveSuccessMessage = `Your account now has ${newContext.replace('_', ' ')} capabilities!`;
+    setTimeout(() => (this.saveSuccessMessage = ''), 4000);
+  }
+}

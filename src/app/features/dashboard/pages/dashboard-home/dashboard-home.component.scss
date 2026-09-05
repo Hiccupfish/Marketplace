@@ -1,3 +1,61 @@
-:host {
-  display: block;
+@import "../../../../../assets/styles/variables";
+
+.dashboard-home {
+  padding: 2.5rem 1.5rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dashboard-home__header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-home__title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  color: $text-ink;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-home__subtitle {
+  font-size: 1.05rem;
+  color: $text-muted;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dashboard-home__actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.dashboard-home__action-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: $surface-card;
+  border: 1px solid $border-on-light;
+  border-radius: 14px;
+  box-shadow: $shadow-sm;
+  color: $text-ink;
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.dashboard-home__action-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.dashboard-home__action-label {
+  font-size: 0.95rem;
+  font-weight: 600;
 }

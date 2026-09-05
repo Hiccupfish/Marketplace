@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthResponse } from '../models/auth-response.model';
+import { User, UserContext, UserRole } from '../models/user.model';
 import { TokenService } from './token.service';
 
 export interface AuthCredentials {
@@ -14,48 +15,60 @@ export interface RegistrationData extends AuthCredentials {
   name: string;
   phone?: string;
   city?: string;
+  context: UserContext;
 }
-
-export type LoginIntent = 'BUY' | 'SELL_PRODUCTS' | 'OFFER_SERVICES' | 'BUSINESS' | null;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
-  private readonly INTENT_STORAGE_KEY = 'auth_login_intent';
+
+  private _currentUser: User | null = null;
+
+  get currentUser(): User | null {
+    return this._currentUser;
+  }
 
   constructor(private readonly http: HttpClient, private readonly tokenService: TokenService) {}
 
   login(credentials: AuthCredentials): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(tap((response) => this.tokenService.saveToken(response.token)));
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(tap((response) => {
+      this.tokenService.saveToken(response.token);
+      this._currentUser = response.user;
+    }));
   }
 
   register(data: RegistrationData): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(tap((response) => this.tokenService.saveToken(response.token)));
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(tap((response) => {
+      this.tokenService.saveToken(response.token);
+      this._currentUser = response.user;
+    }));
   }
 
-  logout(): void { 
-    this.tokenService.clearToken(); 
-    this.clearLoginIntent();
+  logout(): void {
+    this.tokenService.clearToken();
+    this._currentUser = null;
   }
 
-  isAuthenticated(): boolean { 
-    return Boolean(this.tokenService.getToken()); 
+  isAuthenticated(): boolean {
+    return Boolean(this.tokenService.getToken());
   }
 
-  // Login intent management
-  setLoginIntent(intent: LoginIntent): void {
-    if (intent) {
-      sessionStorage.setItem(this.INTENT_STORAGE_KEY, intent);
-    } else {
-      this.clearLoginIntent();
-    }
+  hasRole(role: UserRole | UserRole[]): boolean {
+    if (!this._currentUser) return false;
+    const roles = Array.isArray(role) ? role : [role];
+    return roles.some((r) => this._currentUser?.roles.includes(r));
   }
 
-  getLoginIntent(): LoginIntent {
-    return (sessionStorage.getItem(this.INTENT_STORAGE_KEY) as LoginIntent) || null;
+  hasContext(context: UserContext): boolean {
+    return this.hasRole(context);
   }
 
-  clearLoginIntent(): void {
-    sessionStorage.removeItem(this.INTENT_STORAGE_KEY);
+  upgradeContext(context: UserContext): void {
+    if (!this._currentUser) return;
+    this._currentUser = {
+      ...this._currentUser,
+      context,
+      roles: Array.from(new Set([...this._currentUser.roles, context]))
+    };
   }
 }

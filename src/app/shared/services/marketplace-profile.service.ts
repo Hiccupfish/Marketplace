@@ -7,6 +7,8 @@ import {
   ProfileKind,
   ProfileProductItem,
   ProfileServiceItem,
+  TierVerificationRecord,
+  VerificationStatus,
   VerificationTier
 } from '../models/marketplace-profile.model';
 import { Review } from '../models/review.model';
@@ -27,7 +29,13 @@ const SEED_PROFILES: MarketplaceProfile[] = [
     coverImage: 'https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=1200&auto=format&fit=crop&q=80',
     coverColor: '#174a35',
     specialties: ['Custom Furniture', 'Fitted Kitchens', 'Wood Repairs', 'TV Media Walls', 'Shelving Units'],
-    verification: ['PHONE', 'ID', 'CERTIFIED', 'COMMUNITY_VOUCHED'],
+    verification: ['PHONE', 'ID', 'PRO'],
+    verificationRecords: [
+      { tier: 'PHONE', status: 'APPROVED', reviewedAt: '2026-01-10' },
+      { tier: 'ID', status: 'APPROVED', reviewedAt: '2026-01-15' },
+      { tier: 'PRO', status: 'APPROVED', reviewedAt: '2026-02-01', notes: 'Trade test certificate verified' },
+      { tier: 'BUSINESS', status: 'UNVERIFIED' }
+    ],
     openingHours: 'Mon–Sat · 07:30 – 17:30',
     establishedYear: 2014,
     responseRate: 'Under 1 hour',
@@ -156,7 +164,13 @@ const SEED_PROFILES: MarketplaceProfile[] = [
     coverImage: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=1200&auto=format&fit=crop&q=80',
     coverColor: '#1e5e3e',
     specialties: ['Corporate Catering', 'Party Platters', 'Traditional Feasts', 'Wedding Meals', 'Custom Cakes'],
-    verification: ['PHONE', 'ID', 'CERTIFIED', 'COMMUNITY_VOUCHED'],
+    verification: ['PHONE', 'ID', 'BUSINESS'],
+    verificationRecords: [
+      { tier: 'PHONE', status: 'APPROVED', reviewedAt: '2026-02-12' },
+      { tier: 'ID', status: 'APPROVED', reviewedAt: '2026-02-14' },
+      { tier: 'BUSINESS', status: 'APPROVED', reviewedAt: '2026-02-20', notes: 'CIPC Enterprise Reg #2018/193822/07 Verified' },
+      { tier: 'PRO', status: 'UNVERIFIED' }
+    ],
     openingHours: 'Mon–Sat · 06:30 – 19:00 (Sunday Orders By Booking)',
     establishedYear: 2018,
     responseRate: 'Within 30 mins',
@@ -261,7 +275,13 @@ const SEED_PROFILES: MarketplaceProfile[] = [
     coverImage: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1200&auto=format&fit=crop&q=80',
     coverColor: '#134e38',
     specialties: ['Solar Inverters', 'DB Board Upgrades', 'Fault Finding', 'CoC Certificates', 'Generator Switchovers'],
-    verification: ['PHONE', 'ID', 'CERTIFIED', 'COMMUNITY_VOUCHED'],
+    verification: ['PHONE', 'ID', 'PRO'],
+    verificationRecords: [
+      { tier: 'PHONE', status: 'APPROVED', reviewedAt: '2026-01-08' },
+      { tier: 'ID', status: 'APPROVED', reviewedAt: '2026-01-12' },
+      { tier: 'PRO', status: 'APPROVED', reviewedAt: '2026-01-20', notes: 'Wiremans License & DoL Registration Verified' },
+      { tier: 'BUSINESS', status: 'UNVERIFIED' }
+    ],
     openingHours: 'Mon–Sun · 07:00 – 20:00 (Emergency Call-Outs 24/7)',
     establishedYear: 2016,
     responseRate: 'Under 15 mins',
@@ -357,7 +377,13 @@ const SEED_PROFILES: MarketplaceProfile[] = [
     coverImage: 'https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=1200&auto=format&fit=crop&q=80',
     coverColor: '#246949',
     specialties: ['Paint Correction', 'Interior Deep Clean', 'Ceramic Coating', 'Headlight Polish', 'Engine Bay Wash'],
-    verification: ['PHONE', 'ID', 'CERTIFIED'],
+    verification: ['PHONE', 'ID', 'BUSINESS'],
+    verificationRecords: [
+      { tier: 'PHONE', status: 'APPROVED', reviewedAt: '2026-03-01' },
+      { tier: 'ID', status: 'APPROVED', reviewedAt: '2026-03-05' },
+      { tier: 'BUSINESS', status: 'APPROVED', reviewedAt: '2026-03-12', notes: 'KZN Business Permit Verified' },
+      { tier: 'PRO', status: 'UNVERIFIED' }
+    ],
     openingHours: 'Mon–Sat · 07:00 – 18:00 (Sunday Bookings)',
     establishedYear: 2020,
     responseRate: 'Under 1 hour',
@@ -453,7 +479,13 @@ const SEED_PROFILES: MarketplaceProfile[] = [
     coverImage: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200&auto=format&fit=crop&q=80',
     coverColor: '#1a563b',
     specialties: ['Traditional Attire', 'Shweshwe Dresses', 'Suit Tailoring', 'Alterations', 'Graduation Outfits'],
-    verification: ['PHONE', 'ID', 'COMMUNITY_VOUCHED'],
+    verification: ['PHONE', 'ID'],
+    verificationRecords: [
+      { tier: 'PHONE', status: 'APPROVED', reviewedAt: '2026-04-01' },
+      { tier: 'ID', status: 'APPROVED', reviewedAt: '2026-04-05' },
+      { tier: 'BUSINESS', status: 'UNVERIFIED' },
+      { tier: 'PRO', status: 'PENDING', submittedAt: '2026-08-25', notes: 'Master Artisan Portfolio Submitted' }
+    ],
     openingHours: 'Mon–Sat · 08:30 – 17:00',
     establishedYear: 2011,
     responseRate: 'Under 2 hours',
@@ -658,16 +690,115 @@ export class MarketplaceProfileService {
     return newReview;
   }
 
+  /**
+   * USER INITIATION: User submits documents for verification.
+   * Status transitions to PENDING. Does NOT grant approved badge to public profile.
+   */
   requestVerification(profileId: string, tier: VerificationTier): void {
     const profile = this.getProfile(profileId);
     if (!profile) return;
-    if (!profile.verification.includes(tier)) {
-      const updatedProfile: MarketplaceProfile = {
-        ...profile,
-        verification: [...profile.verification, tier]
-      };
-      this.saveProfile(updatedProfile);
+
+    const records = profile.verificationRecords || [];
+    const existingIndex = records.findIndex(r => r.tier === tier);
+    const newRecord: TierVerificationRecord = {
+      tier,
+      status: 'PENDING',
+      submittedAt: new Date().toISOString().split('T')[0],
+      notes: 'Submitted for compliance review'
+    };
+
+    let updatedRecords: TierVerificationRecord[];
+    if (existingIndex >= 0) {
+      updatedRecords = [...records];
+      updatedRecords[existingIndex] = newRecord;
+    } else {
+      updatedRecords = [...records, newRecord];
     }
+
+    const updatedProfile: MarketplaceProfile = {
+      ...profile,
+      verificationRecords: updatedRecords
+    };
+    this.saveProfile(updatedProfile);
+  }
+
+  /**
+   * DEMO ADMIN SIMULATOR: Approves a pending verification request.
+   * This adds the tier to the public verification badges and updates the record to APPROVED.
+   */
+  demoAdminApproveVerification(profileId: string, tier: VerificationTier): void {
+    const profile = this.getProfile(profileId);
+    if (!profile) return;
+
+    const records = profile.verificationRecords || [];
+    const existingIndex = records.findIndex(r => r.tier === tier);
+    const updatedRecord: TierVerificationRecord = {
+      tier,
+      status: 'APPROVED',
+      reviewedAt: new Date().toISOString().split('T')[0],
+      notes: 'Approved via Admin compliance audit'
+    };
+
+    let updatedRecords: TierVerificationRecord[];
+    if (existingIndex >= 0) {
+      updatedRecords = [...records];
+      updatedRecords[existingIndex] = updatedRecord;
+    } else {
+      updatedRecords = [...records, updatedRecord];
+    }
+
+    const currentPublic = profile.verification || [];
+    const updatedPublic = currentPublic.includes(tier) ? currentPublic : [...currentPublic, tier];
+
+    const updatedProfile: MarketplaceProfile = {
+      ...profile,
+      verification: updatedPublic,
+      verificationRecords: updatedRecords
+    };
+    this.saveProfile(updatedProfile);
+  }
+
+  /**
+   * DEMO ADMIN SIMULATOR: Rejects a verification request.
+   */
+  demoAdminRejectVerification(profileId: string, tier: VerificationTier, reason: string = 'Incomplete documentation'): void {
+    const profile = this.getProfile(profileId);
+    if (!profile) return;
+
+    const records = profile.verificationRecords || [];
+    const existingIndex = records.findIndex(r => r.tier === tier);
+    const updatedRecord: TierVerificationRecord = {
+      tier,
+      status: 'REJECTED',
+      reviewedAt: new Date().toISOString().split('T')[0],
+      notes: reason
+    };
+
+    let updatedRecords: TierVerificationRecord[];
+    if (existingIndex >= 0) {
+      updatedRecords = [...records];
+      updatedRecords[existingIndex] = updatedRecord;
+    } else {
+      updatedRecords = [...records, updatedRecord];
+    }
+
+    const updatedPublic = (profile.verification || []).filter(t => t !== tier);
+
+    const updatedProfile: MarketplaceProfile = {
+      ...profile,
+      verification: updatedPublic,
+      verificationRecords: updatedRecords
+    };
+    this.saveProfile(updatedProfile);
+  }
+
+  getVerificationStatus(profileId: string, tier: VerificationTier): VerificationStatus {
+    const profile = this.getProfile(profileId);
+    if (!profile) return 'UNVERIFIED';
+    const record = (profile.verificationRecords || []).find(r => r.tier === tier);
+    if (record) return record.status;
+    return profile.verification?.includes(tier) ? 'APPROVED' : 'UNVERIFIED';
   }
 }
+
 
