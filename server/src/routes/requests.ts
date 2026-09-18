@@ -7,6 +7,9 @@ const prisma = new PrismaClient();
 
 // --- Helpers ---
 
+// Upper bound on images attached to a single request (mirrors the create-request form).
+const MAX_IMAGES_PER_REQUEST = 6;
+
 const parseJsonField = (value: string | null | undefined): string[] => {
   if (!value) return [];
   try { return JSON.parse(value); } catch { return []; }
@@ -205,6 +208,16 @@ router.post('/', authenticateToken, async (req: AuthRequest, res: Response) => {
 
   if (!title || !description || !categoryId) {
     return res.status(400).json({ message: 'Missing required fields: title, description, categoryId' });
+  }
+
+  // Image URLs may be http(s) links or base64 data URLs produced by the upload form.
+  if (images !== undefined && images !== null) {
+    if (!Array.isArray(images) || images.some((img: unknown) => typeof img !== 'string' || !img.trim())) {
+      return res.status(400).json({ message: 'images must be an array of image URLs or data URLs' });
+    }
+    if (images.length > MAX_IMAGES_PER_REQUEST) {
+      return res.status(400).json({ message: `A request can have at most ${MAX_IMAGES_PER_REQUEST} images` });
+    }
   }
 
   try {

@@ -39,7 +39,27 @@ router.post('/register', async (req, res) => {
                 profilePicture,
             },
         });
-        const { password: _, ...safeUser } = user;
+        const sellerProfile = await prisma.sellerProfile.create({
+            data: {
+                userId: user.id,
+                sellerType: 'CASUAL',
+            },
+        });
+        const safeUser = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            location: user.location,
+            profilePicture: user.profilePicture,
+            isVerified: user.isVerified,
+            isAdmin: user.isAdmin,
+            accountType: user.accountType,
+            providerCapabilities: user.providerCapabilities,
+            sellerProfile: sellerProfile ? { sellerType: sellerProfile.sellerType } : null,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+        };
         const token = generateToken(user.id, user.email);
         return res.status(201).json({ token, user: safeUser });
     }
@@ -55,7 +75,12 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Email and password are required' });
     }
     try {
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({
+            where: { email },
+            include: {
+                sellerProfile: { select: { sellerType: true } },
+            },
+        });
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }

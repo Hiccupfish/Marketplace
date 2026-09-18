@@ -4,6 +4,10 @@ import { RequestService } from '../../../../shared/services/request.service';
 import { CategoryService } from '../../../../shared/services/category.service';
 import { CreateRequestData, MarketplaceType } from '../../../../shared/models/request.model';
 
+/** Images are sent as data URLs inside the JSON body, so keep the count and size sensible. */
+const MAX_REQUEST_IMAGES = 6;
+const MAX_REQUEST_IMAGE_BYTES = 3 * 1024 * 1024; // 3MB per image
+
 @Component({
   selector: 'app-create-request',
   templateUrl: './create-request.component.html',
@@ -35,15 +39,21 @@ export class CreateRequestComponent {
     });
   }
 
+  /**
+   * Budget is opt-in. It needs its own flag because the amount starts empty —
+   * deriving "is the budget set?" from the value would hide the input again as
+   * soon as the toggle is switched on.
+   */
+  budgetEnabled = false;
+
   get hasBudget(): boolean {
-    return this.budget !== null && this.budget !== undefined && this.budget > 0;
+    return this.budgetEnabled;
   }
 
   toggleBudget(): void {
-    if (this.hasBudget) {
+    this.budgetEnabled = !this.budgetEnabled;
+    if (!this.budgetEnabled) {
       this.budget = null;
-    } else {
-      this.budget = 0;
     }
   }
 
@@ -59,15 +69,95 @@ export class CreateRequestComponent {
     }
   }
 
-  addImageUrl(): void {
-    const url = prompt('Enter image URL:');
-    if (url) {
-      this.images = [...this.images, url.trim()];
+  // --- Images: device upload (primary) + optional URL ---
+
+  readonly maxImages = MAX_REQUEST_IMAGES;
+  readonly maxImageMb = MAX_REQUEST_IMAGE_BYTES / (1024 * 1024);
+
+  imageUrlInput = '';
+  imageError = '';
+  dragActive = false;
+
+  /** Handles files picked through the hidden <input type="file">. */
+  onFileInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.readFiles(Array.from(input.files));
     }
+    input.value = '';
+  }
+
+  onImageDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.dragActive = false;
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.readFiles(Array.from(files));
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.dragActive = true;
+  }
+
+  onDragLeave(): void {
+    this.dragActive = false;
+  }
+
+  /** Reads files as data URLs so they can be stored with the request. */
+  private readFiles(files: File[]): void {
+    this.imageError = '';
+    for (const file of files) {
+      if (this.images.length >= MAX_REQUEST_IMAGES) {
+        this.imageError = `You can add up to ${MAX_REQUEST_IMAGES} images.`;
+        break;
+      }
+      if (!file.type.startsWith('image/')) {
+        this.imageError = `"${file.name}" is not an image. Please choose a PNG, JPG, WEBP or GIF file.`;
+        continue;
+      }
+      if (file.size > MAX_REQUEST_IMAGE_BYTES) {
+        this.imageError = `"${file.name}" is larger than ${this.maxImageMb}MB. Please choose a smaller image.`;
+        continue;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const result = e.target?.result as string;
+        if (result && !this.images.includes(result)) {
+          this.images = [...this.images, result];
+        }
+      };
+      reader.onerror = () => {
+        this.imageError = `Could not read "${file.name}". Please try again.`;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  addImageUrl(): void {
+    const url = this.imageUrlInput.trim();
+    if (!url) return;
+
+    if (this.images.length >= MAX_REQUEST_IMAGES) {
+      this.imageError = `You can add up to ${MAX_REQUEST_IMAGES} images.`;
+      return;
+    }
+    if (!/^https?:\/\//i.test(url) && !url.startsWith('data:image/')) {
+      this.imageError = 'Enter a valid image URL starting with http:// or https://';
+      return;
+    }
+    if (!this.images.includes(url)) {
+      this.images = [...this.images, url];
+    }
+    this.imageUrlInput = '';
+    this.imageError = '';
   }
 
   removeImage(index: number): void {
     this.images = this.images.filter((_, i) => i !== index);
+    this.imageError = '';
   }
 
   submit(): void {
@@ -83,6 +173,10 @@ export class CreateRequestComponent {
     }
     if (!this.categoryId) {
       this.error = 'Please select a category.';
+      return;
+    }
+    if (this.budgetEnabled && (!this.budget || this.budget <= 0)) {
+      this.error = 'Please enter a budget amount, or switch Budget off.';
       return;
     }
 

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const client_1 = require("@prisma/client");
 const auth_1 = require("../middleware/auth");
+const role_guards_1 = require("../middleware/role-guards");
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 // GET /api/deliveries - Get all open delivery jobs (for drivers)
@@ -55,7 +56,7 @@ router.get('/:jobId', auth_1.authenticateToken, async (req, res) => {
     }
 });
 // POST /api/deliveries/:jobId/offers - Submit an offer for a delivery job (for drivers)
-router.post('/:jobId/offers', auth_1.authenticateToken, async (req, res) => {
+router.post('/:jobId/offers', auth_1.authenticateToken, role_guards_1.requireDriver, async (req, res) => {
     const driverId = req.user?.id;
     if (!driverId)
         return res.status(401).json({ message: 'Unauthenticated' });

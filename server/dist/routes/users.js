@@ -117,7 +117,7 @@ router.put('/me', auth_1.authenticateToken, async (req, res) => {
     const userId = req.user?.id;
     if (!userId)
         return res.status(401).json({ message: 'Unauthenticated' });
-    const { name, phoneNumber, location, profilePicture } = req.body;
+    const { name, phoneNumber, location, profilePicture, accountType } = req.body;
     try {
         const updatedUser = await prisma.user.update({
             where: { id: userId },
@@ -126,6 +126,7 @@ router.put('/me', auth_1.authenticateToken, async (req, res) => {
                 phoneNumber,
                 location,
                 profilePicture,
+                accountType,
             },
             select: {
                 id: true,
@@ -134,6 +135,7 @@ router.put('/me', auth_1.authenticateToken, async (req, res) => {
                 phoneNumber: true,
                 location: true,
                 profilePicture: true,
+                accountType: true,
             }
         });
         res.json(updatedUser);
@@ -141,6 +143,99 @@ router.put('/me', auth_1.authenticateToken, async (req, res) => {
     catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server error updating profile' });
+    }
+});
+// GET /api/users/business-profile - Get authenticated user's business profile
+router.get('/business-profile', auth_1.authenticateToken, async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId)
+        return res.status(401).json({ message: 'Unauthenticated' });
+    try {
+        const businessProfile = await prisma.businessProfile.findUnique({
+            where: { userId },
+        });
+        res.json(businessProfile);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error getting business profile' });
+    }
+});
+// POST /api/users/business-profile - Create a business profile
+router.post('/business-profile', auth_1.authenticateToken, async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId)
+        return res.status(401).json({ message: 'Unauthenticated' });
+    const { businessName, logoUrl, description, category, contactNumber, email, physicalAddress, city, province, website, operatingHours, gallery, socialLinks, } = req.body;
+    if (!businessName) {
+        return res.status(400).json({ message: 'Business name is required' });
+    }
+    try {
+        const businessProfile = await prisma.businessProfile.create({
+            data: {
+                userId,
+                businessName,
+                logoUrl,
+                description,
+                category,
+                contactNumber,
+                email,
+                physicalAddress,
+                city,
+                province,
+                website,
+                operatingHours,
+                gallery,
+                socialLinks,
+            },
+        });
+        await prisma.user.update({
+            where: { id: userId },
+            data: { accountType: 'BUSINESS' },
+        });
+        res.status(201).json(businessProfile);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error creating business profile' });
+    }
+});
+// PUT /api/users/business-profile - Update business profile
+router.put('/business-profile', auth_1.authenticateToken, async (req, res) => {
+    const userId = req.user?.id;
+    if (!userId)
+        return res.status(401).json({ message: 'Unauthenticated' });
+    const { businessName, logoUrl, description, category, contactNumber, email, physicalAddress, city, province, website, operatingHours, gallery, socialLinks, } = req.body;
+    try {
+        const existing = await prisma.businessProfile.findUnique({
+            where: { userId },
+        });
+        if (!existing) {
+            return res.status(404).json({ message: 'Business profile not found' });
+        }
+        const updated = await prisma.businessProfile.update({
+            where: { userId },
+            data: {
+                businessName,
+                logoUrl,
+                description,
+                category,
+                contactNumber,
+                email,
+                physicalAddress,
+                city,
+                province,
+                website,
+                operatingHours,
+                gallery,
+                socialLinks,
+            },
+        });
+        res.json(updated);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error updating business profile' });
     }
 });
 exports.default = router;
