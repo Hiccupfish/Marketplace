@@ -29,13 +29,22 @@ const requireProvider = async (req, res, next) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { providerCapabilities: true },
+            select: { providerCapabilities: true, providerProfile: { select: { id: true } } },
         });
-        if (!user || !user.providerCapabilities) {
-            return res.status(403).json({ message: 'Forbidden: You must have provider capabilities to perform this action' });
+        let capabilities = [];
+        if (user?.providerCapabilities) {
+            try {
+                const parsed = JSON.parse(user.providerCapabilities);
+                capabilities = Array.isArray(parsed) ? parsed : [];
+            }
+            catch {
+                capabilities = [];
+            }
         }
-        const capabilities = JSON.parse(user.providerCapabilities);
-        if (capabilities.length === 0) {
+        // A service provider profile is the app's own record that this user provides
+        // services, so it counts as a capability alongside the providerCapabilities flag.
+        const isProvider = capabilities.length > 0 || Boolean(user?.providerProfile);
+        if (!user || !isProvider) {
             return res.status(403).json({ message: 'Forbidden: You must have provider capabilities to perform this action' });
         }
         next();

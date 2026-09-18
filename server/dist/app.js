@@ -24,6 +24,13 @@ app.use((0, cors_1.default)({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express_1.default.json({ limit: '30mb' }));
+// Lightweight request log (dev only) so a stray/incorrect URL is easy to trace while testing.
+if (process.env.NODE_ENV !== 'production') {
+    app.use((req, _res, next) => {
+        console.log(`[api] ${req.method} ${req.originalUrl}`);
+        next();
+    });
+}
 app.use('/api/auth', auth_1.default);
 app.use('/api/products', products_1.default);
 app.use('/api/services', services_1.default);
@@ -31,6 +38,11 @@ app.use('/api/requests', requests_1.default);
 app.use('/api/categories', categories_1.default);
 app.use('/api/deliveries', deliveries_1.default);
 app.use('/api/users', users_1.default);
+// Anything that reaches this point matched no route. Answer with JSON instead of Express's
+// bare HTML 404, so a mistyped/stale URL explains itself while testing.
+app.use((req, res) => {
+    res.status(404).json({ message: `No API route for ${req.method} ${req.originalUrl}` });
+});
 // Body parsing errors (e.g. an oversized image payload) must be answered with JSON so the
 // client can surface a useful message instead of an HTML error page.
 app.use((err, _req, res, next) => {

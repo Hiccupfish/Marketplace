@@ -38,6 +38,17 @@ async function main() {
     }
   });
 
+  // The role guards require a seller profile to create products. Registration creates one,
+  // so keep the seeded account consistent with that flow instead of bypassing it.
+  await prisma.sellerProfile.upsert({
+    where: { userId: seller.id },
+    update: {},
+    create: {
+      userId: seller.id,
+      sellerType: 'CASUAL',
+    },
+  });
+
   // Helper to find category id
   const getCategoryId = async (name: string) => {
     const c = await prisma.category.findUnique({ where: { name } });
