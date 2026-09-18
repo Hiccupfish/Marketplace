@@ -32,6 +32,32 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+// Lenient handling for the "/create" spelling used while testing (it is an app route, not an
+// API route): POST /api/<resource>/create creates, and GET explains itself instead of 404ing.
+const CREATE_ALIAS = /^\/api\/(products|services|requests)\/create(\?.*)?$/;
+
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const match = req.url.match(CREATE_ALIAS);
+  if (!match) return next();
+
+  const resource = match[1];
+  const query = match[2] || '';
+
+  if (req.method === 'POST') {
+    const target = `/api/${resource}${query}`;
+    console.log(`[api] alias ${req.method} ${req.url} -> ${target}`);
+    req.url = target;
+    return next();
+  }
+
+  console.log(`[api] lenient ${req.method} ${req.url}`);
+  return res.status(200).json({
+    message: `${req.method} ${req.url} is not a create action, so nothing was created.`,
+    didYouMean: `POST /api/${resource}${query}`,
+    note: `In the app the page is /listings/create${resource === 'requests' ? '' : '?type=service'} (products: /listings/create).`,
+  });
+});
+
 app.use('/api/auth', authRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/services', servicesRouter);

@@ -143,13 +143,6 @@ router.get('/', async (req, res) => {
 // GET /api/requests/:id - Get a single request
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    // 'create' is not a lookup id: point callers at the real endpoint instead of a bare 404.
-    if (id === 'create') {
-        return res.status(404).json({
-            message: 'No API route for GET /api/requests/create',
-            hint: 'Create a request with POST /api/requests. In the app the page is /requests/create.',
-        });
-    }
     try {
         const request = await prisma.request.findUnique({
             where: { id },
